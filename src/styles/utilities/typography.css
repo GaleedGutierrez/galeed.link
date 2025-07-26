@@ -1,0 +1,15 @@
+.text-center {
+	text-align: center;
+}
+
+.font-fallback {
+	font-family: var(--font-fallback-primary);
+	letter-spacing: 0.3px;
+	word-spacing: -0.05px;
+}
+
+.font-primary {
+	font-family: var(--font-primary);
+	letter-spacing: initial;
+	word-spacing: initial;
+}

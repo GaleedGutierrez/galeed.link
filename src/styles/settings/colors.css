@@ -1,0 +1,21 @@
+:root {
+	/* Primary */
+	--slate-50: oklch(98.4% 0.003 247.858);
+	--slate-400: oklch(70.4% 0.04 256.788);
+	--slate-600: oklch(44.6% 0.043 257.281);
+	--slate-950: oklch(12.9% 0.042 264.695);
+	--pink-800: oklch(45.9% 0.187 3.815);
+	--blue-600: oklch(54.6% 0.245 262.881);
+	--blue-800: oklch(42.4% 0.199 265.638);
+	--gray-800: oklch(27.8% 0.033 256.848);
+	--sky-800: oklch(44.3% 0.11 240.79);
+
+	/* Text */
+	--text-color-primary: light-dark(var(--slate-950), var(--slate-50));
+	--text-color-secondary: light-dark(var(--slate-600), var(--slate-400));
+
+	/* Background */
+	--background-color-primary: light-dark(var(--slate-50), var(--slate-950));
+
+	color-scheme: light dark;
+}

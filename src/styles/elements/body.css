@@ -1,0 +1,21 @@
+body {
+	background-color: var(--background-color-primary);
+	color: var(--text-color-primary);
+	font-size: var(--fs-body-lg);
+	font-weight: var(--weight-normal);
+	line-height: var(--lh-body-lg);
+}
+
+/* .font-fallback */
+body:not(.fonts-loaded) {
+	font-family: var(--font-fallback-primary);
+	letter-spacing: 0.3px;
+	word-spacing: -0.05px;
+}
+
+/* .font-primary */
+body.fonts-loaded {
+	font-family: var(--font-primary);
+	letter-spacing: initial;
+	word-spacing: initial;
+}
