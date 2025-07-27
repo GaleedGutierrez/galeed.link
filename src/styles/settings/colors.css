@@ -1,6 +1,7 @@
 :root {
 	/* Primary */
 	--slate-50: oklch(98.4% 0.003 247.858);
+	--slate-50-opacity-0: oklch(98.4% 0.003 247.858 / 0%);
 	--slate-400: oklch(70.4% 0.04 256.788);
 	--slate-600: oklch(44.6% 0.043 257.281);
 	--slate-950: oklch(12.9% 0.042 264.695);
@@ -16,6 +17,10 @@
 
 	/* Background */
 	--background-color-primary: light-dark(var(--slate-50), var(--slate-950));
+	--background-color-primary-gradient: light-dark(
+		var(--slate-50),
+		var(--slate-950)
+	);
 
 	color-scheme: light dark;
 }
