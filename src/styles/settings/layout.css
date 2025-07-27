@@ -7,34 +7,34 @@
 	--screen-tablet: 48rem;
 	--screen-desktop: 64rem;
 
-	/* Space */
-	--space-0: 0;
-	--space-025: 0.1rem;
-	--space-05: 0.2rem;
-	--space-1: 0.4rem;
-	--space-2: 0.8rem;
-	--space-3: 1.2rem;
-	--space-4: 1.6rem;
-	--space-5: 2rem;
-	--space-6: 2.4rem;
-	--space-7: 2.8rem;
-	--space-8: 3.2rem;
-	--space-9: 3.6rem;
-	--space-10: 4rem;
-	--space-11: 4.4rem;
-	--space-12: 4.8rem;
-	--space-13: 5.2rem;
-	--space-14: 5.6rem;
-	--space-15: 6rem;
-	--space-16: 6.4rem;
-	--space-17: 6.8rem;
-	--space-18: 7.2rem;
-	--space-20: 8rem;
-	--space-24: 9.6rem;
-	--space-25: 10rem;
-	--space-28: 11.2rem;
-	--space-32: 12.8rem;
-	--space-100: 40rem;
+	/* Spacing */
+	--spacing-0: 0;
+	--spacing-025: 0.1rem;
+	--spacing-05: 0.2rem;
+	--spacing-1: 0.4rem;
+	--spacing-2: 0.8rem;
+	--spacing-3: 1.2rem;
+	--spacing-4: 1.6rem;
+	--spacing-5: 2rem;
+	--spacing-6: 2.4rem;
+	--spacing-7: 2.8rem;
+	--spacing-8: 3.2rem;
+	--spacing-9: 3.6rem;
+	--spacing-10: 4rem;
+	--spacing-11: 4.4rem;
+	--spacing-12: 4.8rem;
+	--spacing-13: 5.2rem;
+	--spacing-14: 5.6rem;
+	--spacing-15: 6rem;
+	--spacing-16: 6.4rem;
+	--spacing-17: 6.8rem;
+	--spacing-18: 7.2rem;
+	--spacing-20: 8rem;
+	--spacing-24: 9.6rem;
+	--spacing-25: 10rem;
+	--spacing-28: 11.2rem;
+	--spacing-32: 12.8rem;
+	--spacing-100: 40rem;
 
 	/* Border */
 	--border-025: 0.1rem;
