@@ -1,0 +1,28 @@
+---
+import styles from "./styles.module.css";
+---
+
+<section class={styles["hero"]}>
+	<div class={styles["hero__image-container"]}>
+		<div class={styles["hero__image-gradient"]}></div>
+		<picture>
+			<source
+				srcset="/src/assets/images/me/avif/me.avif"
+				type="image/avif"
+			/>
+			<source
+				srcset="/src/assets/images/me/webp/me.webp"
+				type="image/webp"
+			/>
+			<img
+				class={styles["hero__image"]}
+				src="/src/assets/images/me/jpg/me.jpg"
+				alt="Galeed Gutierrez foto de perfil"
+			/>
+		</picture>
+	</div>
+	<div class={styles["hero__text-container"]}>
+		<h1 class={styles["hero__title"]}>Galeed Gutierrez</h1>
+		<h2 class={styles["hero__subtitle"]}>Frontend developer</h2>
+	</div>
+</section>
