@@ -15,18 +15,36 @@
 			name="generator"
 			content={Astro.generator}
 		/>
+		<link
+			rel="stylesheet"
+			href="/src/styles/index.css"
+		/>
+		<style>
+			:root {
+				--font-fallback:
+					system-ui, -apple-system, blinkmacsystemfont, "Segoe UI",
+					"Noto Sans", helvetica, arial, sans-serif,
+					"Apple Color Emoji", "Segoe UI Emoji";
+				--font-fallback-primary: Arial, var(--font-fallback);
+				--font-primary: "Manrope", var(--font-fallback-primary);
+			}
+
+			@font-face {
+				font-family: "Manrope";
+				src: url("/src/assets/fonts/Manrope/Manrope-VariableFont_wght.woff2")
+					format("woff2");
+				font-display: swap;
+			}
+		</style>
 		<title>Astro Basics</title>
 	</head>
 	<body>
 		<slot />
 	</body>
-</html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+	<script>
+		import { loadFonts } from "@utils/loadFonts";
+
+		loadFonts(["1em Manrope"]);
+	</script>
+</html>
