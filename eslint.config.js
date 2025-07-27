@@ -70,8 +70,6 @@ export default tseslint.config(
 			},
 
 			parserOptions: {
-				project: true,
-				tsconfigRootDir: import.meta.dirname,
 				ecmaFeatures: {
 					jsx: true,
 				},
@@ -350,6 +348,7 @@ export default tseslint.config(
 				'error',
 				{
 					ignore: [
+						String.raw`^astro:.*$`, // Astro virtual modules
 						String.raw`^/.*\.(svg|png|jpg|jpeg|gif|ico|webp)$`, // Public folder assets
 						String.raw`\?react$`, // SVGR react imports
 						String.raw`\?url$`, // Vite URL imports
@@ -382,6 +381,13 @@ export default tseslint.config(
 		],
 		plugins: {
 			tsdoc,
+		},
+
+		languageOptions: {
+			parserOptions: {
+				project: true,
+				tsconfigRootDir: import.meta.dirname,
+			},
 		},
 
 		settings: {
