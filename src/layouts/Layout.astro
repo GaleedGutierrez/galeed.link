@@ -1,3 +1,8 @@
+---
+import "../styles/index.css";
+// import { SEO } from "astro-seo";
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -11,13 +16,9 @@
 			type="image/svg+xml"
 			href="/favicon.svg"
 		/>
-		<meta
-			name="generator"
-			content={Astro.generator}
-		/>
 		<link
-			rel="stylesheet"
-			href="/src/styles/index.css"
+			rel="sitemap"
+			href="/sitemap-index.xml"
 		/>
 		<style>
 			:root {
@@ -36,13 +37,35 @@
 				font-display: swap;
 			}
 		</style>
-		<title>Astro Basics</title>
+		<!-- <SEO
+			title="Galeed Gutierrez"
+			titleTemplate="%s | Galeed Gutierrez"
+			titleDefault="Galeed Gutierrez"
+			description="Frontend developer especializado en la creación de interfaces de usuario con un enfoque en el rendimiento y la accesibilidad."
+			canonical="https://galeed.link"
+			charset="utf8"
+			lang="es"
+			robots="index, follow"
+			openGraph={{
+				basic: {
+					title: "Galeed Gutierrez",
+					type: "website",
+					// image: ""
+				},
+				image: {
+					alt: "Galeed Gutierrez profile picture",
+				},
+			}}
+			canonical="/"
+			noindex={false}
+			nofollow={false}
+			surpressWarnings={true}
+		/> -->
+		<title>Galeed Gutierrez</title>
 	</head>
 	<body>
 		<slot />
-	</body>
-
-	<script>
+	</body><script>
 		import { loadFonts } from "@utils/loadFonts";
 
 		loadFonts(["1em Manrope"]);
