@@ -48,7 +48,9 @@
 		"@galeedgutierrez/shared-assets": "^0.0.1",
 		"astro": "^5.12.1",
 		"astro-icon": "^1.1.5",
-		"astro-seo": "^0.8.4"
+		"astro-seo": "^0.8.4",
+		"astro-seo-schema": "^5.1.0",
+		"schema-dts": "^1.1.5"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^19.8.1",
