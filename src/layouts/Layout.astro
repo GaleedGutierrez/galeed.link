@@ -98,5 +98,41 @@ import { personalSchema } from "@/data/personalSchema";
 
 			loadFonts(["1em Manrope"]);
 		</script>
+		<script
+			defer
+			src={"https://www.googletagmanager.com/gtag/js?id=G-M8H4YB694S"}
+			type="text/partytown"
+		></script>
+		<script defer type="text/partytown">
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+
+			window.dataLayer = window.dataLayer || [];
+			gtag("js", new Date());
+			gtag("config", "G-M8H4YB694S");
+		</script>
+		<script defer type="text/partytown">
+			function sendToGoogleAnalytics({ name, delta, id }) {
+				gtag("event", name, {
+					event_category: "Web Vitals",
+					event_label: id,
+					value: Math.round(name === "CLS" ? delta * 1000 : delta),
+					non_interaction: true,
+				});
+			}
+
+			(function () {
+				var script = document.createElement("script");
+				script.src =
+					"https://unpkg.com/web-vitals@5/dist/web-vitals.iife.js";
+				script.onload = function () {
+					webVitals.onCLS(sendToGoogleAnalytics);
+					webVitals.onINP(sendToGoogleAnalytics);
+					webVitals.onLCP(sendToGoogleAnalytics);
+				};
+				document.head.appendChild(script);
+			})();
+		</script>
 	</body>
 </html>
