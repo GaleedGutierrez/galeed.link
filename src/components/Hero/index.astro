@@ -1,4 +1,8 @@
 ---
+import ME_AVIF from "@images/me/avif/me.avif";
+import ME_JPG from "@images/me/jpg/me.jpg";
+import ME_WEBP from "@images/me/webp/me.webp";
+
 import styles from "./styles.module.css";
 ---
 
@@ -7,16 +11,16 @@ import styles from "./styles.module.css";
 		<div class={styles["hero__image-gradient"]}></div>
 		<picture>
 			<source
-				srcset="/src/assets/images/me/avif/me.avif"
+				srcset={ME_AVIF.src}
 				type="image/avif"
 			/>
 			<source
-				srcset="/src/assets/images/me/webp/me.webp"
+				srcset={ME_WEBP.src}
 				type="image/webp"
 			/>
 			<img
 				class={styles["hero__image"]}
-				src="/src/assets/images/me/jpg/me.jpg"
+				src={ME_JPG.src}
 				alt="Galeed Gutierrez foto de perfil"
 			/>
 		</picture>
