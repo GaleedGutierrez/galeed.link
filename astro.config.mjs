@@ -16,11 +16,6 @@ export default defineConfig({
 		build: {
 			sourcemap: process.env.ENABLE_SOURCEMAP === 'true',
 		},
-		define: {
-			'import.meta.env.GOOGLE_ANALYTICS_ID': JSON.stringify(
-				process.env.GOOGLE_ANALYTICS_ID,
-			),
-		},
 	},
 	server: {
 		host: true,
