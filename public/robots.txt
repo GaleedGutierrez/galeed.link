@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /*.js.map
+
+Sitemap: https://galeed.link/sitemap-index.xml
