@@ -32,6 +32,8 @@
 
 	.hero__subtitle {
 		color: var(--text-color-secondary);
+		font-weight: var(--weight-medium);
 		text-align: center;
+		text-transform: capitalize;
 	}
 }

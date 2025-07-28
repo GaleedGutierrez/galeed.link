@@ -1,8 +1,6 @@
 ---
-import ME_AVIF from "@images/me/avif/me.avif";
-import ME_JPG from "@images/me/jpg/me.jpg";
-import ME_WEBP from "@images/me/webp/me.webp";
-import { Image } from "astro:assets";
+import authorPhoto from "@images/me/jpg/me.jpg";
+import { Picture } from "astro:assets";
 
 import styles from "./styles.module.css";
 ---
@@ -10,22 +8,15 @@ import styles from "./styles.module.css";
 <section class={styles["hero"]}>
 	<div class={styles["hero__image-container"]}>
 		<div class={styles["hero__image-gradient"]}></div>
-		<picture>
-			<source
-				srcset={ME_AVIF.src}
-				type="image/avif"
-			/>
-			<source
-				srcset={ME_WEBP.src}
-				type="image/webp"
-			/>
-			<Image
-				class={styles["hero__image"]}
-				src={ME_JPG}
-				loading={"eager"}
-				alt="Galeed Gutierrez foto de perfil"
-			/>
-		</picture>
+		<Picture
+			alt="Galeed Gutierrez foto de perfil."
+			class={styles["hero__image"]}
+			formats={["avif", "webp", "jpg"]}
+			layout="constrained"
+			loading={"eager"}
+			priority
+			src={authorPhoto}
+		/>
 	</div>
 	<div class={styles["hero__text-container"]}>
 		<h1 class={styles["hero__title"]}>Galeed Gutierrez</h1>
