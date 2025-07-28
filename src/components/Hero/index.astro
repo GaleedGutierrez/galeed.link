@@ -2,6 +2,7 @@
 import ME_AVIF from "@images/me/avif/me.avif";
 import ME_JPG from "@images/me/jpg/me.jpg";
 import ME_WEBP from "@images/me/webp/me.webp";
+import { Image } from "astro:assets";
 
 import styles from "./styles.module.css";
 ---
@@ -18,9 +19,10 @@ import styles from "./styles.module.css";
 				srcset={ME_WEBP.src}
 				type="image/webp"
 			/>
-			<img
+			<Image
 				class={styles["hero__image"]}
-				src={ME_JPG.src}
+				src={ME_JPG}
+				loading={"eager"}
 				alt="Galeed Gutierrez foto de perfil"
 			/>
 		</picture>
