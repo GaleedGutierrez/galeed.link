@@ -1,5 +1,9 @@
 ---
 import "../styles/index.css";
+
+import { Schema } from "astro-seo-schema";
+
+import { personalSchema } from "@/data/personalSchema";
 // import { SEO } from "astro-seo";
 ---
 
@@ -8,17 +12,17 @@ import "../styles/index.css";
 	<head>
 		<meta charset="utf8" />
 		<meta
-			name="viewport"
 			content="width=device-width"
+			name="viewport"
 		/>
 		<link
+			href="/favicon.svg"
 			rel="icon"
 			type="image/svg+xml"
-			href="/favicon.svg"
 		/>
 		<link
-			rel="sitemap"
 			href="/sitemap-index.xml"
+			rel="sitemap"
 		/>
 		<style>
 			:root {
@@ -61,13 +65,38 @@ import "../styles/index.css";
 			nofollow={false}
 			surpressWarnings={true}
 		/> -->
+		<Schema
+			item={{
+				"@context": "https://schema.org",
+				"@type": "Person",
+				name: personalSchema.name,
+				alternateName: personalSchema.alternateName,
+				url: "https://galeed.link",
+				image: "https://galeed.link/profile.webp",
+				jobTitle: "Frontend Developer",
+				description:
+					"Desarrollador frontend con experiencia en React, Astro y pruebas E2E. Apasionado por crear interfaces limpias, funcionales y accesibles.",
+				sameAs: [
+					personalSchema.socialLinks.github,
+					personalSchema.socialLinks.linkedin,
+					personalSchema.socialLinks.x,
+					personalSchema.socialLinks.personalWebsite,
+					personalSchema.socialLinks.portfolio,
+				],
+				knowsAbout: personalSchema.skills,
+				alumniOf: personalSchema.education,
+				hasOccupation: personalSchema.jobProfile,
+				hasPart: personalSchema.relatedProjects,
+			}}
+		/>
 		<title>Galeed Gutierrez</title>
 	</head>
 	<body>
 		<slot />
-	</body><script>
-		import { loadFonts } from "@utils/loadFonts";
+		<script>
+			import { loadFonts } from "@utils/loadFonts";
 
-		loadFonts(["1em Manrope"]);
-	</script>
+			loadFonts(["1em Manrope"]);
+		</script>
+	</body>
 </html>
