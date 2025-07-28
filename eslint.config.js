@@ -370,7 +370,15 @@ export default tseslint.config(
 			],
 		},
 	},
-
+	{
+		files: ['**/*.astro'],
+		rules: {
+			'astro/sort-attributes': [
+				'error',
+				{ type: 'alphabetical', order: 'asc', ignoreCase: true },
+			],
+		},
+	},
 	{
 		files: ['**/*.ts', '**/*.mts', '**/*.cts', '**/*.tsx'],
 		extends: [
