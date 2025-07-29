@@ -324,6 +324,9 @@ export default tseslint.config(
 				'error',
 				{
 					checkFilenames: false,
+					allowList: {
+						Props: true,
+					},
 				},
 			],
 
