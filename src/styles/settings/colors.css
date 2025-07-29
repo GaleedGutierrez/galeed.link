@@ -14,6 +14,8 @@
 	/* Text */
 	--text-color-primary: light-dark(var(--slate-950), var(--slate-50));
 	--text-color-secondary: light-dark(var(--slate-600), var(--slate-400));
+	--text-color-hover-primary: light-dark(var(--slate-600), var(--slate-400));
+	--text-color-active-primary: light-dark(var(--slate-400), var(--slate-600));
 
 	/* Background */
 	--background-color-primary: light-dark(var(--slate-50), var(--slate-950));
