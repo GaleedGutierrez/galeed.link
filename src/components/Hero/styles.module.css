@@ -37,3 +37,12 @@
 		text-transform: capitalize;
 	}
 }
+
+.hero__socials {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: var(--spacing-8);
+	inline-size: min-content;
+	margin-inline: auto;
+	margin-block-start: var(--spacing-5);
+}

@@ -1,4 +1,5 @@
 ---
+import SocialMediaLink from "@components/SocialMediaLink/index.astro";
 import authorPhoto from "@images/me/jpg/me.jpg";
 import { Picture } from "astro:assets";
 
@@ -21,5 +22,27 @@ import styles from "./styles.module.css";
 	<div class={styles["hero__text-container"]}>
 		<h1 class={styles["hero__title"]}>Galeed Gutierrez</h1>
 		<h2 class={styles["hero__subtitle"]}>Frontend developer</h2>
+	</div>
+	<div class={styles["hero__socials"]}>
+		<SocialMediaLink
+			href="https://linkedin.com/in/galeedgutierrez"
+			icon="lucide:linkedin"
+			label="LinkedIn"
+		/>
+		<SocialMediaLink
+			href="https://x.com/gutierrezgaleed"
+			icon="lucide:twitter"
+			label="Twitter"
+		/>
+		<SocialMediaLink
+			href="https://github.com/galeedgutierrez"
+			icon="lucide:github"
+			label="GitHub"
+		/>
+		<SocialMediaLink
+			href="https://galeedgutierrez.com"
+			icon="lucide:globe"
+			label="Web"
+		/>
 	</div>
 </section>
