@@ -1,0 +1,23 @@
+---
+import { Icon } from "astro-icon/components";
+
+import styles from "./styles.module.css";
+
+interface Props {
+	href: string;
+	icon: string;
+	label: string;
+}
+
+const { href, icon, label } = Astro.props;
+---
+
+<a
+	class={styles["social-media__link"]}
+	href={href}
+	rel="noopener noreferrer"
+	target="_blank"
+>
+	<Icon name={icon} />
+	<span class="social-media__label">{label}</span>
+</a>
