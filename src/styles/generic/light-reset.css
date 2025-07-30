@@ -33,11 +33,6 @@
 		text-wrap: pretty;
 	}
 
-	figure,
-	picture {
-		display: flex;
-	}
-
 	img,
 	video,
 	svg,
@@ -54,12 +49,6 @@
 		list-style: none;
 	}
 
-	button {
-		border: none;
-		background: none;
-		cursor: pointer;
-	}
-
 	input,
 	button,
 	textarea,
@@ -69,6 +58,12 @@
 		letter-spacing: inherit;
 		word-spacing: inherit;
 		outline: none;
+	}
+
+	button {
+		border: none;
+		background: none;
+		cursor: pointer;
 	}
 
 	textarea {
