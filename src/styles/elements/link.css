@@ -1,12 +1,17 @@
 a {
-	/* color: var(--dark-gray); */
+	color: var(--text-color-primary);
 	text-decoration: none;
 
-	/* &:hover {
-		text-decoration: underline;
+	&:hover {
+		color: var(--text-color-hover-primary);
+	}
+
+	&:focus-visible {
+		outline: 0.125rem solid var(--text-color-primary);
+		outline-offset: 0.125rem;
 	}
 
 	&:active {
-		color: var(--gold);
-	} */
+		color: var(--text-color-active-primary);
+	}
 }
