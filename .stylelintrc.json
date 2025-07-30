@@ -11,6 +11,7 @@
 		"color-function-notation": "modern",
 		"font-weight-notation": "named-where-possible",
 		"property-no-vendor-prefix": true,
+		"import-notation": "string",
 		"function-disallowed-list": [
 			"rgba",
 			"hsla",

@@ -1,2 +1,2 @@
-@import url("./normalize.css") layer(normalize);
-@import url("./light-reset.css") layer(reset);
+/* @import url("./normalize.css") layer(normalize); */
+@import "./light-reset.css" layer(reset);
