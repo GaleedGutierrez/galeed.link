@@ -136,13 +136,8 @@ const processCSSFile = async (cssFile: string): Promise<number | undefined> => {
 				purgeCSSResult[0].css,
 				{ from: undefined },
 			);
-			// const result = await postcss(postcssConfig.plugins).process(
-			// 	purgeCSSResult[0].css,
-			// 	{ from: undefined },
-			// );
 
 			fs.writeFileSync(cssFilePath, result.css);
-			// fs.writeFileSync(cssFilePath, purgeCSSResult[0].css);
 		}
 
 		const afterSize = calculateFileSize(cssFilePath);
