@@ -1,8 +1,8 @@
 body {
 	background-color: var(--background-color-primary);
 	color: var(--text-color-primary);
-	font-size: var(--fs-body-lg);
-	font-weight: var(--weight-normal);
+	font-size: var(--f-body-lg);
+	font-weight: var(--fw-normal);
 	line-height: var(--lh-body-lg);
 }
 

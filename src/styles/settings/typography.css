@@ -1,26 +1,28 @@
 :root {
 	/* Typography scale */
-	--fs-base: 62.5%;
+
+	/* --f-base: 62.5%; */
+	--f-base: 100%;
 
 	/* Weight */
-	--weight-thin: 100;
-	--weight-extralight: 200;
-	--weight-light: 300;
-	--weight-normal: 400;
-	--weight-medium: 500;
-	--weight-semibold: 600;
-	--weight-bold: 700;
-	--weight-extrabold: 800;
-	--weight-black: 900;
+	--fw-thin: 100;
+	--fw-extralight: 200;
+	--fw-light: 300;
+	--fw-normal: 400;
+	--fw-medium: 500;
+	--fw-semibold: 600;
+	--fw-bold: 700;
+	--fw-extrabold: 800;
+	--fw-black: 900;
 
 	/* Typography applications */
-	--fs-body-sm: 1.4rem;
-	--fs-body-md: 1.5rem;
-	--fs-body-lg: 1.6rem;
-	--fs-title-sm: 1.4rem;
-	--fs-title-md: 1.8rem;
-	--fs-title-lg: 2.4rem;
-	--fs-title-xl: 3.6rem;
+	--f-body-sm: 0.875rem;
+	--f-body-md: 0.9375rem;
+	--f-body-lg: 1rem;
+	--f-title-sm: 0.875rem;
+	--f-title-md: 1.125rem;
+	--f-title-lg: 1.5rem;
+	--f-title-xl: 2.25rem;
 
 	/* Line Height */
 

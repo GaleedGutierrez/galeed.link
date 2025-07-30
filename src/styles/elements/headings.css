@@ -1,6 +1,6 @@
 h1 {
-	font-size: var(--fs-title-xl);
-	font-weight: var(--weight-bold);
+	font-size: var(--f-title-xl);
+	font-weight: var(--fw-bold);
 
 	/* line-height: var(--lh-title-xl); */
 
@@ -8,8 +8,8 @@ h1 {
 }
 
 h2 {
-	font-size: var(--fs-title-lg);
-	font-weight: var(--weight-bold);
+	font-size: var(--f-title-lg);
+	font-weight: var(--fw-bold);
 
 	/* line-height: var(--lh-title-lg); */
 
@@ -17,8 +17,8 @@ h2 {
 }
 
 h3 {
-	font-size: var(--fs-title-md);
-	font-weight: var(--weight-bold);
+	font-size: var(--f-title-md);
+	font-weight: var(--fw-bold);
 
 	/* line-height: var(--lh-title-md); */
 
@@ -26,8 +26,8 @@ h3 {
 }
 
 h4 {
-	font-size: var(--fs-title-sm);
-	font-weight: var(--weight-bold);
+	font-size: var(--f-title-sm);
+	font-weight: var(--fw-bold);
 
 	/* line-height: var(--lh-title-sm); */
 
