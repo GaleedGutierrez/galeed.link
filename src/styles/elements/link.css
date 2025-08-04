@@ -7,8 +7,8 @@ a {
 	}
 
 	&:focus-visible {
-		outline: 0.125rem solid var(--text-color-primary);
-		outline-offset: 0.125rem;
+		outline: var(--border-radius-05) solid var(--text-color-primary);
+		outline-offset: var(--spacing-025);
 	}
 
 	&:active {
