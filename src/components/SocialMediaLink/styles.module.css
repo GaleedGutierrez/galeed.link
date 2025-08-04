@@ -5,19 +5,6 @@
 	color: var(--text-color-primary);
 
 	svg {
-		inline-size: 2.4rem;
-	}
-
-	&:hover {
-		color: var(--text-color-hover-primary);
-	}
-
-	&:focus-visible {
-		outline: 0.2rem solid var(--text-color-primary);
-		outline-offset: 0.2rem;
-	}
-
-	&:active {
-		color: var(--text-color-active-primary);
+		inline-size: calc(24 * var(--rem-scale));
 	}
 }
