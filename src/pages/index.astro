@@ -1,11 +1,16 @@
 ---
-import Hero from "../components/Hero/index.astro";
-import Layout from "../layouts/Layout.astro";
+import Hero from "@components/Hero/index.astro";
+import Navbar from "@components/Navbar/index.astro";
+import Layout from "@layouts/Layout.astro";
 
+import styles from "./styles.module.css";
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
 	<Hero />
+	<div class={`${styles.main__navbar} mt-2`}>
+		<Navbar />
+	</div>
 </Layout>
