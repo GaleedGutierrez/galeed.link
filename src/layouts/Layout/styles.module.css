@@ -1,12 +1,3 @@
-.body {
-	/* var(--screen-tablet) */
-	@media screen and (width >= 768px) {
-		& {
-			padding-block: var(--spacing-12);
-		}
-	}
-}
-
 .main {
 	max-width: var(--max-w-md);
 	margin-inline: auto;
