@@ -9,46 +9,46 @@
 
 	/* Spacing */
 	--spacing-0: 0;
-	--spacing-025: 0.0625rem;
-	--spacing-05: 0.125rem;
-	--spacing-1: 0.25rem;
-	--spacing-2: 0.5rem;
-	--spacing-3: 0.75rem;
-	--spacing-4: 1rem;
-	--spacing-5: 1.25rem;
-	--spacing-6: 1.5rem;
-	--spacing-7: 1.75rem;
-	--spacing-8: 2rem;
-	--spacing-9: 2.25rem;
-	--spacing-10: 2.5rem;
-	--spacing-11: 2.75rem;
-	--spacing-12: 3rem;
-	--spacing-13: 3.25rem;
-	--spacing-14: 3.5rem;
-	--spacing-15: 3.75rem;
-	--spacing-16: 4rem;
-	--spacing-17: 4.25rem;
-	--spacing-18: 4.5rem;
-	--spacing-20: 5rem;
-	--spacing-24: 6rem;
-	--spacing-25: 6.25rem;
-	--spacing-28: 7rem;
-	--spacing-32: 8rem;
-	--spacing-100: 25rem;
+	--spacing-025: calc(1 * var(--rem-scale));
+	--spacing-05: calc(2 * var(--rem-scale));
+	--spacing-1: calc(4 * var(--rem-scale));
+	--spacing-2: calc(8 * var(--rem-scale));
+	--spacing-3: calc(12 * var(--rem-scale));
+	--spacing-4: calc(16 * var(--rem-scale));
+	--spacing-5: calc(20 * var(--rem-scale));
+	--spacing-6: calc(24 * var(--rem-scale));
+	--spacing-7: calc(28 * var(--rem-scale));
+	--spacing-8: calc(32 * var(--rem-scale));
+	--spacing-9: calc(36 * var(--rem-scale));
+	--spacing-10: calc(40 * var(--rem-scale));
+	--spacing-11: calc(44 * var(--rem-scale));
+	--spacing-12: calc(48 * var(--rem-scale));
+	--spacing-13: calc(52 * var(--rem-scale));
+	--spacing-14: calc(56 * var(--rem-scale));
+	--spacing-15: calc(60 * var(--rem-scale));
+	--spacing-16: calc(64 * var(--rem-scale));
+	--spacing-17: calc(68 * var(--rem-scale));
+	--spacing-18: calc(72 * var(--rem-scale));
+	--spacing-20: calc(80 * var(--rem-scale));
+	--spacing-24: calc(96 * var(--rem-scale));
+	--spacing-25: calc(100 * var(--rem-scale));
+	--spacing-28: calc(112 * var(--rem-scale));
+	--spacing-32: calc(128 * var(--rem-scale));
+	--spacing-100: calc(400 * var(--rem-scale));
 
 	/* Border */
-	--border-025: 0.0625rem;
-	--border-05: 0.125rem;
-	--border-1: 0.25rem;
-	--border-2: 0.5rem;
+	--border-025: calc(1 * var(--rem-scale));
+	--border-05: calc(2 * var(--rem-scale));
+	--border-1: calc(4 * var(--rem-scale));
+	--border-2: calc(8 * var(--rem-scale));
 
 	/* Border radios */
-	--border-radius-05: 0.125rem;
-	--border-radius-1: 0.25rem;
-	--border-radius-2: 0.5rem;
-	--border-radius-3: 0.75rem;
-	--border-radius-4: 1rem;
-	--border-radius-5: 1.25rem;
-	--border-radius-6: 1.5rem;
+	--border-radius-05: calc(2 * var(--rem-scale));
+	--border-radius-1: calc(4 * var(--rem-scale));
+	--border-radius-2: calc(8 * var(--rem-scale));
+	--border-radius-3: calc(12 * var(--rem-scale));
+	--border-radius-4: calc(16 * var(--rem-scale));
+	--border-radius-5: calc(20 * var(--rem-scale));
+	--border-radius-6: calc(24 * var(--rem-scale));
 	--border-radius-circle: 50%;
 }
