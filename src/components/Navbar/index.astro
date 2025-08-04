@@ -1,0 +1,49 @@
+---
+import styles from "./styles.module.css";
+
+interface Props {
+	classNavbar?: string;
+}
+
+const { classNavbar } = Astro.props;
+---
+
+<nav class={`${styles.navbar} ${classNavbar}`}>
+	<ul class={styles.navbar__list}>
+		<li class={styles.navbar__item}>
+			<a
+				class={styles.navbar__link}
+				href="/"
+				>Bio</a
+			>
+		</li>
+		<li class={styles.navbar__item}>
+			<a
+				class={styles.navbar__link}
+				href="/blog"
+				>Trabajo freelance</a
+			>
+		</li>
+		<li class={styles.navbar__item}>
+			<a
+				class={styles.navbar__link}
+				href="/about"
+				>Side projects</a
+			>
+		</li>
+		<li class={styles.navbar__item}>
+			<a
+				class={styles.navbar__link}
+				href="/contact"
+				>Open source</a
+			>
+		</li>
+		<li class={styles.navbar__item}>
+			<a
+				class={styles.navbar__link}
+				href="/contact"
+				>Contacto</a
+			>
+		</li>
+	</ul>
+</nav>

@@ -1,0 +1,25 @@
+.main__navbar {
+	position: relative;
+
+	&::before {
+		position: absolute;
+		inset-block-start: 50%;
+		inset-inline-start: 0;
+		block-size: calc(24 * var(--rem-scale));
+		inline-size: calc(16 * var(--rem-scale));
+		background: var(--linear-gradient-primary-to-left);
+		transform: translateY(-50%);
+		content: "";
+	}
+
+	&::after {
+		position: absolute;
+		inset-block-start: 50%;
+		inset-inline-end: 0;
+		block-size: calc(24 * var(--rem-scale));
+		inline-size: calc(60 * var(--rem-scale));
+		background: var(--linear-gradient-primary-to-right);
+		transform: translateY(-50%);
+		content: "";
+	}
+}
