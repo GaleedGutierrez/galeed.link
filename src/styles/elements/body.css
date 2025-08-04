@@ -8,14 +8,12 @@ body {
 
 /* .font-fallback */
 body:not(.fonts-loaded) {
-	font-family: var(--font-fallback-primary);
-	letter-spacing: 0.3px;
-	word-spacing: -0.05px;
+	/* stylelint-disable-next-line at-rule-no-unknown */
+	@mixin font-fallback;
 }
 
 /* .font-primary */
 body.fonts-loaded {
-	font-family: var(--font-primary);
-	letter-spacing: initial;
-	word-spacing: initial;
+	/* stylelint-disable-next-line at-rule-no-unknown */
+	@mixin font-primary;
 }
