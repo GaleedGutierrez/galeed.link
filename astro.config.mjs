@@ -4,8 +4,6 @@ import sitemap from '@astrojs/sitemap';
 // import playformCompress from '@playform/compress';
 import { defineConfig } from 'astro/config';
 import icon from 'astro-icon';
-import cssnano from 'cssnano';
-import postcssNested from 'postcss-nested';
 import Sonda from 'sonda/astro';
 import UnoCSS from 'unocss/astro';
 
@@ -17,11 +15,6 @@ export default defineConfig({
 	vite: {
 		build: {
 			sourcemap: process.env.ENABLE_SOURCEMAP === 'true',
-		},
-		css: {
-			postcss: {
-				plugins: [cssnano({ preset: ['default'] }), postcssNested],
-			},
 		},
 	},
 	server: {
