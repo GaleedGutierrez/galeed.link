@@ -9,7 +9,9 @@ import { browserslistToTargets, transform } from 'lightningcss';
 
 const distributionPath = path.join(import.meta.dirname, '..', 'dist');
 let beforeTotalSize = 0;
-const targets = browserslistToTargets(browserslist('>= 0.25%'));
+const targets = browserslistToTargets(
+	browserslist(['>= 0.25%', 'not dead', 'supports css-nesting']),
+);
 
 function calculateFileSize(filePath: string): string {
 	try {
