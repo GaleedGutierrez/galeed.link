@@ -27,8 +27,7 @@
 
 	.hero__title {
 		letter-spacing: -0.144px;
-
-		/* text-align: center; */
+		text-align: center;
 	}
 
 	.hero__subtitle {
