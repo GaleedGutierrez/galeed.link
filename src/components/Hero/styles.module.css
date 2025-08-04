@@ -13,10 +13,18 @@
 			var(--background-color-primary) 98%
 		);
 	}
+}
 
-	.hero__image {
-		filter: grayscale(1);
-		aspect-ratio: 1 / 1;
+.hero__image {
+	filter: grayscale(1);
+	aspect-ratio: 1 / 1;
+
+	/* var(--screen-tablet) */
+	@media screen and (width >= 768px) {
+		& {
+			border-start-start-radius: var(--border-radius-4);
+			border-start-end-radius: var(--border-radius-4);
+		}
 	}
 }
 
