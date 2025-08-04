@@ -1,14 +1,8 @@
 ---
 import styles from "./styles.module.css";
-
-interface Props {
-	classNavbar?: string;
-}
-
-const { classNavbar } = Astro.props;
 ---
 
-<nav class={`${styles.navbar} ${classNavbar}`}>
+<nav class={styles.navbar}>
 	<ul class={styles.navbar__list}>
 		<li class={styles.navbar__item}>
 			<a
