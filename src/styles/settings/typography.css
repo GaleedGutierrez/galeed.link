@@ -35,6 +35,19 @@
 	/* Line Height */
 
 	/* Word Spacing */
+
+	/* Font Family */
+	--font-fallback:
+		system-ui, -apple-system, blinkmacsystemfont, "Segoe UI", "Noto Sans",
+		helvetica, arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+	--font-fallback-primary: arial, var(--font-fallback);
+	--font-primary: "Manrope", var(--font-fallback-primary);
+}
+
+@font-face {
+	font-family: Manrope;
+	src: url("/fonts/Manrope/Manrope-VariableFont_wght.woff2") format("woff2");
+	font-display: swap;
 }
 
 /* Factor Scales
