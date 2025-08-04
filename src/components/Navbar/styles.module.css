@@ -2,6 +2,7 @@
 	overflow-x: scroll;
 	padding-block: var(--spacing-5);
 	padding-inline: var(--spacing-4);
+	scrollbar-width: none;
 }
 
 .navbar__list {

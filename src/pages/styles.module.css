@@ -1,25 +1,24 @@
 .main__navbar {
 	position: relative;
 
-	&::before {
+	&::before,
+	&::after {
 		position: absolute;
 		inset-block-start: 50%;
-		inset-inline-start: 0;
-		block-size: calc(24 * var(--rem-scale));
-		inline-size: calc(16 * var(--rem-scale));
-		background: var(--linear-gradient-primary-to-left);
+		block-size: utopia.clamp(24, 27);
 		transform: translateY(-50%);
 		content: "";
 	}
 
+	&::before {
+		inset-inline-start: 0;
+		inline-size: calc(16 * var(--rem-scale));
+		background: var(--linear-gradient-primary-to-left);
+	}
+
 	&::after {
-		position: absolute;
-		inset-block-start: 50%;
 		inset-inline-end: 0;
-		block-size: calc(24 * var(--rem-scale));
 		inline-size: calc(60 * var(--rem-scale));
 		background: var(--linear-gradient-primary-to-right);
-		transform: translateY(-50%);
-		content: "";
 	}
 }
