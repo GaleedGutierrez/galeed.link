@@ -1,14 +1,16 @@
 ---
-import "../styles/index.css";
+import "@styles/index.css";
 
 import { Schema } from "astro-seo-schema";
 
 import { personalSchema } from "@/data/personalSchema";
+
+import styles from "./styles.module.css";
 // import { SEO } from "astro-seo";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="utf8" />
 		<meta
@@ -24,23 +26,6 @@ import { personalSchema } from "@/data/personalSchema";
 			href="/sitemap-index.xml"
 			rel="sitemap"
 		/>
-		<style>
-			:root {
-				--font-fallback:
-					system-ui, -apple-system, blinkmacsystemfont, "Segoe UI",
-					"Noto Sans", helvetica, arial, sans-serif,
-					"Apple Color Emoji", "Segoe UI Emoji";
-				--font-fallback-primary: Arial, var(--font-fallback);
-				--font-primary: "Manrope", var(--font-fallback-primary);
-			}
-
-			@font-face {
-				font-family: "Manrope";
-				src: url("/src/assets/fonts/Manrope/Manrope-VariableFont_wght.woff2")
-					format("woff2");
-				font-display: swap;
-			}
-		</style>
 		<!-- <SEO
 			title="Galeed Gutierrez"
 			titleTemplate="%s | Galeed Gutierrez"
@@ -92,11 +77,25 @@ import { personalSchema } from "@/data/personalSchema";
 		<title>Galeed Gutierrez</title>
 	</head>
 	<body>
-		<slot />
+		<main class={`${styles.main} shadow-xl dark:shadow-slate-50/20`}>
+			<slot />
+		</main>
 		<script>
 			import { loadFonts } from "@utils/loadFonts";
 
 			loadFonts(["1em Manrope"]);
+			const theme = window.matchMedia("(prefers-color-scheme: dark)");
+			if (theme.matches) {
+				document.documentElement.classList.add("dark");
+			}
+
+			theme.addEventListener("change", (event) => {
+				if (event.matches) {
+					document.documentElement.classList.add("dark");
+				} else {
+					document.documentElement.classList.remove("dark");
+				}
+			});
 		</script>
 		<script
 			defer

@@ -1,0 +1,12 @@
+.main {
+	max-width: var(--max-w-md);
+	margin-inline: auto;
+
+	/* var(--screen-tablet) */
+	@media screen and (width >= 768px) {
+		& {
+			border-radius: var(--border-radius-4);
+			margin-block: var(--spacing-12);
+		}
+	}
+}
