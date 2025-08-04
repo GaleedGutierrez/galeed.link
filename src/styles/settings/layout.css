@@ -1,11 +1,12 @@
 :root {
 	/* Width */
-	--max-width-1: 102.4rem;
-	--max-width-element-001: 40rem;
+	--max-w-5xl: calc(1024 * var(--rem-scale));
+	--max-w-2xl: calc(672 * var(--rem-scale));
+	--max-w-md: calc(448 * var(--rem-scale));
 
 	/* Screens - In this case 1rem = 16px only in media queries */
-	--screen-tablet: 48rem;
-	--screen-desktop: 64rem;
+	--screen-tablet: calc(768 * var(--rem-scale));
+	--screen-desktop: calc(1024 * var(--rem-scale));
 
 	/* Spacing */
 	--spacing-0: 0;
