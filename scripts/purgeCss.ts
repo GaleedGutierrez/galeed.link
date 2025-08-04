@@ -25,6 +25,30 @@ const purgeCssConfig: Omit<UserDefinedOptions, 'css'> = {
 			/^\[data-.*\]$/,
 			/^\[aria-.*\]$/,
 
+			// Media queries y clases responsivas
+			/^@media/,
+			/^@container/,
+			/^@supports/,
+
+			// Clases con prefijos responsivos (Tailwind-style)
+			/^sm:/,
+			/^md:/,
+			/^lg:/,
+			/^xl:/,
+			/^2xl:/,
+
+			// Clases responsivas específicas
+			/^md\\:/,
+			/^lg\\:/,
+			/^xl\\:/,
+			/^2xl\\:/,
+
+			// Escapar caracteres especiales en nombres de clase
+			/\\:/,
+			/\\./,
+			/\\\[/,
+			/\\]/,
+
 			// Pseudo-clases básicas
 			/:hover$/,
 			/:focus$/,
@@ -159,7 +183,20 @@ const purgeCssConfig: Omit<UserDefinedOptions, 'css'> = {
 			/::file-selector-button$/,
 			/::part$/,
 			/::slotted$/,
+
+			// Media queries para deep scanning
+			/^@media/,
+			/^@container/,
+
+			// Clases responsivas
+			/^sm:/,
+			/^md:/,
+			/^lg:/,
+			/^xl:/,
+			/^2xl:/,
 		],
+		// Preservar todas las reglas dentro de media queries
+		greedy: [/^@media/, /^@container/, /^@supports/],
 	},
 	keyframes: true,
 	fontFace: true,
