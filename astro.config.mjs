@@ -7,7 +7,11 @@ import icon from 'astro-icon';
 import Sonda from 'sonda/astro';
 import UnoCSS from 'unocss/astro';
 
-process.loadEnvFile();
+try {
+	process.loadEnvFile();
+} catch {
+	console.error('No .env file found, using environment variables');
+}
 
 // https://astro.build/config
 export default defineConfig({
