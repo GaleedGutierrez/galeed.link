@@ -5,6 +5,7 @@
 	--slate-400: oklch(70.4% 0.04 256.788);
 	--slate-600: oklch(44.6% 0.043 257.281);
 	--slate-950: oklch(12.9% 0.042 264.695);
+	--slate-950-opacity-0: oklch(12.9% 0.042 264.695 / 0%);
 	--pink-800: oklch(45.9% 0.187 3.815);
 	--blue-600: oklch(54.6% 0.245 262.881);
 	--blue-800: oklch(42.4% 0.199 265.638);
@@ -22,6 +23,26 @@
 	--background-color-primary-gradient: light-dark(
 		var(--slate-50),
 		var(--slate-950)
+	);
+
+	/* Linear gradient */
+	--linear-gradient-color-primary-0: light-dark(
+		var(--slate-50-opacity-0),
+		var(--slate-950-opacity-0)
+	);
+	--linear-gradient-color-primary-1: light-dark(
+		var(--slate-50),
+		var(--slate-950)
+	);
+	--linear-gradient-primary-to-left: linear-gradient(
+		to left,
+		var(--linear-gradient-color-primary-0),
+		var(--linear-gradient-color-primary-1)
+	);
+	--linear-gradient-primary-to-right: linear-gradient(
+		to right,
+		var(--linear-gradient-color-primary-0),
+		var(--linear-gradient-color-primary-1)
 	);
 
 	color-scheme: light dark;
