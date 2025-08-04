@@ -8,7 +8,7 @@ import postcss from 'postcss';
 import type postcssrc from 'postcss-load-config';
 import { PurgeCSS, type UserDefinedOptions } from 'purgecss';
 
-import postcssConfig from './postcss.config.js';
+import postcssConfig from '../postcss.config.js';
 
 const distributionPath = path.join(import.meta.dirname, '..', 'dist');
 let beforeTotalSize = 0;
