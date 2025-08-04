@@ -1,14 +1,14 @@
 /* Custom Properties */
 @import "./settings/index.css";
 
+/* Mixins */
+@import "./tools/index.css";
+
 /* Generic */
 @import "./generic/index.css";
 
 /* Elements */
 @import "./elements/index.css";
-
-/* Mixins */
-@import "./tools/index.css";
 
 /* Utilities */
 @import "./utilities/index.css";
