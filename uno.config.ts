@@ -32,13 +32,5 @@ export default defineConfig({
 				'margin-inline-end': `${d === 'auto' ? 'auto' : `${Number(d) * 0.25}rem`}`,
 			}),
 		],
-
-		// box-shadow
-		[
-			/^shadow-(.+)$/,
-			([, d]) => ({
-				'box-shadow': `var(--shadow-${d})`,
-			}),
-		],
 	],
 });
