@@ -70,7 +70,7 @@
 		field-sizing: content;
 	}
 
-	:not([class]) {
+	/* :not([class]) {
 		h1&,
 		h2&,
 		h3&,
@@ -98,7 +98,7 @@
 		li& {
 			margin-block: 0.5em;
 		}
-	}
+	} */
 
 	@media (prefers-reduced-motion: reduce) {
 		*,
