@@ -1,0 +1,15 @@
+.navbar {
+	overflow-x: scroll;
+	padding-block: var(--spacing-5);
+	padding-inline: var(--spacing-4);
+}
+
+.navbar__list {
+	display: flex;
+	gap: var(--spacing-4);
+	width: max-content;
+}
+
+.navbar__link {
+	color: var(--color-text-primary);
+}
