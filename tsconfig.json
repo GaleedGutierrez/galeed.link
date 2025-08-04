@@ -32,6 +32,7 @@
 			"@infrastructure/*": ["./src/infrastructure/*"],
 			"@models/*": ["./src/models/*"],
 			"@modules/*": ["./src/modules/*"],
+			"@layouts/*": ["./src/layouts/*"],
 			"@pages/*": ["./src/pages/*"],
 			"@private/*": ["./src/private/*"],
 			"@ui/*": ["./src/components/ui/*"],
