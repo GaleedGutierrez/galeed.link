@@ -77,9 +77,11 @@ import styles from "./styles.module.css";
 		<title>Galeed Gutierrez</title>
 	</head>
 	<body class="md:py-12">
-		<main class={`${styles.main} shadow-xl dark:shadow-slate-50/20`}>
+		<div
+			class={`${styles.main} shadow-xl dark:shadow-slate-50/20 flex flex-col`}
+		>
 			<slot />
-		</main>
+		</div>
 		<script>
 			import { loadFonts } from "@utils/loadFonts";
 
