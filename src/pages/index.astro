@@ -1,4 +1,5 @@
 ---
+import Bio from "@components/Bio.astro";
 import Hero from "@components/Hero/index.astro";
 import Navbar from "@components/Navbar/index.astro";
 import Layout from "@layouts/Layout/index.astro";
@@ -9,8 +10,11 @@ import styles from "./_styles.module.css";
 ---
 
 <Layout>
-	<Hero />
-	<div class={`${styles.main__navbar} mt-2`}>
-		<Navbar />
-	</div>
+	<main class="pb-8">
+		<Hero />
+		<div class={`${styles.main__navbar} mt-2`}>
+			<Navbar />
+		</div>
+		<Bio />
+	</main>
 </Layout>
