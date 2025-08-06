@@ -13,33 +13,29 @@ export default defineConfig({
 		},
 	],
 	rules: [
-		// Redefinir mt para usar margin-block-start
+		[
+			/^pt-(.+)$/,
+			([, d]) => ({
+				'padding-block-start': `${d === 'auto' ? 'auto' : `calc(var(--un-unit) * ${Number(d)})`}`,
+			}),
+		],
+		[
+			/^pb-(.+)$/,
+			([, d]) => ({
+				'padding-block-end': `${d === 'auto' ? 'auto' : `calc(var(--un-unit) * ${Number(d)})`}`,
+			}),
+		],
+
 		[
 			/^mt-(.+)$/,
 			([, d]) => ({
 				'margin-block-start': `${d === 'auto' ? 'auto' : `calc(var(--un-unit) * ${Number(d)})`}`,
 			}),
 		],
-
-		// También puedes redefinir mb para margin-block-end
 		[
 			/^mb-(.+)$/,
 			([, d]) => ({
 				'margin-block-end': `${d === 'auto' ? 'auto' : `calc(var(--un-unit) * ${Number(d)})`}`,
-			}),
-		],
-
-		// Y ms/me para margin-inline-start/end
-		[
-			/^ms-(.+)$/,
-			([, d]) => ({
-				'margin-inline-start': `${d === 'auto' ? 'auto' : `calc(var(--un-unit) * ${Number(d)})`}`,
-			}),
-		],
-		[
-			/^me-(.+)$/,
-			([, d]) => ({
-				'margin-inline-end': `${d === 'auto' ? 'auto' : `calc(var(--un-unit) * ${Number(d)})`}`,
 			}),
 		],
 
