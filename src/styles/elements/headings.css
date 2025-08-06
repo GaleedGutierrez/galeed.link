@@ -9,7 +9,7 @@ h1 {
 
 h2 {
 	font-size: var(--f-title-lg);
-	font-weight: var(--fw-bold);
+	font-weight: var(--fw-semibold);
 
 	/* line-height: var(--lh-title-lg); */
 
@@ -18,7 +18,7 @@ h2 {
 
 h3 {
 	font-size: var(--f-title-md);
-	font-weight: var(--fw-bold);
+	font-weight: var(--fw-semibold);
 
 	/* line-height: var(--lh-title-md); */
 
@@ -27,7 +27,7 @@ h3 {
 
 h4 {
 	font-size: var(--f-title-sm);
-	font-weight: var(--fw-bold);
+	font-weight: var(--fw-semibold);
 
 	/* line-height: var(--lh-title-sm); */
 
