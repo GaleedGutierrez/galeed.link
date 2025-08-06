@@ -4,6 +4,29 @@ import authorPhoto from "@images/me/jpg/me.jpg";
 import { Picture } from "astro:assets";
 
 import styles from "./styles.module.css";
+
+const socialMediaLinks = [
+	{
+		href: "https://linkedin.com/in/galeedgutierrez",
+		icon: "lucide:linkedin",
+		label: "LinkedIn",
+	},
+	{
+		href: "https://x.com/gutierrezgaleed",
+		icon: "lucide:twitter",
+		label: "Twitter",
+	},
+	{
+		href: "https://github.com/galeedgutierrez",
+		icon: "lucide:github",
+		label: "GitHub",
+	},
+	{
+		href: "https://galeedgutierrez.com",
+		icon: "lucide:globe",
+		label: "Web",
+	},
+];
 ---
 
 <section class={styles["hero"]}>
@@ -24,25 +47,14 @@ import styles from "./styles.module.css";
 		<h2 class={styles["hero__subtitle"]}>Frontend developer</h2>
 	</div>
 	<div class={styles["hero__socials"]}>
-		<SocialMediaLink
-			href="https://linkedin.com/in/galeedgutierrez"
-			icon="lucide:linkedin"
-			label="LinkedIn"
-		/>
-		<SocialMediaLink
-			href="https://x.com/gutierrezgaleed"
-			icon="lucide:twitter"
-			label="Twitter"
-		/>
-		<SocialMediaLink
-			href="https://github.com/galeedgutierrez"
-			icon="lucide:github"
-			label="GitHub"
-		/>
-		<SocialMediaLink
-			href="https://galeedgutierrez.com"
-			icon="lucide:globe"
-			label="Web"
-		/>
+		{
+			socialMediaLinks.map((socialMedia) => (
+				<SocialMediaLink
+					href={socialMedia.href}
+					icon={socialMedia.icon}
+					label={socialMedia.label}
+				/>
+			))
+		}
 	</div>
 </section>
