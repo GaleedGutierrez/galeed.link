@@ -25,6 +25,9 @@ pnpm-debug.log*
 lighthouse-report/
 .lighthouseci/
 
+# Playwright MCP output (screenshots, page snapshots, console logs)
+.playwright-mcp/
+
 # local Claude Code settings
 .claude/settings.local.json
 
