@@ -19,14 +19,21 @@ import styles from "./styles.module.css";
 interface Props {
 	title?: string;
 	description?: string;
+	/** Error pages: noindex, no canonical and no ProfilePage JSON-LD. */
+	noindex?: boolean;
 }
 
 const {
 	title = `${personalSchema.name} · ${personalSchema.jobTitle}`,
 	description = "Galeed Gutierrez, desarrollador frontend en Jujuy, Argentina. React, Astro y TypeScript. Trabajo freelance, side projects, open source y contacto.",
+	noindex = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, SITE_URL).href;
+// astro-seo leaves out the canonical tag only for null: undefined falls back
+// to the page's own URL.
+// eslint-disable-next-line unicorn/no-null
+const canonicalTag = noindex ? null : canonical;
 const personId = `${SITE_URL}/#person`;
 // public/og.jpg: 1200×630 link-preview card, rendered from the site's own
 // tokens and fonts. Regenerate it when the name, role or portrait change.
@@ -140,7 +147,7 @@ const [firstName, ...lastNames] = personalSchema.name.split(" ");
 			rel="sitemap"
 		/>
 		<SEO
-			canonical={canonical}
+			canonical={canonicalTag}
 			description={description}
 			extend={{
 				link: [
@@ -160,6 +167,7 @@ const [firstName, ...lastNames] = personalSchema.name.split(" ");
 					{ name: "author", content: personalSchema.name },
 				],
 			}}
+			noindex={noindex}
 			openGraph={{
 				basic: {
 					title,
@@ -188,40 +196,42 @@ const [firstName, ...lastNames] = personalSchema.name.split(" ");
 		/>
 		<!-- ProfilePage + Person: the page is about one person (Google's
 			 profile-page rich result; also what AI answer engines read). -->
-		<Schema
-			item={{
-				"@context": "https://schema.org",
-				"@type": "ProfilePage",
-				"@id": `${SITE_URL}/#profile`,
-				url: canonical,
-				name: title,
-				description,
-				inLanguage: "es-AR",
-				dateModified: new Date().toISOString(),
-				mainEntity: {
-					"@type": "Person",
-					"@id": personId,
-					name: personalSchema.name,
-					alternateName: personalSchema.alternateName,
-					givenName: firstName,
-					familyName: lastNames.join(" "),
-					url: SITE_URL,
-					image: `${SITE_URL}/profile.webp`,
-					jobTitle: personalSchema.jobTitle,
-					description: personalSchema.description,
-					address: personalSchema.address,
-					nationality: { "@type": "Country", name: "Argentina" },
-					sameAs: Object.values(personalSchema.socialLinks),
-					knowsAbout: personalSchema.skills,
-					knowsLanguage: "es",
-					alumniOf: personalSchema.studies.map(
-						({ school }) => school,
-					),
-					hasCredential: personalSchema.credentials,
-					hasOccupation: personalSchema.jobProfile,
-				},
-			}}
-		/>
+		{!noindex && (
+			<Schema
+				item={{
+					"@context": "https://schema.org",
+					"@type": "ProfilePage",
+					"@id": `${SITE_URL}/#profile`,
+					url: canonical,
+					name: title,
+					description,
+					inLanguage: "es-AR",
+					dateModified: new Date().toISOString(),
+					mainEntity: {
+						"@type": "Person",
+						"@id": personId,
+						name: personalSchema.name,
+						alternateName: personalSchema.alternateName,
+						givenName: firstName,
+						familyName: lastNames.join(" "),
+						url: SITE_URL,
+						image: `${SITE_URL}/profile.webp`,
+						jobTitle: personalSchema.jobTitle,
+						description: personalSchema.description,
+						address: personalSchema.address,
+						nationality: { "@type": "Country", name: "Argentina" },
+						sameAs: Object.values(personalSchema.socialLinks),
+						knowsAbout: personalSchema.skills,
+						knowsLanguage: "es",
+						alumniOf: personalSchema.studies.map(
+							({ school }) => school,
+						),
+						hasCredential: personalSchema.credentials,
+						hasOccupation: personalSchema.jobProfile,
+					},
+				}}
+			/>
+		)}
 	</head>
 	<body>
 		<a
