@@ -24,7 +24,7 @@
 	"author": "Galeed Gutierrez <galeedeveloper@gmail.com> (https://galeedgutierrez.com/)",
 	"scripts": {
 		"dev": "astro dev",
-		"build": "astro build && npm run lightningcss && npm run purge-css",
+		"build": "astro build && npm run purge-css && npm run lightningcss",
 		"preview": "astro preview",
 		"astro": "astro",
 		"purge-css": "tsx ./scripts/purgeCss.ts",
