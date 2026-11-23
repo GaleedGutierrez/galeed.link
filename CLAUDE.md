@@ -83,7 +83,7 @@ docs are English.
 - `src/types/designTokens.ts`: token lists and card models.
   `src/scripts/theme.ts`: theme logic. `tests/`: Vitest (token invariants from
   §9.9).
-- `scripts/`: post-build `purgeCss.ts` and `lightningcss.ts`.
+- `scripts/`: post-build `purgeCss.ts`, `lightningcss.ts` and `subsetFonts.ts`.
 - Path aliases in use: `@/*`, `@components/*`, `@layouts/*`, `@styles/*`,
   `@images/*`.
 
@@ -160,9 +160,15 @@ docs are English.
 
 ## Build pipeline gotchas
 
-- Build order is `astro build && purge-css && lightningcss`. lightningcss must
-  stay last: `purgeCss.ts` re-runs `postcss-custom-properties`, which would
-  inline the `light-dark()` polyfill switches and pin every color to light.
+- Build order is `astro build && purge-css && lightningcss && subset-fonts`.
+  lightningcss must come after purge-css: `purgeCss.ts` re-runs
+  `postcss-custom-properties`, which would inline the `light-dark()` polyfill
+  switches and pin every color to light. `subset-fonts` must stay last: it
+  renames fonts and style sheets by content hash, so any later step that
+  rewrites the CSS would leave a stale hash.
+- `subsetFonts.ts` keeps only the characters in the built HTML (plus CSS
+  `content`, both cases and a small margin). Text a client script inserts at
+  runtime isn't in the HTML: add its characters to `SAFETY_CHARACTERS`.
 - `postcss-custom-properties({ preserve: false })` inlines `:root` variables.
   Per-selector token overrides silently disappear.
 - PurgeCSS only sees static HTML/JS. Attributes set at runtime need a safelist
@@ -178,8 +184,14 @@ docs are English.
 - `@galeedgutierrez/shared-assets` is in `vite.ssr.noExternal`: it imports its
   screenshots and `svg?raw` icons, which plain Node can't load at prerender. It
   also makes Vite emit every project screenshot into `dist/`, even unused ones.
-- `Barlow Fallback` metrics come from Capsize (`@capsizecss/core` +
-  `@capsizecss/metrics`). Regenerate them; don't edit by hand.
+- `Barlow Fallback` and `JetBrains Mono Fallback*` metrics come from Capsize
+  (`@capsizecss/core` + `@capsizecss/metrics`; Consolas via `@capsizecss/unpack`
+  from `consola.ttf`, since Capsize ships no metrics for it). Regenerate them;
+  don't edit by hand.
+- Analytics: `gtag` runs in Partytown and must be assigned to `window.gtag`
+  (Partytown wraps inline scripts in a function, so a declared `gtag` stays
+  local). Web Vitals run on the main thread from the `web-vitals` package: in a
+  worker, `PerformanceObserver` has no LCP, layout-shift or event entries.
 
 ## Skills and tools
 

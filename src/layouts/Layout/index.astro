@@ -243,34 +243,41 @@ const [firstName, ...lastNames] = personalSchema.name.split(" ");
 		></script>
 		<script defer is:inline type="text/partytown">
 			window.dataLayer = window.dataLayer || [];
-			function gtag() {
+			// On window, not a function declaration: Partytown wraps each
+			// inline script in a function, so a declared gtag stayed local and
+			// the main thread's forwarded gtag() calls hit undefined.
+			window.gtag = function gtag() {
 				dataLayer.push(arguments);
-			}
+			};
 			gtag("js", new Date());
 
 			gtag("config", "G-XEPRCKCX47");
 		</script>
-		<script defer is:inline type="text/partytown">
-			function sendToGoogleAnalytics({ name, delta, id }) {
-				gtag("event", name, {
+		<!-- Web Vitals run on the main thread, bundled from npm. Inside
+			 Partytown they ran in a Web Worker, where PerformanceObserver has no
+			 LCP, layout-shift or event entries, so nothing was ever reported;
+			 and loading them from unpkg failed under tracker blockers. Only
+			 gtag stays in Partytown: the call below is forwarded to it. -->
+		<script>
+			import { type Metric, onCLS, onINP, onLCP } from "web-vitals";
+
+			const sendToGoogleAnalytics = ({
+				name,
+				delta,
+				id,
+			}: Metric): void => {
+				// Partytown's forward stub; missing when analytics is blocked.
+				globalThis.gtag?.("event", name, {
 					event_category: "Web Vitals",
 					event_label: id,
 					value: Math.round(name === "CLS" ? delta * 1000 : delta),
 					non_interaction: true,
 				});
-			}
+			};
 
-			(function () {
-				var script = document.createElement("script");
-				script.src =
-					"https://unpkg.com/web-vitals@5/dist/web-vitals.iife.js";
-				script.onload = function () {
-					webVitals.onCLS(sendToGoogleAnalytics);
-					webVitals.onINP(sendToGoogleAnalytics);
-					webVitals.onLCP(sendToGoogleAnalytics);
-				};
-				document.head.appendChild(script);
-			})();
+			onCLS(sendToGoogleAnalytics);
+			onINP(sendToGoogleAnalytics);
+			onLCP(sendToGoogleAnalytics);
 		</script>
 	</body>
 </html>
