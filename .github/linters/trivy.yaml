@@ -1,0 +1,13 @@
+---
+# Super Linter's default, plus skip-dirs: the CI installs node_modules for
+# the other linters, and Trivy flagged a Dockerfile inside a dependency.
+exit-code: 1
+exit-on-eol: 2
+scan:
+    disable-telemetry: true
+    scanners:
+        - vuln
+        - misconfig
+        - secret
+    skip-dirs:
+        - node_modules

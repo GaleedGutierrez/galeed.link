@@ -9,13 +9,19 @@ jobs:
   commitlint:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           fetch-depth: 0
-      - name: 📥 Install commitlint
-        run: |
-          npm install conventional-changelog-conventionalcommits
-          npm install commitlint@latest
+      - name: 🐢 Setup Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+
+      # The lockfile's commitlint and config, the same ones the commit-msg
+      # hook runs.
+      - name: 📥 Install Dependencies
+        run: npm ci
 
       - name: ✅🗃️ Validate current commit (last commit) with commitlint
         if: github.event_name == 'push'

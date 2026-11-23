@@ -1,0 +1,5 @@
+[codespell]
+check-hidden =
+skip = package-lock.json,*/package-lock.json,*.log,.git,node_modules
+# Spanish words (UI copy and comments) and the "wont do/fix" label name.
+ignore-words-list = cliente,clases,cursos,wont
