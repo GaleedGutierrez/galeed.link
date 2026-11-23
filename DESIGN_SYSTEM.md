@@ -246,6 +246,17 @@ The full module is in §9.8. Its behavior contract:
 Example, with the OS starting in light: click → `dark` is stored and the site turns dark → OS switches to dark: the site stays dark and the value is kept → OS switches back to light: the site stays dark → click → the target (light) matches the OS, so the key is removed and the site follows the OS again.
 | Theme swap | transitions are suppressed for two frames (`[data-theme-switching]`), so 200ms color transitions don't smear across the whole page |
 
+### 2.4 Favicon `[P]`
+
+The favicon sits in the browser's tab strip, so it follows the browser's color scheme through `@media (prefers-color-scheme)` inside `public/favicon.svg`, not the site's `data-theme`. It reuses existing primitives, with no new colors:
+
+| Scheme | Disc | Ring + G | Ratio |
+| --- | --- | --- | --- |
+| Dark (default) | `--charcoal-950` | `--hev-400` | 7.63:1 (AAA) |
+| Light | `--bone-50` | `--hev-text-l` | 7.78:1 (AAA) |
+
+Both versions clear 7:1, the AAA text threshold, though a graphic only needs 3:1. The ring's outer edge (r 28) stays inside the disc (r 32), so the mark always sits on its own disc and the tab strip color never changes the ratio. `--hev-400` on `--bone-50` is only 2.13:1, so the light icon uses the darker text orange. The `.ico`, `apple-touch-icon.png` and manifest PNGs only have one version, rendered from the dark one. The SVG keeps hex literals because it is a standalone file outside the CSS pipeline; keep them in sync with `settings/colors.css`.
+
 ---
 
 ## 3. Color system (semantic tokens: Dark & Light)
