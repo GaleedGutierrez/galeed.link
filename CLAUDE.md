@@ -185,9 +185,11 @@ docs are English.
   the final HTML.
 - The Content-Security-Policy is generated, not written in `public/_headers`.
   `cspHeaders.ts` hashes every inline script and `<style>` in `dist/*.html` (the
-  site is static, so no nonces) and appends the header to `dist/_headers`.
-  Editing an inline script needs no manual hash update. Never add
-  `'unsafe-inline'` or `'unsafe-eval'`: `tests/csp.test.ts` checks it.
+  site is static, so no nonces) and adds the header to the `/*` rule of
+  `dist/_headers`. Never add a second `/*` rule: on Cloudflare it replaces the
+  first one, which dropped HSTS and the other headers. Editing an inline script
+  needs no manual hash update. Never add `'unsafe-inline'` or `'unsafe-eval'`:
+  `tests/csp.test.ts` checks it.
   - It ships as `Content-Security-Policy-Report-Only`; enforcing it is the
     `CSP_HEADER` constant in `csp.ts`.
   - `/~partytown/*` detaches the header: Partytown's sandbox runs gtag through
