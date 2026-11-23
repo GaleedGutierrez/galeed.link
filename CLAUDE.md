@@ -5,8 +5,9 @@ code in this repository.
 
 ## galeed.link
 
-Personal link hub. Astro 5 + TypeScript (strict) + global ITCSS styles + CSS
-Modules + UnoCSS (layout only). Node 22.17.1 (`.nvmrc`), npm, ESM.
+Personal link hub. Astro 7 + TypeScript (strict) + global ITCSS styles + CSS
+Modules + UnoCSS (layout only). Node 22.23.5 (`.nvmrc`; Astro 7 needs ≥
+22.23.4), npm, ESM.
 
 UI copy is Spanish (`<html lang="es">`). Code, comments, commit messages and
 docs are English.
@@ -182,9 +183,16 @@ docs are English.
   arbitrary values (`grid-cols-[1fr_1px_1fr]`, `aspect-[5/4]`) at the brackets,
   so they were silently purged. After adding an arbitrary class, check it
   survives in `dist/_astro/*.css`.
-- `@galeedgutierrez/shared-assets` is in `vite.ssr.noExternal`: it imports its
-  screenshots and `svg?raw` icons, which plain Node can't load at prerender. It
-  also makes Vite emit every project screenshot into `dist/`, even unused ones.
+- `purgeCss.ts` passes the CSS to PurgeCSS as `raw` text. PurgeCSS 9 globs `css`
+  paths, and an absolute Windows path (backslashes) matched nothing, so the step
+  silently purged nothing.
+- `@galeedgutierrez/shared-assets` is in `vite.resolve.noExternal`: it imports
+  its screenshots and `svg?raw` icons, which plain Node can't load at prerender.
+  Not `vite.ssr.noExternal`: Astro 7 prerenders in a separate `prerender` Vite
+  environment that ignores it. It also makes Vite emit every project screenshot
+  into `dist/`, even unused ones.
+- `compressHTML: true` is set on purpose. Astro 7's default (`'jsx'`) drops the
+  whitespace between inline elements ("© 2026Galeed").
 - `Barlow Fallback` and `JetBrains Mono Fallback*` metrics come from Capsize
   (`@capsizecss/core` + `@capsizecss/metrics`; Consolas via `@capsizecss/unpack`
   from `consola.ttf`, since Capsize ships no metrics for it). Regenerate them;

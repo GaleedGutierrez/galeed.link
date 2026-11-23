@@ -16,7 +16,7 @@
 		"url": "https://github.com/GaleedGutierrez/galeed.link.git"
 	},
 	"engines": {
-		"node": ">=22.0.0",
+		"node": ">=22.23.4",
 		"npm": ">=10.0.0"
 	},
 	"homepage": "https://github.com/GaleedGutierrez/galeed.link#readme",
@@ -47,16 +47,15 @@
 		"prepare": "husky"
 	},
 	"dependencies": {
-		"@astrojs/partytown": "^2.1.4",
-		"@astrojs/sitemap": "^3.5.0",
+		"@astrojs/partytown": "^2.1.9",
+		"@astrojs/sitemap": "^3.7.6",
 		"@fontsource-variable/jetbrains-mono": "^5.3.0",
 		"@fontsource/barlow": "^5.3.0",
 		"@galeedgutierrez/shared-assets": "^0.2.4",
-		"@playform/compress": "^0.2.0",
-		"astro": "^5.18.2",
-		"astro-icon": "^1.1.5",
+		"astro": "^7.4.13",
+		"astro-icon": "^1.2.0",
 		"astro-seo": "^1.2.0",
-		"astro-seo-schema": "^5.1.0",
+		"astro-seo-schema": "^7.0.2",
 		"schema-dts": "^1.1.5",
 		"web-vitals": "^6.2.3"
 	},

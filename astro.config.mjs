@@ -16,10 +16,16 @@ try {
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://galeed.link',
+	// Astro 7 defaults to 'jsx', which drops the whitespace between inline
+	// elements ("© 2026 Galeed" became "© 2026Galeed"). Keep the HTML-aware
+	// compression.
+	compressHTML: true,
 	vite: {
 		// shared-assets imports its images and svg?raw icons; Vite must
-		// process it, because plain Node can't import those files.
-		ssr: {
+		// process it, because plain Node can't import those files. Set on
+		// `resolve`, not `ssr`: Astro 7 prerenders in its own `prerender`
+		// environment, which ignores `ssr.noExternal`.
+		resolve: {
 			noExternal: ['@galeedgutierrez/shared-assets'],
 		},
 		build: {
