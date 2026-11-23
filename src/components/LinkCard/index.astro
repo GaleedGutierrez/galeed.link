@@ -32,8 +32,9 @@ const linkProps = isLink
 	<span
 		aria-hidden="true"
 		class={styles["link-card__index"]}
-		>{index}</span
 	>
+		{index}
+	</span>
 	<span class="flex min-w-0 flex-col gap-1">
 		<span class={styles["link-card__title"]}>{item.title}</span>
 		<span
@@ -43,34 +44,28 @@ const linkProps = isLink
 			]}
 		>
 			{item.meta && <span>{item.meta}</span>}
-			{
-				item.status && (
-					<Chip
-						label={item.status.label}
-						tone={item.status.tone}
-					/>
-				)
-			}
-			{item.chips?.map((chip) => <Chip label={chip} />)}
+			{item.status && (
+				<Chip
+					label={item.status.label}
+					tone={item.status.tone}
+				/>
+			)}
+			{item.chips?.map((chip) => (
+				<Chip label={chip} />
+			))}
 		</span>
 	</span>
-	{
-		isLink && (
-			<Icon
-				aria-hidden="true"
-				class={styles["link-card__icon"]}
-				name={
-					item.external
-						? "lucide:arrow-up-right"
-						: "lucide:arrow-right"
-				}
-				size={18}
-			/>
-		)
-	}
-	{
-		item.external && (
-			<span class="sr-only">(se abre en una pestaña nueva)</span>
-		)
-	}
+	{isLink && (
+		<Icon
+			aria-hidden="true"
+			class={styles["link-card__icon"]}
+			name={
+				item.external ? "lucide:arrow-up-right" : "lucide:arrow-right"
+			}
+			size={18}
+		/>
+	)}
+	{item.external && (
+		<span class="sr-only">(se abre en una pestaña nueva)</span>
+	)}
 </Tag>

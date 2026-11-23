@@ -64,101 +64,88 @@ const section = Object.fromEntries(sections.map((item) => [item.id, item]));
 		class="mt-6 flex flex-col gap-8"
 		id="main"
 	>
-		{
-			section.bio && (
-				<section
-					aria-labelledby="bio"
-					class="flex flex-col gap-4 px-4"
+		{section.bio && (
+			<section
+				aria-labelledby="bio"
+				class="flex flex-col gap-4 px-4"
+			>
+				<SectionHeader {...section.bio} />
+				<Bio />
+			</section>
+		)}
+		{section.freelance && (
+			<section
+				aria-labelledby="freelance"
+				class="flex flex-col gap-4 px-4"
+			>
+				<SectionHeader {...section.freelance} />
+				<ul
+					class="flex flex-col gap-4"
+					role="list"
 				>
-					<SectionHeader {...section.bio} />
-					<Bio />
-				</section>
-			)
-		}
-		{
-			section.freelance && (
-				<section
-					aria-labelledby="freelance"
-					class="flex flex-col gap-4 px-4"
+					{freelanceItems.map((item, position) => (
+						<li>
+							<LinkCard
+								index={String(position + 1).padStart(2, "0")}
+								item={item}
+							/>
+						</li>
+					))}
+				</ul>
+			</section>
+		)}
+		{section.proyectos && (
+			<section
+				aria-labelledby="proyectos"
+				class="flex flex-col gap-4 px-4"
+			>
+				<SectionHeader
+					{...section.proyectos}
+					action={{
+						href: PROFILE.portfolioUrl,
+						label: "Ver todos",
+						srContext: "Proyectos: ",
+					}}
+				/>
+				<ul
+					class="grid grid-cols-2 gap-3"
+					role="list"
 				>
-					<SectionHeader {...section.freelance} />
-					<ul
-						class="flex flex-col gap-4"
-						role="list"
-					>
-						{freelanceItems.map((item, position) => (
-							<li>
-								<LinkCard
-									index={String(position + 1).padStart(
-										2,
-										"0",
-									)}
-									item={item}
-								/>
-							</li>
-						))}
-					</ul>
-				</section>
-			)
-		}
-		{
-			section.proyectos && (
-				<section
-					aria-labelledby="proyectos"
-					class="flex flex-col gap-4 px-4"
+					{projectTiles.map((item) => (
+						<li class:list={[item.featured && "col-span-full"]}>
+							<TileCard item={item} />
+						</li>
+					))}
+				</ul>
+			</section>
+		)}
+		{section["open-source"] && (
+			<section
+				aria-labelledby="open-source"
+				class="flex flex-col gap-4 px-4"
+			>
+				<SectionHeader {...section["open-source"]} />
+				<ul
+					class="flex flex-col gap-4"
+					role="list"
 				>
-					<SectionHeader
-						{...section.proyectos}
-						action={{
-							href: PROFILE.portfolioUrl,
-							label: "Ver todos",
-							srContext: "Proyectos: ",
-						}}
-					/>
-					<ul
-						class="grid grid-cols-2 gap-3"
-						role="list"
-					>
-						{projectTiles.map((item) => (
-							<li class:list={[item.featured && "col-span-full"]}>
-								<TileCard item={item} />
-							</li>
-						))}
-					</ul>
-				</section>
-			)
-		}
-		{
-			section["open-source"] && (
-				<section
-					aria-labelledby="open-source"
-					class="flex flex-col gap-4 px-4"
-				>
-					<SectionHeader {...section["open-source"]} />
-					<ul
-						class="flex flex-col gap-4"
-						role="list"
-					>
-						{repoItems.map((item) => (
-							<li>
-								<RepoCard item={item} />
-							</li>
-						))}
-					</ul>
-				</section>
-			)
-		}
-		{
-			section.contacto && (
-				<section
-					aria-labelledby="contacto"
-					class="flex flex-col gap-4 px-4"
-				>
-					<SectionHeader {...section.contacto} />
-					<Contact />
-				</section>
-			)
-		}
+					{repoItems.map((item) => (
+						<li>
+							<RepoCard item={item} />
+						</li>
+					))}
+				</ul>
+			</section>
+		)}
+		{section.contacto && (
+			<section
+				aria-labelledby="contacto"
+				class="flex flex-col gap-4 px-4"
+			>
+				<SectionHeader {...section.contacto} />
+				<Contact />
+			</section>
+		)}
 	</main>
 	<Footer />
 </Layout>

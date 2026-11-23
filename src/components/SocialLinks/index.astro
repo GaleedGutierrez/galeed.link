@@ -16,27 +16,25 @@ const { class: className } = Astro.props;
 	class:list={["grid grid-cols-4 gap-2 px-4", className]}
 	role="list"
 >
-	{
-		SOCIAL_LINKS.map((link) => (
-			<li>
-				<a
-					class:list={[
-						"flex min-h-14 flex-col items-center justify-center gap-1",
-						styles["social-links__link"],
-					]}
-					href={link.href}
-					rel="me noopener"
-					target="_blank"
-				>
-					<Icon
-						aria-hidden="true"
-						name={link.icon}
-						size={20}
-					/>
-					<span>{link.label}</span>
-					<span class="sr-only">(se abre en una pestaña nueva)</span>
-				</a>
-			</li>
-		))
-	}
+	{SOCIAL_LINKS.map((link) => (
+		<li>
+			<a
+				class:list={[
+					"flex min-h-14 flex-col items-center justify-center gap-1",
+					styles["social-links__link"],
+				]}
+				href={link.href}
+				rel="me noopener"
+				target="_blank"
+			>
+				<Icon
+					aria-hidden="true"
+					name={link.icon}
+					size={20}
+				/>
+				<span>{link.label}</span>
+				<span class="sr-only">(se abre en una pestaña nueva)</span>
+			</a>
+		</li>
+	))}
 </ul>

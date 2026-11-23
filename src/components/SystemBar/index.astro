@@ -14,20 +14,18 @@ import styles from "./styles.module.css";
 >
 	<p class={styles["system-bar__meta"]}>
 		{PROFILE.location}
-		{
-			PROFILE.isAvailable && (
-				<>
-					<span aria-hidden="true"> · </span>
-					<span class={styles["system-bar__status"]}>
-						<span
-							aria-hidden="true"
-							class="a-chip__dot"
-						/>
-						Disponible
-					</span>
-				</>
-			)
-		}
+		{PROFILE.isAvailable && (
+			<>
+				<span aria-hidden="true"> · </span>
+				<span class={styles["system-bar__status"]}>
+					<span
+						aria-hidden="true"
+						class="a-chip__dot"
+					/>
+					Disponible
+				</span>
+			</>
+		)}
 	</p>
 	<ThemeToggle />
 </div>

@@ -14,22 +14,18 @@ const { label, tone, icon } = Astro.props;
 ---
 
 <span class:list={["a-chip", tone && `a-chip--${tone}`]}>
-	{
-		tone && (
-			<span
-				aria-hidden="true"
-				class="a-chip__dot"
-			/>
-		)
-	}
-	{
-		icon && (
-			<Icon
-				aria-hidden="true"
-				name={icon}
-				size={14}
-			/>
-		)
-	}
+	{tone && (
+		<span
+			aria-hidden="true"
+			class="a-chip__dot"
+		/>
+	)}
+	{icon && (
+		<Icon
+			aria-hidden="true"
+			name={icon}
+			size={14}
+		/>
+	)}
 	<span class="a-chip__label">{label}</span>
 </span>

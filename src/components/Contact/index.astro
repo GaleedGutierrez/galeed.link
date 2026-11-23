@@ -13,19 +13,18 @@ const linkedin = SOCIAL_LINKS.find((link) => link.label === "LinkedIn");
 	<a
 		class="a-button a-button--primary a-button--wipe"
 		href={`mailto:${PROFILE.email}`}
-		>Escribime</a
 	>
-	{
-		linkedin && (
-			<a
-				class="a-button a-button--secondary"
-				href={linkedin.href}
-				rel="me noopener"
-				target="_blank"
-			>
-				LinkedIn
-				<span class="sr-only">(se abre en una pestaña nueva)</span>
-			</a>
-		)
-	}
+		Escribime
+	</a>
+	{linkedin && (
+		<a
+			class="a-button a-button--secondary"
+			href={linkedin.href}
+			rel="me noopener"
+			target="_blank"
+		>
+			LinkedIn
+			<span class="sr-only">(se abre en una pestaña nueva)</span>
+		</a>
+	)}
 </div>

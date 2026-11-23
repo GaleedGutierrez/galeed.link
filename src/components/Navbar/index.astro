@@ -25,22 +25,20 @@ const { sections } = Astro.props;
 		data-nav-list
 		role="list"
 	>
-		{
-			sections.map((section) => (
-				<li>
-					<a
-						class:list={[
-							"relative inline-flex min-h-11 shrink-0 items-center whitespace-nowrap px-3",
-							styles["navbar__link"],
-						]}
-						data-nav-link
-						href={`#${section.id}`}
-					>
-						{section.label}
-					</a>
-				</li>
-			))
-		}
+		{sections.map((section) => (
+			<li>
+				<a
+					class:list={[
+						"relative inline-flex min-h-11 shrink-0 items-center whitespace-nowrap px-3",
+						styles["navbar__link"],
+					]}
+					data-nav-link
+					href={`#${section.id}`}
+				>
+					{section.label}
+				</a>
+			</li>
+		))}
 	</ul>
 </nav>
 <script>

@@ -29,15 +29,15 @@ const { item } = Astro.props;
 	</span>
 	<span class={styles["link-card__description"]}>{item.description}</span>
 	<span class="flex flex-wrap gap-2">
-		{item.chips.map((chip) => <Chip label={chip} />)}
-		{
-			item.status && (
-				<Chip
-					label={item.status.label}
-					tone={item.status.tone}
-				/>
-			)
-		}
+		{item.chips.map((chip) => (
+			<Chip label={chip} />
+		))}
+		{item.status && (
+			<Chip
+				label={item.status.label}
+				tone={item.status.tone}
+			/>
+		)}
 	</span>
 	<span class="sr-only">(se abre en una pestaña nueva)</span>
 </a>

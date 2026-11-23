@@ -227,8 +227,9 @@ const [firstName, ...lastNames] = personalSchema.name.split(" ");
 		<a
 			class="skip-link a-button a-button--primary"
 			href="#main"
-			>Saltar al contenido</a
 		>
+			Saltar al contenido
+		</a>
 		<div
 			class={styles.shell}
 			id="top"
@@ -241,7 +242,11 @@ const [firstName, ...lastNames] = personalSchema.name.split(" ");
 			src={"https://www.googletagmanager.com/gtag/js?id=G-XEPRCKCX47"}
 			type="text/partytown"
 		></script>
-		<script defer is:inline type="text/partytown">
+		<script
+			defer
+			is:inline
+			type="text/partytown"
+		>
 			window.dataLayer = window.dataLayer || [];
 			// On window, not a function declaration: Partytown wraps each
 			// inline script in a function, so a declared gtag stayed local and
