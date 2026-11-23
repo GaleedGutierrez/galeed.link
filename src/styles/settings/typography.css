@@ -39,6 +39,7 @@
 		system-ui, -apple-system, "Segoe UI", "Noto Sans", sans-serif;
 	--font-primary: "Barlow", "Barlow Fallback", var(--font-fallback);
 	--font-mono:
-		"JetBrains Mono Variable", "JetBrains Mono", ui-monospace,
-		sfmono-regular, menlo, consolas, "Liberation Mono", monospace;
+		"JetBrains Mono Variable", "JetBrains Mono Fallback",
+		"JetBrains Mono Fallback Courier", ui-monospace, sfmono-regular, menlo,
+		consolas, "Liberation Mono", monospace;
 }

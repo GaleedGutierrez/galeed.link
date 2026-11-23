@@ -26,3 +26,26 @@
 	descent-override: 20.6868%;
 	line-gap-override: 0%;
 }
+
+/* JetBrains Mono (metadata, chips, repo names). Two families because each
+   local font needs its own overrides: Consolas on Windows (metrics read from
+   consola.ttf with @capsizecss/unpack; Capsize ships none for it), then
+   Courier New on macOS and the rest (@capsizecss/metrics). Only weight 500
+   is used and font-synthesis is none, so one regular face each is enough. */
+@font-face {
+	font-family: "JetBrains Mono Fallback";
+	src: local("Consolas");
+	size-adjust: 109.1297%;
+	ascent-override: 93.4668%;
+	descent-override: 27.4902%;
+	line-gap-override: 0%;
+}
+
+@font-face {
+	font-family: "JetBrains Mono Fallback Courier";
+	src: local("Courier New"), local("CourierNewPSMT");
+	size-adjust: 99.9837%;
+	ascent-override: 102.0166%;
+	descent-override: 30.0049%;
+	line-gap-override: 0%;
+}

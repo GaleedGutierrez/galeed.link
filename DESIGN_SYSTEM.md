@@ -478,6 +478,8 @@ Rules:
    - The `--font-primary` stack (§9.2) already lists `"Barlow Fallback"` second.
 4. **Normalize the fallback's x-height** with `font-size-adjust: from-font` on `body` (already in `elements/body.css`, §9.4), per the `visually-stable-font-fallbacks` guide. It is a one-line complement to the generated fallback face, and browsers without support ignore it. Verify it by blocking the Barlow files in DevTools: the text should keep roughly the same size and line breaks. If it doesn't, replace `from-font` with Barlow's measured x-height ratio.
 5. Don't put `font-display: optional` on Barlow. The name in the hero should render in the brand face on first visit.
+6. **Mono fallback too** (added 2026-11-23). `JetBrains Mono Fallback` faces (Capsize: JetBrains Mono over Menlo, Consolas and Courier New) sit after JetBrains Mono in `--font-mono`, so metadata, chips and repo names keep their width and line height during the swap.
+7. **Subset to the page's characters** (added 2026-11-23). `scripts/subsetFonts.ts` runs last in the build: it collects the characters in the built HTML (plus CSS `content` strings, both letter cases and a small margin of digits, Spanish letters and punctuation) and subsets every Fontsource file with `subset-font`. Variable axes are kept. It renames each font and each stylesheet that references one by content hash, so a cached stylesheet never points at a font a later deploy removed. Measured: the fonts a visit downloads drop from about 136 KB to about 46 KB.
 
 ---
 
