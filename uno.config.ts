@@ -1,8 +1,35 @@
 /* eslint-disable security/detect-object-injection */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { defineConfig } from 'unocss';
+import { defineConfig, presetWind3, transformerVariantGroup } from 'unocss';
+
+/**
+ * UnoCSS is for LAYOUT ONLY: display, flex/grid, gap, padding/margin, sizing,
+ * position/inset, overflow, aspect-ratio, order, line-clamp, and their
+ * responsive variants. Color, type, borders, radius, shadows and motion live in
+ * src/styles (tokens, mixins, atoms) and in each component's CSS Module.
+ *
+ * Spacing needs no theme: p-4 / gap-4 = 1rem = --spacing-4 (N × 4px).
+ */
+const VISUAL_UTILITIES = [
+	/(^|:)(bg|text|border|divide|ring|outline|shadow|rounded|font|leading|tracking|decoration|underline|transition|duration|ease|delay|animate|opacity|fill|stroke|accent|caret|placeholder)(-|$)/,
+	/(^|:)(uppercase|lowercase|capitalize|italic|truncate|antialiased)$/,
+];
 
 export default defineConfig({
+	presets: [presetWind3()],
+	transformers: [transformerVariantGroup()],
+	blocklist: VISUAL_UTILITIES,
+	theme: {
+		// em, not px, so layouts follow the user's text size (§5.4).
+		breakpoints: {
+			sm: '40em',
+			md: '48em',
+			lg: '64em',
+			xl: '90em',
+		},
+	},
+	// User rules are matched before preset rules, so these logical versions
+	// replace the preset's physical pt/pb/mt/mb/w utilities.
 	preflights: [
 		{
 			getCSS: () => `

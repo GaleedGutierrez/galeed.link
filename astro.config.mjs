@@ -44,8 +44,9 @@ export default defineConfig({
 		// 		},
 		// 	},
 		// }),
+		// generic/light-reset.css is the only reset.
 		UnoCSS({
-			injectReset: true,
+			injectReset: false,
 		}),
 	],
 });
