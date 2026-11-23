@@ -1,0 +1,34 @@
+---
+import { Icon } from "astro-icon/components";
+
+import styles from "./styles.module.css";
+---
+
+<button
+	class:list={["grid size-9 place-items-center", styles["theme-toggle"]]}
+	data-theme-toggle
+	hidden
+	type="button"
+>
+	<span data-when="light">
+		<Icon
+			aria-hidden="true"
+			name="lucide:sun"
+			size={16}
+		/>
+		<span class="sr-only">Cambiar a tema oscuro</span>
+	</span>
+	<span data-when="dark">
+		<Icon
+			aria-hidden="true"
+			name="lucide:moon"
+			size={16}
+		/>
+		<span class="sr-only">Cambiar a tema claro</span>
+	</span>
+</button>
+<script>
+	import { initTheme } from "@/scripts/theme";
+
+	initTheme();
+</script>

@@ -1,0 +1,35 @@
+.theme-toggle {
+	position: relative;
+	border: var(--border-025) solid var(--border-color-strong);
+	border-radius: var(--border-radius-05);
+	background-color: var(--background-color-tertiary);
+	color: var(--text-color-tertiary);
+	transition: color var(--duration-fast) var(--ease-standard);
+	touch-action: manipulation;
+
+	&::after {
+		position: absolute;
+		inset: -4px; /* 36 + 8 = 44px hit area */
+		content: "";
+	}
+
+	&:hover {
+		color: var(--text-color-primary);
+	}
+
+	&:active {
+		translate: 0 1px;
+	}
+
+	/* An author `display` (the Uno `grid` class) would beat the UA [hidden] rule */
+	&[hidden] {
+		display: none;
+	}
+
+	/* Show only the rendered state. display: none also removes the other label
+	   from the a11y tree, so the name stays right when the OS theme changes. */
+	:root:not([data-theme="dark"]) & [data-when="dark"],
+	:root[data-theme="dark"] & [data-when="light"] {
+		display: none;
+	}
+}
