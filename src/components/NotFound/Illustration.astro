@@ -1,0 +1,225 @@
+---
+/**
+ * 404 illustration: a "404" browser window on legs walks up to an
+ * "ANOMALOUS LINK" service window cut into a plain wall, where a guard looks
+ * on, unimpressed.
+ *
+ * No color lives in the markup: every fill and stroke comes from a class in
+ * styles.module.css, so both themes and forced colors restyle it. Strokes
+ * follow `color` through currentColor.
+ */
+import styles from "./styles.module.css";
+---
+
+<svg
+	aria-labelledby="not-found-art-title not-found-art-desc"
+	class:list={["w-full", styles["not-found__art"]]}
+	height="190"
+	role="img"
+	viewBox="0 20 320 190"
+	width="320"
+>
+	<title id="not-found-art-title">
+		Una ventana del navegador con un 404 llega a una ventanilla de atención
+	</title>
+	<desc id="not-found-art-desc">
+		Una ventana de navegador con piernas y zapatillas, que muestra el número
+		404, camina hacia una ventanilla con el cartel «ANOMALOUS LINK».
+		Adentro, un guardia de seguridad con gorra y chaleco la mira sin
+		inmutarse.
+	</desc>
+
+	<!-- Wall base: the walker stands in front of it -->
+	<path
+		class={styles["not-found__line"]}
+		d="M24 172 H300"
+	/>
+
+	<!-- Sign -->
+	<rect
+		class={styles["not-found__plate"]}
+		height="18"
+		rx="1"
+		width="120"
+		x="164"
+		y="34"
+	/>
+	<text
+		class={styles["not-found__sign"]}
+		text-anchor="middle"
+		x="224"
+		y="47"
+	>
+		ANOMALOUS LINK
+	</text>
+
+	<!-- Window opening: back wall, then the dark left jamb for depth -->
+	<rect
+		class={styles["not-found__recess"]}
+		height="68"
+		width="96"
+		x="176"
+		y="60"
+	/>
+	<path
+		class={styles["not-found__inverse"]}
+		d="M176 60 L187 67 V128 H176 Z"
+	/>
+
+	<!-- Guard, drawn before the ledge so it covers the torso -->
+	<g>
+		<path
+			class={styles["not-found__surface"]}
+			d="M206 128 C206 115 216 108 232 108 C248 108 258 115 258 128 Z"
+		/>
+		<path
+			class={styles["not-found__vest"]}
+			d="M211 128 L214 116 C218 112 223 111 226 111 L228 128 Z M253 128 L250 116 C246 112 241 111 238 111 L236 128 Z"
+		/>
+		<path
+			class={styles["not-found__line"]}
+			d="M225 109 L232 117 L239 109"
+		/>
+		<rect
+			class={styles["not-found__surface"]}
+			height="8"
+			width="9"
+			x="227.5"
+			y="100"
+		/>
+		<path
+			class={styles["not-found__surface"]}
+			d="M221 88 C218 88 218 95 221 95 M243 88 C246 88 246 95 243 95"
+		/>
+		<ellipse
+			class={styles["not-found__surface"]}
+			cx="232"
+			cy="90"
+			rx="11"
+			ry="12"
+		/>
+		<path
+			class={styles["not-found__line"]}
+			d="M226 92.5 H229.5 M234.5 92.5 H238 M229 98 H235"
+		/>
+		<path
+			class={styles["not-found__inverse"]}
+			d="M220 85 C220 76 226 71 232 71 C238 71 244 76 244 85 Z"
+		/>
+		<path
+			class={styles["not-found__inverse"]}
+			d="M218 84 H246 C248 84 248 87 246 88 C238 91 226 91 218 88 C216 87 216 84 218 84 Z"
+		/>
+	</g>
+
+	<!-- Window frame and the counter ledge in perspective -->
+	<rect
+		class={styles["not-found__line"]}
+		height="68"
+		width="96"
+		x="176"
+		y="60"
+	/>
+	<path
+		class={styles["not-found__surface"]}
+		d="M170 128 H278 L286 135 H162 Z"
+	/>
+	<rect
+		class={styles["not-found__surface"]}
+		height="5"
+		width="124"
+		x="162"
+		y="135"
+	/>
+
+	<!-- Walking 404 window. The card's tilt is a static attribute; the
+		 animated groups only ever set CSS transform. -->
+	<g class={styles["not-found__walker"]}>
+		<g
+			class:list={[
+				styles["not-found__leg"],
+				styles["not-found__leg--back"],
+			]}
+		>
+			<rect
+				class={styles["not-found__surface"]}
+				height="62"
+				width="12"
+				x="70"
+				y="130"
+			/>
+			<path
+				class={styles["not-found__inverse"]}
+				d="M68 192 H82 C88 192 93 195 93 199 V202 H66 V196 C66 194 66 192 68 192 Z"
+			/>
+		</g>
+		<g
+			class:list={[
+				styles["not-found__leg"],
+				styles["not-found__leg--front"],
+			]}
+		>
+			<rect
+				class={styles["not-found__surface"]}
+				height="62"
+				width="12"
+				x="90"
+				y="130"
+			/>
+			<path
+				class={styles["not-found__surface"]}
+				d="M88 192 H102 C108 192 113 195 113 199 V202 H86 V196 C86 194 86 192 88 192 Z"
+			/>
+			<path
+				class={styles["not-found__line"]}
+				d="M86 198.5 H113"
+			/>
+		</g>
+		<g class={styles["not-found__card"]}>
+			<g transform="rotate(-12 88 110)">
+				<rect
+					class={styles["not-found__surface"]}
+					height="68"
+					rx="3"
+					width="96"
+					x="40"
+					y="76"
+				/>
+				<path
+					class={styles["not-found__inverse"]}
+					d="M43 76 H133 C134.7 76 136 77.3 136 79 V90 H40 V79 C40 77.3 41.3 76 43 76 Z"
+				/>
+				<path
+					class={styles["not-found__accent"]}
+					d="M41 90 H135"
+				/>
+				<circle
+					class={styles["not-found__dot"]}
+					cx="48"
+					cy="83"
+					r="1.75"
+				/>
+				<circle
+					class={styles["not-found__dot"]}
+					cx="54"
+					cy="83"
+					r="1.75"
+				/>
+				<circle
+					class={styles["not-found__dot"]}
+					cx="60"
+					cy="83"
+					r="1.75"
+				/>
+				<text
+					class={styles["not-found__code-art"]}
+					text-anchor="middle"
+					x="88"
+					y="131"
+				>
+					404
+				</text>
+			</g>
+		</g>
+	</g>
+</svg>

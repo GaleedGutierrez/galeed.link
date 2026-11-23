@@ -915,9 +915,20 @@ All buttons: labels never wrap mid-word. Allow two-line labels only on mobile vi
   - Tecnología → `lucide:cpu`
   - Gym → `lucide:dumbbell`
   - Hiking → `lucide:mountain`
+  - Juegos de mesa → `lucide:dices`
   - Mate → `lucide:leaf`
   - Café → `lucide:coffee`
 - *Stack tech:* a chip collection (§7.7). "Frontend Developer" moves out of the list (it is already the role line). This also removes the awkward mobile wrap (issue 7).
+
+### 7.15 404 page
+
+- `src/pages/404.astro`: the system bar in a `<header>`, then `NotFound` in `<main>`. `noindex`.
+- Flow, left-aligned: illustration → mono tag (`@mixin micro`, `--text-color-accent`; the visible `ERR_404 // RUTA_NO_RESUELTA` is `aria-hidden`, an `sr-only` twin reads "Error 404: ruta no resuelta") → `h1` → `@mixin body-md` text in `--text-color-secondary` → one `a-button a-button--primary` back to `/`.
+- Illustration (`NotFound/Illustration.astro`): inline SVG line art, `role="img"` named by its Spanish `<title>` and `<desc>`. A "404" browser window on legs walks up to a service window cut into a plain wall, under a sign that reads "ANOMALOUS LINK"; a generic guard looks on from inside. No game names, logos or characters (§6.5).
+  - No color in the markup. Line art is `--text-color-primary` through `currentColor`. Fills are background tokens (`tertiary` surfaces, `primary` window recess, `secondary` sign plate, `inverse` for the window jamb, title bar, cap and one sneaker, `accent-subtle` vest). The single accent is the window's 2px HEV rule in `--border-color-accent`.
+  - SVG text: sign `@mixin micro` (primary on secondary, 15.00 / 13.72:1), "404" `@mixin heading-xl` in `--text-color-accent` on tertiary (8.84 / 7.46:1).
+  - Forced colors map each fill role to `Canvas` / `CanvasText` and the HEV rule to `Highlight`.
+- Motion: the one-pass walk-in in §8.2.
 
 ---
 
@@ -948,6 +959,7 @@ All buttons: labels never wrap mid-word. Allow two-line labels only on mobile vi
 | Press | `transform: translateY(1px)` | instant / standard |
 | Theme switch | **no transition** (suppressed 2 frames) | — |
 | Anchor scroll | `scroll-behavior: smooth` only under `prefers-reduced-motion: no-preference` | — |
+| 404 walk-in (§7.15) | `transform` on the walker, its card and legs. Plays once on load, then rests on the static pose | 2.4s in total (4 × 0.6s steps), out / standard. Under 5s, so WCAG 2.2.2 needs no pause control |
 
 Rules:
 
@@ -968,6 +980,7 @@ There is **no global kill switch** (no `transition-duration: 0.01ms` on `*`). Th
 | Primary CTA diagonal wipe | animated | dropped. The plain hover fill applies |
 | Color / background / border changes | 150–200ms | **unchanged**. They aren't motion |
 | Anchor scrolling | smooth | instant |
+| 404 walk-in | plays once (2.4s) | dropped. The static pose is the final frame |
 | Theme switch | instant | instant |
 
 Pattern: declare the static state by default, and add the transition inside a nested `@media (prefers-reduced-motion: no-preference)` block in the same rule. Code that waits for `transitionend` must not exist, because under `reduce` that event never fires (the theme logic in §9.8 doesn't use it).
