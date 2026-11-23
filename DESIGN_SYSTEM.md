@@ -785,7 +785,7 @@ Conventions (§9):
 ### 7.9 Project / bento card (Side projects)
 
 - Grid: §5.3. The card is an `<a class:list={['flex flex-col gap-2', styles.tile]}>`, with `--border-radius-1` and `--text-color-primary`. There is no border around the whole tile, following LK's open style **[V]**.
-- Media: `<Picture>` in a `<figure class:list={['relative overflow-hidden aspect-square', styles.media]}>` (featured: `aspect-video`). The module adds `--border-radius-1`, a `--border-025` border in `--border-color-primary`, and `--background-color-tertiary`. Images use `loading="lazy"` and explicit dimensions (CLS < 0.1).
+- Media: `<Picture>` in a `<figure class:list={['relative overflow-hidden aspect-video', styles.media]}>` on every tile, featured or not: the project screenshots are 16:9, and a square crop cut them to a third of their width and upscaled them. The `<picture>` wrapper gets `pictureAttributes={{ class: 'block h-full' }}`, so `object-fit: cover` fills the frame even if a screenshot isn't exactly 16:9. The module adds `--border-radius-1`, a `--border-025` border in `--border-color-primary`, and `--background-color-tertiary`. Images use `loading="lazy"` and explicit dimensions (CLS < 0.1).
   - Hover: `img { scale: 1.03 }` over 300ms (BM uses 1.05 **[V]**; reduced here to stay subtle).
 - Title: `@mixin body-md var(--fw-bold)` (LK uses 18/500 **[V]**). Meta: `@mixin micro`, `--text-color-tertiary` (stack · year).
 - Description (optional): `@mixin body-sm`, `--text-color-secondary`, `line-clamp-3`. The full text lives on the project page, so the clamp is acceptable.

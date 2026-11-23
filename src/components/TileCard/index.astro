@@ -23,8 +23,9 @@ const sizes = item.featured
 >
 	<figure
 		class:list={[
-			"relative overflow-hidden",
-			item.featured ? "aspect-video" : "aspect-square",
+			// 16:9 for every tile: the shared-assets screenshots are 16:9,
+			// and a square crop zoomed them in.
+			"relative aspect-video overflow-hidden",
 			styles["tile-card__media"],
 		]}
 	>
