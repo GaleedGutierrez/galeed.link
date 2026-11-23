@@ -1,0 +1,17 @@
+# Text files use LF in the repository and in every working copy, whatever
+# core.autocrlf says (it is `true` by default on Windows).
+* text=auto eol=lf
+
+# Binary assets: never convert or diff them as text.
+*.avif binary
+*.gif binary
+*.ico binary
+*.jpeg binary
+*.jpg binary
+*.otf binary
+*.pdf binary
+*.png binary
+*.ttf binary
+*.webp binary
+*.woff binary
+*.woff2 binary
