@@ -38,6 +38,10 @@ export default tseslint.config(
 			'**/lighthouse-report/**',
 			'.markdownlint-cli2.jsonc',
 			'**/.astro/**',
+			// Installed agent skills: third-party files, ignored by every other linter too.
+			'.agents/**',
+			'.claude/**',
+			'skills-lock.json',
 		],
 	},
 
