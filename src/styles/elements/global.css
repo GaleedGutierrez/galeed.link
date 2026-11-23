@@ -1,0 +1,5 @@
+/* One focus ring for everything (BM pattern: 2px, offset 2px). AAA: ≥ 7:1, §3.5. */
+:focus-visible {
+	outline: var(--border-05) solid var(--outline-color-focus);
+	outline-offset: calc(2 * var(--rem-scale));
+}

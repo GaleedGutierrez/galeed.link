@@ -6,11 +6,6 @@ a {
 		color: var(--text-color-hover-primary);
 	}
 
-	&:focus-visible {
-		outline: var(--border-radius-05) solid var(--text-color-primary);
-		outline-offset: var(--spacing-025);
-	}
-
 	&:active {
 		color: var(--text-color-active-primary);
 	}

@@ -1,4 +1,3 @@
-/* stylelint-disable declaration-no-important */
 @layer reset {
 	*,
 	*::before,
@@ -57,7 +56,8 @@
 		font: inherit;
 		letter-spacing: inherit;
 		word-spacing: inherit;
-		outline: none;
+
+		/* No `outline: none`: the focus ring lives in elements/global.css. */
 	}
 
 	button {
@@ -100,15 +100,6 @@
 		}
 	} */
 
-	@media (prefers-reduced-motion: reduce) {
-		*,
-		*::before,
-		*::after {
-			scroll-behavior: auto !important;
-			transition: none;
-			transition-duration: 0.01ms !important;
-			animation-duration: 0.01ms !important;
-			animation-iteration-count: 1 !important;
-		}
-	}
+	/* No global reduced-motion override: each effect opts in to motion next
+	   to its own rule (DESIGN_SYSTEM.md §8.3). */
 }
