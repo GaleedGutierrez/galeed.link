@@ -17,6 +17,11 @@ try {
 export default defineConfig({
 	site: 'https://galeed.link',
 	vite: {
+		// shared-assets imports its images and svg?raw icons; Vite must
+		// process it, because plain Node can't import those files.
+		ssr: {
+			noExternal: ['@galeedgutierrez/shared-assets'],
+		},
 		build: {
 			sourcemap: process.env.ENABLE_SOURCEMAP === 'true',
 		},
