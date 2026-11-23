@@ -56,6 +56,7 @@ describe('buildWorksSchema', () => {
 
 		expect(work).toStrictEqual({
 			'@type': 'CreativeWork',
+			'@id': 'https://galeed.link/#proyecto-shop-co',
 			name: 'Shop.co',
 			url: 'https://shop.example/',
 			description: 'E-commerce.',
@@ -71,12 +72,13 @@ describe('buildWorksSchema', () => {
 
 		expect(work).toStrictEqual({
 			'@type': 'CreativeWork',
+			'@id': 'https://galeed.link/#freelance-cliente-privado',
 			name: 'Cliente privado',
 			contributor: { '@id': PERSON_ID },
 		});
 	});
 
-	it('points pull requests at the repository, not at the PR', () => {
+	it('models a pull request as part of its repository', () => {
 		const [work] = build({
 			repos: [
 				{
@@ -91,13 +93,32 @@ describe('buildWorksSchema', () => {
 		});
 
 		expect(work).toStrictEqual({
-			'@type': 'SoftwareSourceCode',
-			name: 'withastro/docs',
-			description: 'Fix a typo',
-			codeRepository: 'https://github.com/withastro/docs',
-			programmingLanguage: 'MDX',
-			contributor: { '@id': PERSON_ID },
+			'@type': 'CreativeWork',
+			'@id': 'https://github.com/withastro/docs/pull/1',
+			name: 'Fix a typo',
+			url: 'https://github.com/withastro/docs/pull/1',
+			author: { '@id': PERSON_ID },
+			isPartOf: {
+				'@type': 'SoftwareSourceCode',
+				name: 'withastro/docs',
+				codeRepository: 'https://github.com/withastro/docs',
+				programmingLanguage: 'MDX',
+			},
 		});
+	});
+
+	it('gives every node a fragment @id without accents or symbols', () => {
+		const [work] = build({
+			tiles: [
+				{
+					title: 'Diseño & Código',
+					href: 'https://a.example/',
+					alt: '',
+				},
+			],
+		});
+
+		expect(work['@id']).toBe('https://galeed.link/#proyecto-diseno-codigo');
 	});
 
 	it('follows the page order: freelance, side projects, open source', () => {

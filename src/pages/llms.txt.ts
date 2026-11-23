@@ -52,7 +52,6 @@ export const GET: APIRoute = async () => {
 		...projects.map(({ title, href, meta, description }) =>
 			link(title, href, [meta, description].filter(Boolean).join('. ')),
 		),
-		link('Todos los proyectos', PROFILE.portfolioUrl),
 		'',
 		'## Open source',
 		'',
@@ -63,6 +62,12 @@ export const GET: APIRoute = async () => {
 				[description, status?.label].filter(Boolean).join(' · '),
 			),
 		),
+		'',
+		// llmstxt.org: links under "Optional" can be skipped for a shorter
+		// context.
+		'## Optional',
+		'',
+		link('Todos los proyectos', PROFILE.portfolioUrl),
 		'',
 	];
 

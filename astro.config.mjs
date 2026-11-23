@@ -7,6 +7,8 @@ import icon from 'astro-icon';
 import Sonda from 'sonda/astro';
 import UnoCSS from 'unocss/astro';
 
+import { getLastModified } from './src/utils/lastModified.ts';
+
 try {
 	process.loadEnvFile();
 } catch {
@@ -33,7 +35,8 @@ export default defineConfig({
 		},
 	},
 	integrations: [
-		sitemap({ lastmod: new Date() }),
+		// Last content commit, not the build time (src/utils/lastModified.ts).
+		sitemap({ lastmod: getLastModified() }),
 		icon(),
 		process.env.ENABLE_SOURCEMAP === 'true' &&
 			Sonda({ server: true, open: false }),
