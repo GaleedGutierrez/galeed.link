@@ -144,10 +144,11 @@ const {
 		</div>
 		<script
 			defer
+			is:inline
 			src={"https://www.googletagmanager.com/gtag/js?id=G-XEPRCKCX47"}
 			type="text/partytown"
 		></script>
-		<script defer type="text/partytown">
+		<script defer is:inline type="text/partytown">
 			window.dataLayer = window.dataLayer || [];
 			function gtag() {
 				dataLayer.push(arguments);
@@ -156,7 +157,7 @@ const {
 
 			gtag("config", "G-XEPRCKCX47");
 		</script>
-		<script defer type="text/partytown">
+		<script defer is:inline type="text/partytown">
 			function sendToGoogleAnalytics({ name, delta, id }) {
 				gtag("event", name, {
 					event_category: "Web Vitals",
