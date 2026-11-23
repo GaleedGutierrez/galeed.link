@@ -6,6 +6,35 @@
 	}
 }
 
+/* One scrolling line (the original hub's pattern). The edges fade so it's
+   clear there is more; each fade only covers the list's own padding at
+   the scroll ends, so the first and last links are never hidden. */
+.navbar__list {
+	--navbar-fade-start: var(--spacing-4);
+	--navbar-fade-end: var(--spacing-8);
+
+	/* py-1 (4px) leaves room for the focus ring: overflow clips outlines. */
+	padding-inline: var(--navbar-fade-start) var(--navbar-fade-end);
+	scroll-padding-inline: var(--navbar-fade-start) var(--navbar-fade-end);
+	overscroll-behavior-inline: contain;
+	mask-image: linear-gradient(
+		to right,
+		transparent,
+		oklch(0% 0 0) var(--navbar-fade-start),
+		oklch(0% 0 0) calc(100% - var(--navbar-fade-end)),
+		transparent
+	);
+
+	/* Touch: swipe, no bar (as before). Mouse: a thin bar, so the last
+	   links are reachable without a trackpad or Shift + wheel. */
+	scrollbar-width: none;
+
+	@media (hover: hover) and (pointer: fine) {
+		scrollbar-width: thin;
+		scrollbar-color: var(--border-color-strong) transparent;
+	}
+}
+
 .navbar__link {
 	color: var(--text-color-secondary);
 	transition: color var(--duration-fast) var(--ease-standard);

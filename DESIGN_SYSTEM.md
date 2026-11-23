@@ -133,7 +133,7 @@ Issues verified during inspection:
 |---|---|---|
 | Shell | single centered column, grayscale portrait with fade, full-bleed on mobile | width 448 → **480px** to fit a 2-col bento. Radius 16 → **8px** ("machined"). Shell gets a hairline border, so the edge stays visible in dark mode (fixes issue 4) |
 | Hero | name, role, social row with **visible labels** (better than Linkd's icon-only row) | role becomes `<p>`. New slim **system bar** above the photo with mono metadata, theme toggle, and HL2's 2px orange underline rule |
-| Nav | same five destinations | IDs fixed to match labels, uppercase DIN-style labels, **wraps instead of clipping**, BM accent underline indicator, sticky ≥1024px |
+| Nav | same five destinations | IDs fixed to match labels, uppercase DIN-style labels, **one scrolling line with faded edges** (owner's choice, 2026-11-23), BM accent underline indicator, sticky ≥1024px |
 | Bio | two-column "Sobre mí / Stack tech" with **1px vertical rule** (HL2 uses the same footer-column rule) | emoji → SVG icons and mono tech chips. Optional lead paragraph |
 | New sections | — | Freelance (link cards), Side projects (bento), Open source (repo cards), Contacto (one primary CTA), all built from Linkd's 56px card / 16px gap / 32px section rhythm |
 | Color | light + dark | slate/blue-black → bone `#ede6d8` / charcoal `#1c1c1c` + HEV orange, authored in `oklch()`, **WCAG AAA** text contrast. Manual toggle with System default |
@@ -516,7 +516,7 @@ Applications: `--spacing-gutter: var(--spacing-4)`, `--spacing-stack: var(--spac
  │        │                    Galeed Gutierrez          ← h1 @mixin heading-xl                    │   │
  │        │                    Frontend developer        ← p  @mixin heading-md                    │   │
  │        │          [in LinkedIn]  [X/Twitter]  [GitHub]  [Web]   ← 4-col social row               │   │
- │        │   BIO   FREELANCE   PROYECTOS   OPEN SOURCE   CONTACTO  ← nav (wraps; sticky ≥1024)    │   │
+ │        │   BIO   FREELANCE   PROYECTOS   OPEN SOURCE   CONTACTO  ← nav (scrolls; sticky ≥1024)  │   │
  │        │ ─────────────────────────────────────────────── hairline                                │   │
  │        │ 01  Bio                                                                                │   │
  │        │     lead paragraph (optional)                                                          │   │
@@ -554,7 +554,7 @@ Section IDs (fixes issue 1): `#bio`, `#freelance`, `#proyectos`, `#open-source`,
 
 | Name | Min-width | Behavior |
 |---|---|---|
-| `xs` (base) | 375px design floor (works down to 320) | shell full-bleed, radius 0, no border/shadow, body bg = `surface`. Portrait 5:4 (`object-position: 50% 20%`) so the name lands above the fold. Nav wraps to 2 lines. Social 4-col with icon over label |
+| `xs` (base) | 375px design floor (works down to 320) | shell full-bleed, radius 0, no border/shadow, body bg = `surface`. Portrait 5:4 (`object-position: 50% 20%`) so the name lands above the fold. Nav is one horizontally scrolling line. Social 4-col with icon over label |
 | `sm` | `40em` (640px) | shell floats: `margin-block: var(--spacing-8)`, `--border-radius-2`, 1px `border`, shell shadow (Layout module shadows block, §9.6). Page bg = `--background-color-primary`. Portrait 1:1 |
 | `md` | `48em` (768px) | `margin-block: var(--spacing-12)` (GL parity) |
 | `lg` | `64em` (1024px) | section nav becomes `position: sticky; top: 0` inside the shell (surface bg + bottom hairline, `z-index: var(--z-index-10-sticky-nav)`). Nothing else changes, on purpose |
@@ -720,7 +720,11 @@ Conventions (§9):
 - Link: `<a class:list={['relative inline-flex items-center min-h-11 px-3', styles.link]}>`. The module adds `@mixin label` and `color: var(--text-color-secondary)`.
 - Indicator (BM **[V]**): `::after` with `inset-inline: var(--spacing-3)`, `inset-block-end: var(--spacing-2)`, `block-size: var(--border-05)`, `background-color: var(--background-color-indicator)`, `scale: 0 1`, origin left. It grows over `--duration-slow` / `--ease-out` only under `no-preference` (code in §9.6).
 - States: hover → `--text-color-primary` + indicator `scale: 1`. **Current section** (`aria-current="true"`, set by an IntersectionObserver with `rootMargin: "-40% 0px -55% 0px"`) → `--text-color-primary` + indicator fully shown. Focus-visible → global ring.
-- **Wraps, never clips** (fixes issue 2). At 375px the 5 short labels fit on 2 lines.
+- **One scrolling line, with an affordance** (fixes issue 2 without wrapping; the owner prefers the original scrolling nav, 2026-11-23).
+  - `ul.navbar__list`: `overflow-x: auto`, `py-1` so the focus ring isn't clipped, inline padding 16px / 32px matched by `scroll-padding-inline`.
+  - A `mask-image` fades both edges over that padding only, so the first and last links are never covered at the scroll ends.
+  - Scrollbar hidden on touch; `scrollbar-width: thin` under `(hover: hover) and (pointer: fine)`, so mouse users can reach the last links.
+  - The current link is scrolled into view inside the list (never the page) when the observer marks it.
 - ≥1024px: `lg:(sticky top-0)`. The module adds `background-color: var(--background-color-secondary)`, a `--border-025` bottom hairline in `--border-color-primary`, and `z-index: var(--z-index-10-sticky-nav)`. `--height-nav` keeps anchored headings clear via `scroll-margin-top`.
 
 ### 7.6 Section header
@@ -2320,7 +2324,7 @@ for (const v of ['--box-shadow-shell-light', '--box-shadow-shell-dark'])
 
 **Layout & text resilience**
 - [ ] Test at 320, 375, 390, 640, 768, 1024, 1440. No horizontal page scroll anywhere (`documentElement.scrollWidth === innerWidth`).
-- [ ] Nav wraps, never clips. All 5 anchors resolve to existing IDs.
+- [ ] Nav is one scrolling line: edges fade, the last link is reachable by touch, mouse and keyboard, and the current link scrolls into view. All 5 anchors resolve to existing IDs.
 - [ ] Long name, long role, long repo name (`owner/a-really-long-repository-name`), and long Spanish titles all wrap without overflow. Chips stay single-line and the collection wraps.
 - [ ] Browser zoom 200% and text-only zoom: no clipped or overlapping text.
 - [ ] Landscape on phones: the hero doesn't consume the whole viewport (5:4 ratio under 640px).

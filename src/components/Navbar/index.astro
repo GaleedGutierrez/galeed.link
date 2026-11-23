@@ -18,7 +18,11 @@ const { sections } = Astro.props;
 	class:list={["lg:(sticky top-0) mt-6", styles["navbar"]]}
 >
 	<ul
-		class="flex flex-wrap justify-center gap-x-1 px-4"
+		class:list={[
+			"flex gap-x-1 overflow-x-auto py-1",
+			styles["navbar__list"],
+		]}
+		data-nav-list
 		role="list"
 	>
 		{
@@ -26,7 +30,7 @@ const { sections } = Astro.props;
 				<li>
 					<a
 						class:list={[
-							"relative inline-flex min-h-11 items-center px-3",
+							"relative inline-flex min-h-11 shrink-0 items-center whitespace-nowrap px-3",
 							styles["navbar__link"],
 						]}
 						data-nav-link
@@ -40,10 +44,38 @@ const { sections } = Astro.props;
 	</ul>
 </nav>
 <script>
-	// Mark the section in view as current (§7.5).
+	// Mark the section in view as current (§7.5) and keep its link visible in
+	// the horizontally scrolling list.
+	const list = document.querySelector<HTMLElement>("[data-nav-list]");
 	const links = [
 		...document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]"),
 	];
+	const prefersReducedMotion = globalThis.matchMedia(
+		"(prefers-reduced-motion: reduce)",
+	);
+
+	// Scrolls the list only (never the page), so a non-sticky nav that is out
+	// of view stays where it is.
+	const revealInList = (link: HTMLAnchorElement): void => {
+		if (!list) {
+			return;
+		}
+
+		const start = link.offsetLeft - list.offsetLeft;
+		const end = start + link.offsetWidth;
+		const isVisible =
+			start >= list.scrollLeft &&
+			end <= list.scrollLeft + list.clientWidth;
+
+		if (isVisible) {
+			return;
+		}
+
+		list.scrollTo({
+			left: start - (list.clientWidth - link.offsetWidth) / 2,
+			behavior: prefersReducedMotion.matches ? "auto" : "smooth",
+		});
+	};
 
 	const observer = new IntersectionObserver(
 		(entries) => {
@@ -55,6 +87,7 @@ const { sections } = Astro.props;
 				for (const link of links) {
 					if (link.hash === `#${entry.target.id}`) {
 						link.setAttribute("aria-current", "true");
+						revealInList(link);
 					} else {
 						link.removeAttribute("aria-current");
 					}
