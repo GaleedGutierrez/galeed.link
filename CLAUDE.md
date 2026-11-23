@@ -133,7 +133,7 @@ docs are English.
   crash the `jsx-a11y` ESLint rules. Write `id={id}`.
 - Lists keep `role="list"`; ESLint allows it on `ul` only.
 - `setAttribute('data-theme…')` in `theme.ts` has a scoped
-  `unicorn/prefer-dom-node-dataset` disable: PurgeCSS needs the literal names.
+  `unicorn/dom-node-dataset` disable: PurgeCSS needs the literal names.
 
 ## Theming
 

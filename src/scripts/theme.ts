@@ -50,7 +50,7 @@ const renderedTheme = (): ResolvedTheme =>
  * Paint a preference. Never touches storage.
  * @param preference - The preference to render.
  */
-/* eslint-disable unicorn/prefer-dom-node-dataset -- PurgeCSS only keeps the
+/* eslint-disable unicorn/dom-node-dataset -- PurgeCSS only keeps the
    [data-theme*] rules when the literal attribute names are in the built JS. */
 function render(preference: ThemePreference): void {
 	const root = document.documentElement;
@@ -74,7 +74,7 @@ function render(preference: ThemePreference): void {
 		}),
 	);
 }
-/* eslint-enable unicorn/prefer-dom-node-dataset */
+/* eslint-enable unicorn/dom-node-dataset */
 
 /**
  * Two-state toggle:

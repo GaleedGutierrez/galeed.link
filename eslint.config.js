@@ -6,8 +6,8 @@ import vitest from '@vitest/eslint-plugin';
 import eslintPluginAstro from 'eslint-plugin-astro';
 import checkFile from 'eslint-plugin-check-file';
 import { importX } from 'eslint-plugin-import-x';
-import jsdoc from 'eslint-plugin-jsdoc';
-import eslintPluginJsonc from 'eslint-plugin-jsonc';
+import { configs as jsdocConfigs } from 'eslint-plugin-jsdoc';
+import { configs as jsoncConfigs } from 'eslint-plugin-jsonc';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import playwright from 'eslint-plugin-playwright';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
@@ -46,8 +46,8 @@ export default tseslint.config(
 	pluginSecurity.configs.recommended,
 	jsxA11y.flatConfigs.recommended,
 	eslintPluginPrettierRecommended,
-	...eslintPluginJsonc.configs['flat/recommended-with-jsonc'],
-	...eslintPluginJsonc.configs['flat/prettier'],
+	...jsoncConfigs['flat/recommended-with-jsonc'],
+	...jsoncConfigs['flat/prettier'],
 	// eslint-disable-next-line import-x/no-named-as-default-member
 	...eslintPluginAstro.configs.recommended,
 	// ...fixupConfigRules(compat.extends('plugin:editorconfig/noconflict')),
@@ -354,7 +354,7 @@ export default tseslint.config(
 				'error',
 				{
 					ignore: [
-						String.raw`^astro:.*$`, // Astro virtual modules
+						'^astro:.*$', // Astro virtual modules
 						String.raw`^/.*\.(svg|png|jpg|jpeg|gif|ico|webp)$`, // Public folder assets
 						String.raw`\?react$`, // SVGR react imports
 						String.raw`\?url$`, // Vite URL imports
@@ -844,7 +844,7 @@ export default tseslint.config(
 	// 	},
 	// },
 	{
-		...jsdoc.configs['flat/recommended'],
+		...jsdocConfigs['flat/recommended'],
 		...sortClassMembers.configs['flat/recommended'],
 		files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
 		rules: {

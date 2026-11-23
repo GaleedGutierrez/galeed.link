@@ -4,6 +4,7 @@ import { markdownLink, toMarkdownText } from '@/utils/markdown';
 import { toSafeUrl } from '@/utils/safeUrl';
 
 describe('toSafeUrl', () => {
+	// eslint-disable-next-line unicorn/prefer-https -- plain http must stay allowed
 	it.each(['https://galeed.link/', 'http://example.com/a?b=c'])(
 		'keeps the http(s) URL %s',
 		(value) => {

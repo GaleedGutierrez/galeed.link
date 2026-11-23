@@ -20,7 +20,7 @@ const shared = new Set<string>(SHARED_COLOR_TOKENS);
 
 const declarationOf = (token: string, flags = ''): RegExp =>
 	// eslint-disable-next-line security/detect-non-literal-regexp -- token names come from COLOR_TOKENS
-	new RegExp(`--${token}:\\s*([^;]+);`, flags);
+	new RegExp(String.raw`--${token}:\s*([^;]+);`, flags);
 
 describe('color tokens (DESIGN_SYSTEM.md §9.9)', () => {
 	it.each(COLOR_TOKENS)('--%s is declared once in :root', (token) => {
