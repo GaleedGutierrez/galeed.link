@@ -7,6 +7,7 @@ import "@fontsource-variable/jetbrains-mono";
 import "@styles/index.css";
 
 import barlow400 from "@fontsource/barlow/files/barlow-latin-400-normal.woff2?url";
+import barlow700 from "@fontsource/barlow/files/barlow-latin-700-normal.woff2?url";
 import barlow800 from "@fontsource/barlow/files/barlow-latin-800-normal.woff2?url";
 import { Schema } from "astro-seo-schema";
 
@@ -81,6 +82,14 @@ const {
 			as="font"
 			crossorigin
 			href={barlow400}
+			rel="preload"
+			type="font/woff2"
+		/>
+		<!-- 700: social labels, nav and column headings, all above the fold. -->
+		<link
+			as="font"
+			crossorigin
+			href={barlow700}
 			rel="preload"
 			type="font/woff2"
 		/>

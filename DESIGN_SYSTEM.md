@@ -450,13 +450,15 @@ Rules:
    import '@fontsource-variable/jetbrains-mono';
    ```
    Fontsource CSS ships `font-display: swap`.
-2. **Preload only the two critical faces** (latin 400 and 800, used above the fold):
+2. **Preload only the three critical faces** (latin 400, 700 and 800, used above the fold; 700 added 2026-11-23 because the social labels, nav and column headings use it). 500 (one role line) and mono (system bar) are not preloaded: each preload competes with the LCP portrait, and the metric-matched fallback keeps their swap stable:
    ```astro
    ---
    import barlow400 from '@fontsource/barlow/files/barlow-latin-400-normal.woff2?url';
+   import barlow700 from '@fontsource/barlow/files/barlow-latin-700-normal.woff2?url';
    import barlow800 from '@fontsource/barlow/files/barlow-latin-800-normal.woff2?url';
    ---
    <link rel="preload" href={barlow400} as="font" type="font/woff2" crossorigin />
+   <link rel="preload" href={barlow700} as="font" type="font/woff2" crossorigin />
    <link rel="preload" href={barlow800} as="font" type="font/woff2" crossorigin />
    ```
    Don't preload mono. It only appears in small metadata, and a swap there is harmless.
@@ -2336,7 +2338,7 @@ for (const v of ['--box-shadow-shell-light', '--box-shadow-shell-dark'])
 
 **Performance**
 - [ ] Portrait via `<Picture>` (AVIF/WebP), `fetchpriority="high"`, explicit dimensions. Tiles are lazy-loaded with dimensions. CLS < 0.1.
-- [ ] Only Barlow 400 + 800 latin preloaded. Fallback face metric-matched, plus `font-size-adjust: from-font` verified by blocking the font files. No Google Fonts CSS request.
+- [ ] Only Barlow 400 + 700 + 800 latin preloaded, each pointing at the same hashed file the `@font-face` uses (no double download). Fallback face metric-matched, plus `font-size-adjust: from-font` verified by blocking the font files. No Google Fonts CSS request.
 - [ ] No GSAP or animation libraries. JS limited to `theme.ts` and the nav scrollspy.
 
 ### 10.3 Maintenance rules
