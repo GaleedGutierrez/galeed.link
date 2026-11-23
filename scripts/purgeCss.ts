@@ -11,7 +11,6 @@ import { PurgeCSS, type UserDefinedOptions } from 'purgecss';
 import postcssConfig from '../postcss.config.js';
 
 const distributionPath = path.join(import.meta.dirname, '..', 'dist');
-let beforeTotalSize = 0;
 const purgeCssConfig: Omit<UserDefinedOptions, 'css'> = {
 	content: ['dist/**/*.html', 'dist/**/*.js'],
 	// The default extractor splits on [ ] ( ) / , so UnoCSS arbitrary values
@@ -194,6 +193,21 @@ const purgeCssConfig: Omit<UserDefinedOptions, 'css'> = {
 	skippedContentGlobs: ['node_modules/**', '.sonda/**'],
 };
 
+/**
+ * Total size of the given dist files, read before any step rewrites them.
+ * @param files - Paths relative to dist.
+ * @returns The size in bytes.
+ */
+function totalSizeOf(files: string[]): number {
+	let total = 0;
+
+	for (const file of files) {
+		total += fs.statSync(path.join(distributionPath, file)).size;
+	}
+
+	return total;
+}
+
 function calculateFileSize(filePath: string): string {
 	try {
 		const stats = fs.statSync(filePath);
@@ -236,25 +250,16 @@ function getValidPostCSSPlugins(
 		if (typeof plugin === 'function') {
 			// Direct plugin function
 			validPlugins.push(plugin);
-		} else if (typeof plugin === 'object') {
-			// Check if it's a plugin instance with postcss property
-			if ('postcss' in plugin && typeof plugin.postcss === 'function') {
-				validPlugins.push(plugin as postcss.AcceptedPlugin);
-			}
-			// Check if it's a plugin with process method
-			else if (
-				'process' in plugin &&
-				typeof plugin.process === 'function'
-			) {
-				validPlugins.push(plugin as postcss.AcceptedPlugin);
-			}
-			// Check if it's a plugin creator result
-			else if (
-				'pluginName' in plugin &&
-				typeof plugin.pluginName === 'string'
-			) {
-				validPlugins.push(plugin as postcss.AcceptedPlugin);
-			}
+		} else if (
+			typeof plugin === 'object' &&
+			// A plugin instance (postcss), a processor (process) or the result
+			// of a plugin creator (pluginName).
+			(('postcss' in plugin && typeof plugin.postcss === 'function') ||
+				('process' in plugin && typeof plugin.process === 'function') ||
+				('pluginName' in plugin &&
+					typeof plugin.pluginName === 'string'))
+		) {
+			validPlugins.push(plugin as postcss.AcceptedPlugin);
 		}
 	}
 
@@ -266,7 +271,6 @@ const processCSSFile = async (cssFile: string): Promise<number | undefined> => {
 	const beforeSize = calculateFileSize(cssFilePath);
 	const beforeBytes = fs.statSync(cssFilePath).size;
 
-	beforeTotalSize += beforeBytes;
 	logMessage(`📂 Processing: ${cssFile} (${beforeSize})`);
 
 	try {
@@ -326,6 +330,8 @@ async function runPurgeCSS(): Promise<void> {
 
 			return;
 		}
+
+		const beforeTotalSize = totalSizeOf(cssFiles);
 
 		const savingsResults = await Promise.all(
 			cssFiles.map((cssFile) => processCSSFile(cssFile)),

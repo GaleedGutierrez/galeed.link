@@ -22,14 +22,14 @@ const assetsPath = path.join(distributionPath, '_astro');
 // Always kept, on top of the page text: digits, Spanish letters and common
 // punctuation. A small margin for text a future build might add.
 const SAFETY_CHARACTERS =
-	'  0123456789.,:;!?¿¡()[]-–—·…\'"“”‘’/#@&%+*=<>©áéíóúüñÁÉÍÓÚÜÑ';
+	' \u{A0}0123456789.,:;!?¿¡()[]-–—·…\'"“”‘’/#@&%+*=<>©áéíóúüñÁÉÍÓÚÜÑ';
 
 const NAMED_ENTITIES: Record<string, string> = {
 	amp: '&',
 	apos: "'",
 	gt: '>',
 	lt: '<',
-	nbsp: ' ',
+	nbsp: '\u{A0}',
 	quot: '"',
 };
 
@@ -40,7 +40,7 @@ const decodeEntities = (text: string): string =>
 		}
 
 		if (code.startsWith('#')) {
-			return String.fromCodePoint(Number.parseInt(code.slice(1), 10));
+			return String.fromCodePoint(Number(code.slice(1)));
 		}
 
 		return NAMED_ENTITIES[code.toLowerCase()] ?? entity;
@@ -58,7 +58,8 @@ const extractText = (html: string): string =>
 
 /** Strings in CSS `content` (pseudo-element text). */
 const extractCssContent = (css: string): string =>
-	[...css.matchAll(/content:\s*(["'])(.*?)\1/g)]
+	css
+		.matchAll(/content:\s*(["'])(.*?)\1/g)
 		.map((match) =>
 			match[2].replaceAll(
 				/\\([\da-f]{1,6})\s?/gi,
@@ -66,6 +67,7 @@ const extractCssContent = (css: string): string =>
 					String.fromCodePoint(Number.parseInt(hex, 16)),
 			),
 		)
+		.toArray()
 		.join('');
 
 const hashOf = (content: Buffer | string): string =>
@@ -110,7 +112,8 @@ const rewriteReferences = (
 		for (const [oldName, newName] of renames) {
 			after = after.replaceAll(
 				`/_astro/${oldName}`,
-				`/_astro/${newName}`,
+				// A function, so a `$` in the name is never read as a pattern.
+				() => `/_astro/${newName}`,
 			);
 		}
 
@@ -182,10 +185,12 @@ const run = async (): Promise<void> => {
 		const cssFile = path.basename(cssPath);
 		const newName = `${stemOf(cssFile)}.${hashOf(fs.readFileSync(cssPath))}.css`;
 
-		if (newName !== cssFile) {
-			fs.renameSync(cssPath, path.join(assetsPath, newName));
-			cssRenames.set(cssFile, newName);
+		if (newName === cssFile) {
+			continue;
 		}
+
+		fs.renameSync(cssPath, path.join(assetsPath, newName));
+		cssRenames.set(cssFile, newName);
 	}
 
 	rewriteReferences(htmlFiles, cssRenames);

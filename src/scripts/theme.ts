@@ -21,7 +21,7 @@ declare global {
 }
 
 const darkQuery = (): MediaQueryList =>
-	globalThis.matchMedia('(prefers-color-scheme: dark)');
+	matchMedia('(prefers-color-scheme: dark)');
 
 const systemTheme = (): ResolvedTheme =>
 	darkQuery().matches ? 'dark' : 'light';
@@ -126,6 +126,8 @@ export function initTheme(): void {
 		return;
 	}
 
+	// initTheme runs again after every page swap; these listeners must not.
+	// eslint-disable-next-line unicorn/no-top-level-assignment-in-function -- bind-once guard
 	hasBoundGlobalListeners = true;
 
 	darkQuery().addEventListener('change', () => {
@@ -136,7 +138,7 @@ export function initTheme(): void {
 		}
 	});
 
-	globalThis.addEventListener('storage', (event) => {
+	addEventListener('storage', (event) => {
 		// key === null means another tab called localStorage.clear()
 		if (event.key !== THEME_STORAGE_KEY && event.key !== null) {
 			return;

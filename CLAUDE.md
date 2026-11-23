@@ -131,7 +131,11 @@ docs are English.
 ## Astro and ESLint gotchas
 
 - Don't use Astro's shorthand attributes (`<h2 {id}>`, `<Card {item} />`). They
-  crash the `jsx-a11y` ESLint rules. Write `id={id}`.
+  crash the `jsx-a11y-x` ESLint rules. Write `id={id}`.
+- ESLint 10 uses `eslint-plugin-jsx-a11y-x`, a fork with the same rules under
+  the `jsx-a11y-x/` prefix: `eslint-plugin-jsx-a11y` doesn't support ESLint 10.
+- Unicorn is scoped to code files: ESLint 10 rejects its rules on JSON. Two of
+  its style rules are off because they fight the JSDoc/TSDoc comment style.
 - Lists keep `role="list"`; ESLint allows it on `ul` only.
 - `setAttribute('data-theme…')` in `theme.ts` has a scoped
   `unicorn/dom-node-dataset` disable: PurgeCSS needs the literal names.

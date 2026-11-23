@@ -59,7 +59,7 @@ const yearRange = (start: Date, end?: Date): string => {
 		return `${from}—hoy`;
 	}
 
-	return from === to ? `${from}` : `${from}—${to}`;
+	return from === to ? String(from) : `${from}—${to}`;
 };
 
 const FREELANCE_STATUS: Record<FreelanceProject['status'], Status> = {
@@ -105,7 +105,7 @@ export const getProjectTiles = async (): Promise<TileItem[]> => {
 		.flatMap((project) => {
 			const href = toSafeUrl(project.url);
 
-			return href ? [{ project, href }] : [];
+			return href ? { project, href } : [];
 		})
 		.toSorted((a, b) => byDateDesc(a.project, b.project))
 		.slice(0, FEATURED_PROJECTS_COUNT);

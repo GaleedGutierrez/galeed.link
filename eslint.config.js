@@ -8,7 +8,7 @@ import checkFile from 'eslint-plugin-check-file';
 import { importX } from 'eslint-plugin-import-x';
 import { configs as jsdocConfigs } from 'eslint-plugin-jsdoc';
 import { configs as jsoncConfigs } from 'eslint-plugin-jsonc';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
+import jsxA11y from 'eslint-plugin-jsx-a11y-x';
 import playwright from 'eslint-plugin-playwright';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 // import reactPlugin from 'eslint-plugin-react';
@@ -22,6 +22,8 @@ import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+
+const CODE_FILES = ['**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,astro}'];
 
 export default tseslint.config(
 	{
@@ -39,12 +41,14 @@ export default tseslint.config(
 		],
 	},
 
-	eslintPluginUnicorn.configs.recommended,
+	// Unicorn 80 declares the languages its rules support, and ESLint 10
+	// rejects them on JSON (jsonc) files, so scope it to code.
+	{ ...eslintPluginUnicorn.configs.recommended, files: CODE_FILES },
 	importX.flatConfigs.recommended,
 	importX.flatConfigs.typescript,
 	eslint.configs.recommended,
 	pluginSecurity.configs.recommended,
-	jsxA11y.flatConfigs.recommended,
+	jsxA11y.configs.recommended,
 	eslintPluginPrettierRecommended,
 	...jsoncConfigs['flat/recommended-with-jsonc'],
 	...jsoncConfigs['flat/prettier'],
@@ -307,28 +311,6 @@ export default tseslint.config(
 				},
 			],
 
-			// Unicorn
-			'unicorn/filename-case': [
-				'error',
-				{
-					cases: {
-						camelCase: true,
-						pascalCase: true,
-					},
-					ignore: [/\.json$/, /vite-env\.d\.ts$/],
-				},
-			],
-
-			'unicorn/prevent-abbreviations': [
-				'error',
-				{
-					checkFilenames: false,
-					allowList: {
-						Props: true,
-					},
-				},
-			],
-
 			'check-file/folder-naming-convention': [
 				'error',
 				{
@@ -345,7 +327,7 @@ export default tseslint.config(
 
 			// Safari drops list semantics with `list-style: none`, so lists
 			// that matter (nav, social, chips) keep an explicit role="list".
-			'jsx-a11y/no-redundant-roles': ['error', { ul: ['list'] }],
+			'jsx-a11y-x/no-redundant-roles': ['error', { ul: ['list'] }],
 
 			'import-x/first': 'error',
 			'import-x/newline-after-import': 'error',
@@ -374,6 +356,41 @@ export default tseslint.config(
 					argsIgnorePattern: '^_',
 				},
 			],
+		},
+	},
+	{
+		files: CODE_FILES,
+		rules: {
+			'unicorn/filename-case': [
+				'error',
+				{
+					cases: {
+						camelCase: true,
+						pascalCase: true,
+					},
+					ignore: [/vite-env\.d\.ts$/],
+				},
+			],
+
+			// Renamed from prevent-abbreviations in unicorn 80. "repo" stays,
+			// matching RepoCard and RepoItem.
+			'unicorn/name-replacements': [
+				'error',
+				{
+					checkFilenames: false,
+					allowList: {
+						Props: true,
+					},
+					replacements: {
+						repo: false,
+					},
+				},
+			],
+
+			// Both fight the JSDoc/TSDoc style that eslint-plugin-jsdoc
+			// enforces: one-line /** … */ comments and leading asterisks.
+			'unicorn/single-line-block-comment-style': 'off',
+			'unicorn/no-asterisk-prefix-in-documentation-comments': 'off',
 		},
 	},
 	{

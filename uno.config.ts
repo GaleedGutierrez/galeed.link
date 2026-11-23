@@ -43,26 +43,38 @@ export default defineConfig({
 		[
 			/^pt-(.+)$/,
 			([, d]) => ({
-				'padding-block-start': `${d === 'auto' ? 'auto' : `calc(var(--un-unit) * ${Number(d)})`}`,
+				'padding-block-start':
+					d === 'auto'
+						? 'auto'
+						: `calc(var(--un-unit) * ${Number(d)})`,
 			}),
 		],
 		[
 			/^pb-(.+)$/,
 			([, d]) => ({
-				'padding-block-end': `${d === 'auto' ? 'auto' : `calc(var(--un-unit) * ${Number(d)})`}`,
+				'padding-block-end':
+					d === 'auto'
+						? 'auto'
+						: `calc(var(--un-unit) * ${Number(d)})`,
 			}),
 		],
 
 		[
 			/^mt-(.+)$/,
 			([, d]) => ({
-				'margin-block-start': `${d === 'auto' ? 'auto' : `calc(var(--un-unit) * ${Number(d)})`}`,
+				'margin-block-start':
+					d === 'auto'
+						? 'auto'
+						: `calc(var(--un-unit) * ${Number(d)})`,
 			}),
 		],
 		[
 			/^mb-(.+)$/,
 			([, d]) => ({
-				'margin-block-end': `${d === 'auto' ? 'auto' : `calc(var(--un-unit) * ${Number(d)})`}`,
+				'margin-block-end':
+					d === 'auto'
+						? 'auto'
+						: `calc(var(--un-unit) * ${Number(d)})`,
 			}),
 		],
 
@@ -97,7 +109,7 @@ export default defineConfig({
 
 				// Fracciones
 				if (d.split('/').length === 2) {
-					const [numerator, denominator] = d.split('/');
+					const [numerator, denominator] = d.split('/', 2);
 
 					if (
 						!Number.isNaN(Number(numerator)) &&

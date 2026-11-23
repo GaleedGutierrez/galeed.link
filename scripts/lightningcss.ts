@@ -8,10 +8,24 @@ import browserslist from 'browserslist';
 import { browserslistToTargets, transform } from 'lightningcss';
 
 const distributionPath = path.join(import.meta.dirname, '..', 'dist');
-let beforeTotalSize = 0;
 const targets = browserslistToTargets(
 	browserslist(['>= 0.25%', 'not dead', 'supports css-nesting']),
 );
+
+/**
+ * Total size of the given dist files, read before any step rewrites them.
+ * @param files - Paths relative to dist.
+ * @returns The size in bytes.
+ */
+function totalSizeOf(files: string[]): number {
+	let total = 0;
+
+	for (const file of files) {
+		total += fs.statSync(path.join(distributionPath, file)).size;
+	}
+
+	return total;
+}
 
 function calculateFileSize(filePath: string): string {
 	try {
@@ -40,7 +54,6 @@ const processCSSFile = (cssFile: string): number | undefined => {
 	const beforeSize = calculateFileSize(cssFilePath);
 	const beforeBytes = fs.statSync(cssFilePath).size;
 
-	beforeTotalSize += beforeBytes;
 	logMessage(`📂 Processing: ${cssFile} (${beforeSize})`);
 
 	try {
@@ -95,6 +108,8 @@ function runLightningCSS(): void {
 
 			return;
 		}
+
+		const beforeTotalSize = totalSizeOf(cssFiles);
 
 		const savingsResults = cssFiles.map((cssFile) =>
 			processCSSFile(cssFile),
