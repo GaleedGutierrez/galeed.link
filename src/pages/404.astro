@@ -1,0 +1,21 @@
+---
+// Without a top-level 404.html, Cloudflare Pages treats the site as an SPA
+// and answers every unknown URL with the home page and a 200, so crawlers
+// and agents (Lighthouse's /.well-known/ard.json check) got HTML for JSON.
+import NotFound from "@components/NotFound/index.astro";
+import SystemBar from "@components/SystemBar/index.astro";
+import Layout from "@layouts/Layout/index.astro";
+---
+
+<Layout
+	description="La página que buscás no existe o se movió."
+	noindex
+	title="Página no encontrada · Galeed Gutierrez"
+>
+	<header>
+		<SystemBar />
+	</header>
+	<main id="main">
+		<NotFound />
+	</main>
+</Layout>

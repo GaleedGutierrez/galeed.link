@@ -1,0 +1,11 @@
+.not-found__code {
+	color: var(--text-color-accent);
+
+	@mixin micro;
+}
+
+.not-found__text {
+	color: var(--text-color-secondary);
+
+	@mixin body-lg;
+}
