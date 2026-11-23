@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+	applyPolicy,
 	buildPolicy,
+	CSP_HEADER,
 	hashSource,
 	inlineScripts,
 	inlineStyles,
@@ -97,5 +99,49 @@ describe('buildPolicy', () => {
 
 	it('falls back to same-origin only', () => {
 		expect(directives.get('default-src')).toStrictEqual(["'self'"]);
+	});
+});
+
+describe('applyPolicy', () => {
+	const headers = [
+		'/*',
+		'  Strict-Transport-Security: max-age=31536000',
+		'',
+		'/_astro/*',
+		'  Cache-Control: immutable',
+		'',
+	].join('\n');
+	const result = applyPolicy(headers, "default-src 'self'");
+	const lines = result.split('\n');
+
+	it('adds the header to the existing /* rule, never a second one', () => {
+		// A second /* rule replaces the first on Cloudflare, dropping HSTS.
+		expect(lines.filter((line) => line === '/*')).toHaveLength(1);
+		expect(lines.slice(0, 3)).toStrictEqual([
+			'/*',
+			`  ${CSP_HEADER}: default-src 'self'`,
+			'  Strict-Transport-Security: max-age=31536000',
+		]);
+	});
+
+	it("detaches it from Partytown's files, after the rule that adds it", () => {
+		const detach = lines.indexOf('/~partytown/*');
+
+		expect(detach).toBeGreaterThan(lines.indexOf('/*'));
+		expect(lines[detach + 1]).toBe(`  ! ${CSP_HEADER}`);
+	});
+
+	it('gives the same file when applied twice', () => {
+		expect(applyPolicy(result, "default-src 'self'")).toBe(result);
+	});
+
+	it('creates the /* rule when the file has none', () => {
+		expect(
+			applyPolicy('', "default-src 'self'").split('\n').slice(0, 2),
+		).toStrictEqual(['/*', `  ${CSP_HEADER}: default-src 'self'`]);
+	});
+
+	it('rejects a line longer than Cloudflare allows', () => {
+		expect(() => applyPolicy(headers, 'a'.repeat(2000))).toThrow(/2000/);
 	});
 });

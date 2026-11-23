@@ -109,3 +109,59 @@ export const buildPolicy = ({ scripts, styles }: PolicyHashes): string =>
 	]
 		.map((directive) => directive.join(' '))
 		.join('; ');
+
+const WILDCARD_RULE = '/*';
+
+const PARTYTOWN_MARKER =
+	'# Partytown runs gtag through an inline script, eval and blob workers in its';
+
+// Cloudflare rejects longer lines in _headers.
+const MAX_LINE_LENGTH = 2000;
+
+/**
+ * Adds the policy to a `_headers` file.
+ *
+ * The header goes inside the existing `/*` rule: a second `/*` rule replaces
+ * the first one on Cloudflare instead of adding to it, which dropped the
+ * other security headers. Partytown's paths then detach it; rules apply in
+ * file order, so the detach comes last. Applying it twice gives the same file.
+ * @param headersFile - The `_headers` file as copied from `public/`.
+ * @param policy - The header value.
+ * @returns The file with the policy.
+ */
+export const applyPolicy = (headersFile: string, policy: string): string => {
+	const policyLine = `  ${CSP_HEADER}: ${policy}`;
+
+	if (policyLine.length > MAX_LINE_LENGTH) {
+		throw new Error(
+			`The CSP line is ${policyLine.length} characters; Cloudflare allows ${MAX_LINE_LENGTH}.`,
+		);
+	}
+
+	const markerIndex = headersFile.indexOf(PARTYTOWN_MARKER);
+	const lines = (
+		markerIndex === -1 ? headersFile : headersFile.slice(0, markerIndex)
+	)
+		.trimEnd()
+		.split('\n')
+		.filter((line) => !line.startsWith(`  ${CSP_HEADER}:`));
+	const ruleIndex = lines.indexOf(WILDCARD_RULE);
+
+	if (ruleIndex === -1) {
+		lines.push('', WILDCARD_RULE, policyLine);
+	} else {
+		lines.splice(ruleIndex + 1, 0, policyLine);
+	}
+
+	return [
+		...lines,
+		'',
+		PARTYTOWN_MARKER,
+		'# sandbox, so its files must not get the page policy.',
+		'/~partytown/*',
+		`  ! ${CSP_HEADER}`,
+		'',
+	]
+		.join('\n')
+		.trimStart();
+};
