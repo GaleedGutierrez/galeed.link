@@ -1,0 +1,186 @@
+---
+/**
+ * 404 illustration: a "404" browser window on legs walks up to an
+ * "ANOMALOUS LINK" booth, drawn in the same flat window style, where a guard
+ * looks on, unimpressed.
+ *
+ * No color lives in the markup: every fill and stroke comes from a class in
+ * styles.module.css, so both themes and forced colors restyle it. Strokes
+ * follow `color` through currentColor.
+ */
+import styles from "./styles.module.css";
+---
+
+<svg
+	aria-labelledby="not-found-art-title not-found-art-desc"
+	class:list={["w-full", styles["not-found__art"]]}
+	height="190"
+	role="img"
+	viewBox="0 20 320 190"
+	width="320"
+>
+	<title id="not-found-art-title">
+		Una ventana del navegador con un 404 llega a una ventanilla de atención
+	</title>
+	<desc id="not-found-art-desc">
+		Una ventana de navegador con piernas y zapatillas, que muestra el número
+		404, camina hacia una garita con el cartel «ANOMALOUS LINK». Desde la
+		ventanilla, un guardia de seguridad con gorra la mira sin inmutarse.
+	</desc>
+
+	<!-- Floor line: the booth stands on it, the walker in front of it -->
+	<path
+		class={styles["not-found__line"]}
+		d="M24 172 H300"
+	/>
+
+	<!-- Booth, drawn like the browser window: body, dark header with the sign -->
+	<path
+		class={styles["not-found__surface"]}
+		d="M175 44 H289 C290.7 44 292 45.3 292 47 V172 H172 V47 C172 45.3 173.3 44 175 44 Z"
+	/>
+	<path
+		class={styles["not-found__inverse"]}
+		d="M175 44 H289 C290.7 44 292 45.3 292 47 V62 H172 V47 C172 45.3 173.3 44 175 44 Z"
+	/>
+	<text
+		class={styles["not-found__sign"]}
+		text-anchor="middle"
+		x="232"
+		y="57"
+	>
+		ANOMALOUS LINK
+	</text>
+
+	<!-- Service window -->
+	<rect
+		class={styles["not-found__recess"]}
+		height="56"
+		width="92"
+		x="186"
+		y="76"
+	/>
+
+	<!-- Guard: shoulders, head, cap; flat eyes and mouth -->
+	<g>
+		<path
+			class={styles["not-found__surface"]}
+			d="M213 132 V127 C213 120 220 116 232 116 C244 116 251 120 251 127 V132 Z"
+		/>
+		<circle
+			class={styles["not-found__surface"]}
+			cx="232"
+			cy="106"
+			r="10"
+		/>
+		<path
+			class={styles["not-found__inverse"]}
+			d="M222 103 L219 94 C219 92.5 220 92 221.5 92 H242.5 C244 92 245 92.5 245 94 L242 103 Z"
+		/>
+		<path
+			class={styles["not-found__line"]}
+			d="M217 103 H247 M227 109 H230 M234 109 H237 M230 113.5 H234"
+		/>
+	</g>
+
+	<!-- Counter -->
+	<rect
+		class={styles["not-found__surface"]}
+		height="6"
+		rx="1"
+		width="104"
+		x="180"
+		y="130"
+	/>
+
+	<!-- Walking 404 window. The card's tilt is a static attribute; the
+		 animated groups only ever set CSS transform. -->
+	<g class={styles["not-found__walker"]}>
+		<g
+			class:list={[
+				styles["not-found__leg"],
+				styles["not-found__leg--back"],
+			]}
+		>
+			<rect
+				class={styles["not-found__surface"]}
+				height="62"
+				width="12"
+				x="70"
+				y="130"
+			/>
+			<path
+				class={styles["not-found__inverse"]}
+				d="M68 192 H82 C88 192 93 195 93 199 V202 H66 V196 C66 194 66 192 68 192 Z"
+			/>
+		</g>
+		<g
+			class:list={[
+				styles["not-found__leg"],
+				styles["not-found__leg--front"],
+			]}
+		>
+			<rect
+				class={styles["not-found__surface"]}
+				height="62"
+				width="12"
+				x="90"
+				y="130"
+			/>
+			<path
+				class={styles["not-found__surface"]}
+				d="M88 192 H102 C108 192 113 195 113 199 V202 H86 V196 C86 194 86 192 88 192 Z"
+			/>
+			<path
+				class={styles["not-found__line"]}
+				d="M86 198.5 H113"
+			/>
+		</g>
+		<g class={styles["not-found__card"]}>
+			<g transform="rotate(-12 88 110)">
+				<rect
+					class={styles["not-found__surface"]}
+					height="68"
+					rx="3"
+					width="96"
+					x="40"
+					y="76"
+				/>
+				<path
+					class={styles["not-found__inverse"]}
+					d="M43 76 H133 C134.7 76 136 77.3 136 79 V90 H40 V79 C40 77.3 41.3 76 43 76 Z"
+				/>
+				<path
+					class={styles["not-found__accent"]}
+					d="M41 90 H135"
+				/>
+				<circle
+					class={styles["not-found__dot"]}
+					cx="48"
+					cy="83"
+					r="1.75"
+				/>
+				<circle
+					class={styles["not-found__dot"]}
+					cx="54"
+					cy="83"
+					r="1.75"
+				/>
+				<circle
+					class={styles["not-found__dot"]}
+					cx="60"
+					cy="83"
+					r="1.75"
+				/>
+				<text
+					class={styles["not-found__code-art"]}
+					text-anchor="middle"
+					x="88"
+					y="131"
+				>
+					404
+				</text>
+			</g>
+		</g>
+	</g>
+</svg>

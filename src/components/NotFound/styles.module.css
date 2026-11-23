@@ -7,5 +7,140 @@
 .not-found__text {
 	color: var(--text-color-secondary);
 
-	@mixin body-lg;
+	@mixin body-md;
+}
+
+/* ---------- Illustration (Illustration.astro) ----------
+   Line art in --text-color-primary through currentColor (≥ 12.5:1 on every
+   surface, both themes). Surfaces are background tokens; the only accent is
+   the card's 2px HEV rule, which is decorative. */
+.not-found__art {
+	color: var(--text-color-primary);
+	fill: none;
+	stroke: currentcolor;
+	stroke-width: 2;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.not-found__line {
+	fill: none;
+}
+
+.not-found__surface {
+	fill: var(--background-color-tertiary);
+}
+
+.not-found__recess {
+	fill: var(--background-color-primary);
+}
+
+.not-found__inverse {
+	fill: var(--background-color-inverse);
+}
+
+.not-found__accent {
+	stroke: var(--border-color-accent);
+}
+
+/* Window controls, light on the inverse title bar. */
+.not-found__dot {
+	fill: var(--background-color-tertiary);
+	stroke: none;
+}
+
+/* Sign text: --text-color-inverse on the booth's --background-color-inverse
+   header (15.00 / 13.72:1). */
+.not-found__sign {
+	fill: var(--text-color-inverse);
+	stroke: none;
+
+	@mixin micro;
+}
+
+/* "404": --text-color-accent on --background-color-tertiary (8.84 / 7.46:1). */
+.not-found__code-art {
+	fill: var(--text-color-accent);
+	stroke: none;
+
+	@mixin heading-xl;
+}
+
+/* ---------- Walk-in (motion users only) ----------
+   One pass of four steps, 2.4s in total: it stops on its own well before the
+   5s limit of WCAG 2.2.2, so it needs no pause control. Every group ends on
+   its static pose, which is also the reduced-motion view. Percentages and the
+   leg pivot resolve against each group's own box (fill-box). */
+.not-found__walker {
+	transform-box: fill-box;
+
+	@media (prefers-reduced-motion: no-preference) {
+		animation: not-found-approach 2.4s var(--ease-out) both;
+	}
+}
+
+.not-found__card {
+	transform-box: fill-box;
+
+	@media (prefers-reduced-motion: no-preference) {
+		animation: not-found-bob 0.6s var(--ease-standard) 4;
+	}
+}
+
+.not-found__leg {
+	transform-origin: 50% 0;
+	transform-box: fill-box;
+
+	@media (prefers-reduced-motion: no-preference) {
+		animation: not-found-step 0.6s var(--ease-standard) 4;
+	}
+}
+
+/* Mirrored stride. Inside the same query, so it always follows the shorthand. */
+.not-found__leg--back {
+	@media (prefers-reduced-motion: no-preference) {
+		animation-direction: reverse;
+	}
+}
+
+@keyframes not-found-approach {
+	from {
+		transform: translateX(-20%);
+	}
+}
+
+@keyframes not-found-bob {
+	50% {
+		transform: translateY(-3%);
+	}
+}
+
+@keyframes not-found-step {
+	25% {
+		transform: rotate(10deg);
+	}
+
+	75% {
+		transform: rotate(-10deg);
+	}
+}
+
+/* Forced colors: SVG paint isn't reliably remapped, so map each role to a
+   system color. Line art already follows the forced `color`. */
+@media (forced-colors: active) {
+	.not-found__surface,
+	.not-found__recess,
+	.not-found__dot,
+	.not-found__sign {
+		fill: Canvas;
+	}
+
+	.not-found__inverse,
+	.not-found__code-art {
+		fill: CanvasText;
+	}
+
+	.not-found__accent {
+		stroke: Highlight;
+	}
 }
