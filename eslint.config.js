@@ -344,6 +344,10 @@ export default tseslint.config(
 				},
 			],
 
+			// Safari drops list semantics with `list-style: none`, so lists
+			// that matter (nav, social, chips) keep an explicit role="list".
+			'jsx-a11y/no-redundant-roles': ['error', { ul: ['list'] }],
+
 			'import-x/first': 'error',
 			'import-x/newline-after-import': 'error',
 			'import-x/no-duplicates': 'error',
