@@ -82,6 +82,7 @@ describe('buildPolicy', () => {
 			"'self'",
 			hash,
 			'https://*.googletagmanager.com',
+			'https://static.cloudflareinsights.com',
 		]);
 		expect(directives.get('style-src')).toStrictEqual([
 			"'self'",
@@ -125,16 +126,18 @@ describe('applyPolicy', () => {
 		]);
 	});
 
-	it("gives Partytown's files their own CSP and HSTS, after the /* rule", () => {
+	it("gives Partytown's files their own CSP and framing, after the /* rule", () => {
 		const rule = lines.indexOf('/~partytown/*');
 
 		expect(rule).toBeGreaterThan(lines.indexOf('/*'));
-		// Each value is detached first, so a joined /* copy never doubles it.
-		expect(lines.slice(rule + 1, rule + 5)).toStrictEqual([
+		// Cloudflare joins matching rules: each /* value is detached first, so
+		// the page's CSP and X-Frame-Options: DENY never reach the sandbox.
+		expect(lines.slice(rule + 1)).toStrictEqual([
 			`  ! ${CSP_HEADER}`,
 			`  ${CSP_HEADER}: ${PARTYTOWN_POLICY}`,
-			'  ! Strict-Transport-Security',
-			'  Strict-Transport-Security: max-age=31536000',
+			'  ! X-Frame-Options',
+			'  X-Frame-Options: SAMEORIGIN',
+			'',
 		]);
 	});
 

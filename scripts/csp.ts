@@ -24,6 +24,11 @@ const ANALYTICS = [
 	TAG_MANAGER,
 ];
 
+// Cloudflare Web Analytics: the edge injects its beacon into every page, so
+// the script is never in the built HTML.
+const CLOUDFLARE_BEACON = 'https://static.cloudflareinsights.com';
+const CLOUDFLARE_RUM = 'https://cloudflareinsights.com';
+
 // Types the browser executes. Anything else (`application/ld+json`,
 // `text/partytown`) is a data block and is not subject to `script-src`.
 const EXECUTABLE_TYPES = new Set([
@@ -94,12 +99,12 @@ interface PolicyHashes {
 export const buildPolicy = ({ scripts, styles }: PolicyHashes): string =>
 	[
 		['default-src', "'self'"],
-		['script-src', "'self'", ...scripts, TAG_MANAGER],
+		['script-src', "'self'", ...scripts, TAG_MANAGER, CLOUDFLARE_BEACON],
 		['style-src', "'self'", ...styles],
 		['img-src', "'self'", ...ANALYTICS],
 		// Vite inlines font files under 4 KB into the CSS as data: URIs.
 		['font-src', "'self'", 'data:'],
-		['connect-src', "'self'", ...ANALYTICS],
+		['connect-src', "'self'", ...ANALYTICS, CLOUDFLARE_RUM],
 		// Partytown's service worker, served from /~partytown/.
 		['worker-src', "'self'"],
 		['object-src', "'none'"],
@@ -140,7 +145,7 @@ export const PARTYTOWN_POLICY = [
 	.join('; ');
 
 const WILDCARD_RULE = '/*';
-const HSTS_HEADER = 'Strict-Transport-Security';
+const FRAME_OPTIONS_HEADER = 'X-Frame-Options';
 
 const PARTYTOWN_MARKER =
 	"# Partytown's files get their own policy (PARTYTOWN_POLICY in scripts/csp.ts).";
@@ -172,12 +177,11 @@ const policyLine = (policy: string): string => {
  * replaces the first one on Cloudflare, which dropped the other security
  * headers.
  *
- * Partytown's rule comes last. Cloudflare served only the most specific
- * matching rule, although its docs say matching rules are joined, so the rule
- * works both ways: it detaches the `/*` values it replaces (a no-op when
- * nothing was joined) and sets its own CSP and HSTS. HSTS is detached too:
- * a joined copy would repeat `max-age`, and browsers ignore an HSTS header
- * with a repeated directive. Applying it twice gives the same file.
+ * Partytown's rule comes last. Cloudflare joins every matching rule, so it
+ * detaches the `/*` values it replaces before setting its own: a joined CSP
+ * would be enforced on top of Partytown's and block its eval, and the page's
+ * `X-Frame-Options: DENY` would forbid the page from framing the sandbox.
+ * Applying it twice gives the same file.
  * @param headersFile - The `_headers` file as copied from `public/`.
  * @param policy - The page policy.
  * @returns The file with both policies.
@@ -199,13 +203,13 @@ export const applyPolicy = (headersFile: string, policy: string): string => {
 		lines.splice(ruleIndex + 1, 0, pageLine);
 	}
 
-	const hstsLine = lines.find((line) => line.startsWith(`  ${HSTS_HEADER}:`));
 	const partytownRule = [
 		PARTYTOWN_MARKER,
 		'/~partytown/*',
 		`  ! ${CSP_HEADER}`,
 		policyLine(PARTYTOWN_POLICY),
-		...(hstsLine ? [`  ! ${HSTS_HEADER}`, hstsLine] : []),
+		`  ! ${FRAME_OPTIONS_HEADER}`,
+		`  ${FRAME_OPTIONS_HEADER}: SAMEORIGIN`,
 	];
 
 	return [...lines, '', ...partytownRule, ''].join('\n').trimStart();
