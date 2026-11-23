@@ -1,2 +1,2 @@
-/* @import url("./normalize.css") layer(normalize); */
+@import "./font-fallback.css";
 @import "./light-reset.css" layer(reset);

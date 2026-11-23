@@ -190,7 +190,9 @@ const purgeCssConfig: Omit<UserDefinedOptions, 'css'> = {
 		],
 	},
 	keyframes: true,
-	fontFace: true,
+	// false: it dropped the "Barlow Fallback" face even though font-family
+	// uses it, and every other face (Barlow, JetBrains Mono) is in use anyway.
+	fontFace: false,
 	variables: true,
 	skippedContentGlobs: ['node_modules/**', '.sonda/**'],
 };
