@@ -192,13 +192,16 @@ docs are English.
   the page policy: `tests/csp.test.ts` checks it.
   - It ships as `Content-Security-Policy-Report-Only`; enforcing it is the
     `CSP_HEADER` constant in `csp.ts`.
-  - Cloudflare served only the most specific matching `_headers` rule (its docs
-    say matching rules are joined): `/_astro/*` files get no HSTS or CSP. A rule
-    that needs a `/*` header must set it again.
-  - `/~partytown/*` gets its own `PARTYTOWN_POLICY` plus HSTS: Partytown's
-    sandbox runs gtag through an inline script, eval and blob workers, so the
-    `'unsafe-*'` exceptions live only there. The rule detaches each value before
-    setting it, so it is right whether or not Cloudflare joins rules.
+  - Cloudflare joins every matching `_headers` rule, so `/*` headers reach all
+    files. A rule that replaces one must detach it first (`! Header`).
+  - Check live headers with a cache-busting query (`?v=1`): the edge cache keeps
+    serving a file's old headers for hours after a deploy.
+  - `/~partytown/*` gets its own `PARTYTOWN_POLICY` and
+    `X-Frame-Options: SAMEORIGIN`: Partytown's sandbox is framed by the page and
+    runs gtag through an inline script, eval and blob workers, so the
+    `'unsafe-*'` exceptions live only there.
+  - Cloudflare Web Analytics injects its beacon at the edge, so its origins are
+    listed in the page policy by hand.
   - `astro preview` ignores `_headers`. Test the policy in a browser by adding
     the header to the preview's responses (e.g. a Playwright route), or on a
     Cloudflare preview deploy.
