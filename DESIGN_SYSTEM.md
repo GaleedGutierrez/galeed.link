@@ -17,7 +17,7 @@
 
 1. [Design direction & live audit summary](#1-design-direction--live-audit-summary)
 2. [Theming architecture (system-first + user toggle)](#2-theming-architecture-system-first--user-toggle)
-3. [Color system (semantic tokens: Dark & Light)](#3-color-system-semantic-tokens--dark--light)
+3. [Color system (semantic tokens: Dark & Light)](#3-color-system-semantic-tokens-dark--light)
 4. [Typography system](#4-typography-system)
 5. [Layout, spacing & grid anatomy](#5-layout-spacing--grid-anatomy)
 6. [Surfaces, borders, elevation & Half-Life micro-details](#6-surfaces-borders-elevation--half-life-micro-details)
@@ -25,7 +25,7 @@
 8. [Motion & interaction guidelines](#8-motion--interaction-guidelines)
 9. [Astro + ITCSS + TypeScript implementation blueprint](#9-astro--itcss--typescript-implementation-blueprint)
 10. [Anti-patterns & pre-delivery checklist](#10-anti-patterns--pre-delivery-checklist)
-11. [Appendix: verification log](#11-appendix--verification-log)
+11. [Appendix: verification log](#11-appendix-verification-log)
 
 ---
 
@@ -33,12 +33,21 @@
 
 ### 1.1 Direction in one paragraph
 
-galeed.link stays a **single, centered, scannable column**, the same link-in-bio shell it has today and the same one Linkd polishes. The Half-Life DNA comes in through **discipline, not decoration**: warm industrial neutrals taken from HL2's umber ink and Black Mesa's void blacks, **one** controlled HEV-orange accent, DIN-style grotesque type with tracked uppercase labels, square-ish "machined" geometry, 1px hairline rules, and a small amount of monospace technical metadata. The page has no HUD frames, scanlines, glow, or game imagery. In the light theme it should read like a clean editorial page in charcoal ink on bone paper. In the dark theme it should read like a quiet Black Mesa terminal room.
+galeed.link stays a **single, centered, scannable column**, the same link-in-bio
+shell it has today and the same one Linkd polishes. The Half-Life DNA comes in
+through **discipline, not decoration**: warm industrial neutrals taken from
+HL2's umber ink and Black Mesa's void blacks, **one** controlled HEV-orange
+accent, DIN-style grotesque type with tracked uppercase labels, square-ish
+"machined" geometry, 1px hairline rules, and a small amount of monospace
+technical metadata. The page has no HUD frames, scanlines, glow, or game
+imagery. In the light theme it should read like a clean editorial page in
+charcoal ink on bone paper. In the dark theme it should read like a quiet Black
+Mesa terminal room.
 
 ### 1.2 Extracted visual DNA: Half-Life 2 **[HL2]** (light, editorial)
 
 | Aspect | Verified value | Notes |
-|---|---|---|
+| --- | --- | --- |
 | Page background | `#e9e8e9` (`rgb(233,232,233)`) | `body` and `footer.main_footer` |
 | Content surface | `#ffffff` | sections (`section.row`) |
 | Primary ink | `#4b423c` (`rgb(75,66,60)`) | warm umber-grey. Used for body, h1, and `hr` |
@@ -61,8 +70,10 @@ galeed.link stays a **single, centered, scannable column**, the same link-in-bio
 
 ### 1.3 Extracted visual DNA: Black Mesa **[BM]** (dark, cinematic)
 
+<!-- markdownlint-disable MD013 -->
+
 | Aspect | Verified value | Notes |
-|---|---|---|
+| --- | --- | --- |
 | Body bg | `#0a0a0a` (`--color-void`) | |
 | Ink surfaces | `--color-ink: #171717`, `--color-ink-deep: #141414` (`rgb(20,20,20)`, `rgb(23,23,23)` observed) | |
 | Accent | `--color-accent: #e37226` (`rgb(227,114,38)`) | CTA fill, labels, footer band, focus ring |
@@ -81,6 +92,8 @@ galeed.link stays a **single, centered, scannable column**, the same link-in-bio
 | Editorial motif | Press quotes attributed with accent uppercase labels: `—EUROGAMER`, `—PC GAMER`, `—IGN` | em-dash + uppercase tracking |
 | A11y | `SKIP TO CONTENT` link (`sr-only focus:not-sr-only`) | |
 
+<!-- markdownlint-enable MD013 -->
+
 ### 1.4 Structural audit: galeed.link **[GL]** (current baseline)
 
 Observed facts:
@@ -98,7 +111,7 @@ Observed facts:
 Issues verified during inspection:
 
 | # | Issue | Evidence |
-|---|---|---|
+| --- | --- | --- |
 | 1 | **4 of 5 nav anchors are broken.** Links point to `#blog`, `#about`, `#open-source`, `#contact`, but only `#bio` exists. Labels and IDs also disagree ("Trabajo freelance" → `#blog`, "Side projects" → `#about`). | DOM `[id]` scan: only `bio` |
 | 2 | **Nav overflows with no affordance.** Desktop: the `ul` is 528px inside a 448px `nav`, so "Open source" is clipped and "Contacto" is hidden. Mobile: `scrollWidth 526 / clientWidth 375`. | computed geometry + screenshots |
 | 3 | **Emoji used as icons.** The 🇦🇷 flag renders as the letters "AR" on Windows Chromium. | desktop screenshot |
@@ -111,7 +124,7 @@ Issues verified during inspection:
 ### 1.5 Structural audit: Linkd **[LK]** (layout reference)
 
 | Aspect | Verified value |
-|---|---|
+| --- | --- |
 | Page bg / shell bg | `#0e0e11` / `#09090b` |
 | Shell | 460px wide, radius **16px**, 48px from top. Shadow is a light ring stack: `rgba(250,250,250,.09) 0.3px 0.3px 1.28px -1px, rgba(250,250,250,.082) 1.14px 1.14px 4.85px -2px, rgba(250,250,250,.06) 5px 5px 21.2px -3px` |
 | Mobile (390) | shell full-bleed (375px), radius 0, h1 drops 40 → **32px** |
@@ -130,7 +143,7 @@ Issues verified during inspection:
 ### 1.6 What stays, what evolves, and the bridge
 
 | Area | Stays (from GL) | Evolves (Linkd polish + HL DNA) |
-|---|---|---|
+| --- | --- | --- |
 | Shell | single centered column, grayscale portrait with fade, full-bleed on mobile | width 448 → **480px** to fit a 2-col bento. Radius 16 → **8px** ("machined"). Shell gets a hairline border, so the edge stays visible in dark mode (fixes issue 4) |
 | Hero | name, role, social row with **visible labels** (better than Linkd's icon-only row) | role becomes `<p>`. New slim **system bar** above the photo with mono metadata, theme toggle, and HL2's 2px orange underline rule |
 | Nav | same five destinations | IDs fixed to match labels, uppercase DIN-style labels, **one scrolling line with faded edges** (owner's choice, 2026-11-23), BM accent underline indicator, sticky ≥1024px |
@@ -145,7 +158,7 @@ Issues verified during inspection:
 
 ### 2.1 Model
 
-```
+```text
                  ┌────────────── localStorage["galeed:theme"] ──────────────┐
                  │  absent  →  preference = "system"                          │
                  │  "light" →  preference = "light"                           │
@@ -222,7 +235,7 @@ Place it in `src/layouts/Layout/index.astro` **before** any stylesheet link, and
 The full module is in §9.8. Its behavior contract:
 
 | Event | Result |
-|---|---|
+| --- | --- |
 | User clicks the toggle, target ≠ OS theme | `data-theme` flips immediately, target stored literally, `themechange` dispatched |
 | User clicks the toggle, target = OS theme | storage key **removed**. The site follows the OS again |
 | OS theme changes while pref = system | re-resolve live, nothing persisted |
@@ -237,7 +250,12 @@ Example, with the OS starting in light: click → `dark` is stored and the site 
 
 ## 3. Color system (semantic tokens: Dark & Light)
 
-**Target: WCAG 2.2 Level AAA.** All text (normal and large) is ≥ **7:1** against every surface it can sit on (SC 1.4.6, Contrast Enhanced). Non-text UI boundaries and the focus indicator are ≥ **3:1** (SC 1.4.11 has no AAA level; the focus ring also meets SC 2.4.13 Focus Appearance, see §3.5). Tokens are authored in **`oklch()`**. The hex values next to them are what browsers render, and every ratio in §3.4 was computed from those rendered values.
+**Target: WCAG 2.2 Level AAA.** All text (normal and large) is ≥ **7:1** against
+every surface it can sit on (SC 1.4.6, Contrast Enhanced). Non-text UI
+boundaries and the focus indicator are ≥ **3:1** (SC 1.4.11 has no AAA level;
+the focus ring also meets SC 2.4.13 Focus Appearance, see §3.5). Tokens are
+authored in **`oklch()`**. The hex values next to them are what browsers render,
+and every ratio in §3.4 was computed from those rendered values.
 
 ### 3.1 Derivation
 
@@ -245,7 +263,12 @@ Example, with the OS starting in light: click → `dark` is stored and the site 
 - **Dark ("Black Mesa"):** the same pair, inverted. **Charcoal `#1c1c1c`** is the main surface, **bone `#ede6d8`** the main text. The page canvas is `#141414`, Black Mesa's real `ink-deep` **[V]**.
 - **Accent:** HL2's **`#ff862c`** **[V]** is the brand fill in both themes, and HL2's **`#ffaa6b`** **[V]** is its hover in both themes. Both always carry **charcoal ink, never white** (white on `#ff862c` is only 2.41:1).
 - **Orange as text** must be much darker in light mode (`#7f3300`, a burnt HEV tone) and a little lighter in dark mode (`#ff9b5a`) to reach 7:1.
-- **Three text tiers are kept, but they are close.** At AAA, even the "muted" tier must reach 7:1, so the gap between tiers is small. **Hierarchy comes mainly from type roles** (size, weight, uppercase, mono), not from grey levels. To keep a visible step, secondary text was pushed further from muted (light `#3c332e`, dark `#cec6bc`). In light mode this replaces HL2's original umber `#4b423c` **[V]**, which only reached 7.89:1.
+- **Three text tiers are kept, but they are close.** At AAA, even the "muted"
+  tier must reach 7:1, so the gap between tiers is small. **Hierarchy comes
+  mainly from type roles** (size, weight, uppercase, mono), not from grey
+  levels. To keep a visible step, secondary text was pushed further from muted
+  (light `#3c332e`, dark `#cec6bc`). In light mode this replaces HL2's original
+  umber `#4b423c` **[V]**, which only reached 7.89:1.
 - **Status tones** keep their hues (BM's HUD amber `#e3b12c` **[V]** is still the dark-mode warning, BM blueprint `#1f4472` **[V]** is still the light-mode info) and only their lightness was moved until each reached 7:1.
 - **Charcoal is a pure neutral (chroma 0)**, while bone and the other neutrals are warm (hue ≈ 50–85°). This is intentional, to keep the chosen `#1c1c1c` exact. If the dark theme feels slightly cold, give the charcoal family a little chroma (e.g. `oklch(22.6% 0.006 70)`) and re-run the contrast check.
 
@@ -256,7 +279,7 @@ Primitives are **private**: only the applications in §3.3 reference them, never
 **HEV accent**
 
 | Primitive (`--…`) | `oklch()` | ≈ Hex | Source | Used for |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | `hev-50` | `oklch(96.6% 0.021 63.2)` | `#fff1e5` | [P] | light accent tint |
 | `hev-200` | `oklch(82.3% 0.089 60.5)` | `#f0b88a` | [P] | light accent border |
 | `hev-300` | `oklch(80.9% 0.127 56.3)` | `#ffaa6b` | **[V] HL2** | hover fill (both themes) |
@@ -273,7 +296,7 @@ Black Mesa's `#e37226` **[V]** is no longer used: charcoal on it is only 5.44:1.
 **Neutrals and status**
 
 | Primitive | `oklch()` | ≈ Hex | Source | Used for |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | `--white` | `oklch(100% 0 0)` | `#ffffff` | [P] | light card surface |
 | `--bone-50` | `oklch(95.6% 0.014 84.6)` | `#f5f0e6` | [P] | light shell surface |
 | `--bone-100` | `oklch(92.7% 0.02 84.6)` | `#ede6d8` | [P] chosen bone | light page · dark text |
@@ -302,7 +325,7 @@ Black Mesa's `#e37226` **[V]** is no longer used: charcoal on it is only 5.44:1.
 Named by property, as in the repo: `--background-color-*`, `--text-color-*`, `--border-color-*`, `--outline-color-*`. Each one is `light-dark(var(--<light>), var(--<dark>))`, or a single primitive when it's the same in both themes. The **short name** is the label used in the contrast tables of §3.4.
 
 | Token | **Light** | **Dark** | Short name (§3.4) | Role |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | `--background-color-primary` | `--bone-100` (`#ede6d8`) | `--charcoal-950` (`#141414`) | `bg` | page canvas (≥640px; under 640 the page uses `secondary`) |
 | `--background-color-secondary` | `--bone-50` (`#f5f0e6`) | `--charcoal-900` (`#1c1c1c`) | `surface` | shell / primary surface |
 | `--background-color-tertiary` | `--white` (`#ffffff`) | `--charcoal-800` (`#242424`) | `surface-2` | cards, inset blocks, hover fills |
@@ -338,7 +361,7 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 **Light theme**
 
 | Foreground | bg | surface | surface-2 | accent-subtle | Min | Level |
-|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- |
 | `text` | 13.72 | 15.00 | 17.04 | 15.40 | **13.72** | AAA |
 | `text-secondary` | 9.92 | 10.84 | 12.32 | 11.13 | **9.92** | AAA |
 | `text-muted` | 7.11 | 7.77 | 8.83 | 7.98 | **7.11** | AAA |
@@ -350,7 +373,7 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 | `info` | 7.95 | 8.69 | 9.87 | — | **7.95** | AAA |
 
 | Pair | Ratio | Requirement |
-|---|---|---|
+| --- | --- | --- |
 | `accent-ink` on `accent` | **7.06** | AAA text ✓ |
 | `accent-ink` on `accent-hover` | **9.10** | AAA text ✓ |
 | `border-strong` on bg / surface / surface-2 | **3.81 / 4.16 / 4.73** | UI ≥ 3 ✓ |
@@ -360,7 +383,7 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 **Dark theme**
 
 | Foreground | bg | surface | surface-2 | accent-subtle | Min | Level |
-|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- |
 | `text` | 14.84 | 13.72 | 12.50 | 13.46 | **12.50** | AAA |
 | `text-secondary` | 10.90 | 10.09 | 9.19 | 9.89 | **9.19** | AAA |
 | `text-muted` | 8.51 | 7.87 | 7.17 | 7.72 | **7.17** | AAA |
@@ -372,7 +395,7 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 | `info` | 8.47 | 7.83 | 7.13 | — | **7.13** | AAA |
 
 | Pair | Ratio | Requirement |
-|---|---|---|
+| --- | --- | --- |
 | `accent-ink` on `accent` | **7.63** | AAA text ✓ |
 | `accent-ink` on `accent-hover` | **9.84** | AAA text ✓ |
 | `border-strong` on bg / surface / surface-2 | **3.78 / 3.50 / 3.19** | UI ≥ 3 ✓ |
@@ -382,7 +405,7 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 **Rejected pairs (why the accent rules exist)**
 
 | Pair | Ratio | Seen at |
-|---|---|---|
+| --- | --- | --- |
 | `#ffffff` on `#ff862c` | 2.41 | HL2 active nav |
 | `#ffffff` on `#e37226` | 3.13 | BM primary CTA |
 | `#1c1c1c` on `#e37226` | 5.44 | the previous light hover fill (AA only) |
@@ -393,7 +416,13 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 
 - **Any new color pair** needs a measured ratio ≥ 7:1 (text) or ≥ 3:1 (non-text) in **both** themes before it ships.
 - **No opacity on text.** `opacity`, `/alpha` and `color-mix()` toward the background lower contrast. Use `text-muted` instead of fading `text`. Disabled controls are the one exception, because WCAG exempts inactive components.
-- **Derived colors are only for non-text decoration, and only via `color-mix(in oklab, …)`.** Prefer an explicit token first. Per the `color` guide: don't derive shades by changing only the lightness with `oklch(from …)` (browsers don't gamut-map yet, so the result is unpredictable), and never mix `in oklch` with neutrals (a Chromium bug turns low-chroma colors pinkish, and charcoal has chroma 0). Text and focus colors are always explicit tokens with a measured ratio.
+- **Derived colors are only for non-text decoration, and only via
+  `color-mix(in oklab, …)`.** Prefer an explicit token first. Per the `color`
+  guide: don't derive shades by changing only the lightness with `oklch(from …)`
+  (browsers don't gamut-map yet, so the result is unpredictable), and never mix
+  `in oklch` with neutrals (a Chromium bug turns low-chroma colors pinkish, and
+  charcoal has chroma 0). Text and focus colors are always explicit tokens with
+  a measured ratio.
 - **Focus Appearance (SC 2.4.13, AAA):** the 2px solid outline with 2px offset (`elements/global.css`, §9.4) surrounds the whole control, and it contrasts ≥ 7:1 with the surfaces around it, which exceeds the 3:1 change the criterion requires.
 - **Other AAA criteria this design already meets:** Target Size Enhanced (2.5.5, all targets ≥ 44px), Section Headings (2.4.10, numbered section h2s), Link Purpose: Link Only (2.4.9, "Ver todo" actions carry `sr-only` context). Keep them when adding content.
 
@@ -404,21 +433,29 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 ### 4.1 Reference fonts → license-free equivalents
 
 | Extracted (source) | Status on page | Web equivalent | Package | Rationale |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | **DIN Pro** Light 200 / Bold 700 / Black 900 **[HL2]** | loaded (self-hosted WOFF) | **Barlow** | `@fontsource/barlow` | Barlow is a low-contrast, slightly rounded grotesque in the DIN/industrial-signage family, and it is literally the face **[BM]** serves in place of DIN Pro. Same DNA, OFL-licensed. |
 | "DIN Pro" → **Barlow** **[BM]** | DIN Pro listed but **not served**. Barlow 300–900 served | **Barlow** | same | identical to BM's real rendering |
 | `apercu`, `circularstd`, `minionpro` **[HL2]** | declared, **unloaded** | — not used | — | not part of the visible voice |
 | System mono stack **[BM]** | variable defined | **JetBrains Mono** (variable) | `@fontsource-variable/jetbrains-mono` | the skill's "Developer Mono" pairing. Tall x-height and clear 0/O/1/l at 12px for technical metadata. Falls back to BM's own system mono stack. |
 | Manrope **[GL, LK]** | loaded | — retired | — | geometric/friendly, which conflicts with the industrial voice |
 
-**About the `ui-ux-pro-max` recommendation.** The `--design-system` run returned *Minimalism & Swiss Style* with **Archivo + Space Grotesk** and a monochrome + blue (`#2563EB`) palette. The Swiss/minimal structure is kept (grid discipline, high contrast, clear hierarchy, subtle 200–250ms hovers). The fonts and the blue are **overridden**: Space Grotesk's quirky terminals and the blue accent are exactly the "generic AI tech portfolio" look this brief asks to avoid, and Barlow matches the observed DIN voice. *Optional:* **Barlow Semi Condensed 800** for the h1 only, if you want more HL2 poster energy. It is the same family, so there is no pairing risk.
+**About the `ui-ux-pro-max` recommendation.** The `--design-system` run returned
+*Minimalism & Swiss Style* with **Archivo + Space Grotesk** and a monochrome +
+blue (`#2563EB`) palette. The Swiss/minimal structure is kept (grid discipline,
+high contrast, clear hierarchy, subtle 200–250ms hovers). The fonts and the blue
+are **overridden**: Space Grotesk's quirky terminals and the blue accent are
+exactly the "generic AI tech portfolio" look this brief asks to avoid, and
+Barlow matches the observed DIN voice. *Optional:* **Barlow Semi Condensed 800**
+for the h1 only, if you want more HL2 poster energy. It is the same family, so
+there is no pairing risk.
 
 ### 4.2 Type roles
 
 All roles are defined as tokens (`--f-*`, `--fw-*`, `--lh-*`, `--ls-*`, §9.2) and exposed as **`postcss-mixins`** (`@mixin heading-xl`, §9.3), the repo's own pattern. BM does the same job with `.type-*` classes **[V]**. Fluid sizes use `utopia.clamp(min, max)` between 360 and 448px viewports (`postcss-utopia`).
 
 | Role (mixin) | Family | Size | Weight | Line-height | Tracking | Case | Use |
-|---|---|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- | --- | --- |
 | `heading-xl` | Barlow | `utopia.clamp(32, 40)` → 32–40px | 800 | 1.1 | −0.005em | as written | h1 name (GL/LK/HL2 all use 40px desktop. LK mobile uses 32) |
 | `heading-lg` | Barlow | `utopia.clamp(22, 24)` → 22–24px | 800 | 1.2 | 0 | sentence | section h2 (LK h2 24px) |
 | `heading-md` | Barlow | 1.125rem (18px) | 500 | 1.4 | 0 | sentence | role line under name |
@@ -476,10 +513,23 @@ Rules:
      }
      ```
    - The `--font-primary` stack (§9.2) already lists `"Barlow Fallback"` second.
-4. **Normalize the fallback's x-height** with `font-size-adjust: from-font` on `body` (already in `elements/body.css`, §9.4), per the `visually-stable-font-fallbacks` guide. It is a one-line complement to the generated fallback face, and browsers without support ignore it. Verify it by blocking the Barlow files in DevTools: the text should keep roughly the same size and line breaks. If it doesn't, replace `from-font` with Barlow's measured x-height ratio.
+4. **Normalize the fallback's x-height** with `font-size-adjust: from-font` on
+   `body` (already in `elements/body.css`, §9.4), per the
+   `visually-stable-font-fallbacks` guide. It is a one-line complement to the
+   generated fallback face, and browsers without support ignore it. Verify it by
+   blocking the Barlow files in DevTools: the text should keep roughly the same
+   size and line breaks. If it doesn't, replace `from-font` with Barlow's
+   measured x-height ratio.
 5. Don't put `font-display: optional` on Barlow. The name in the hero should render in the brand face on first visit.
 6. **Mono fallback too** (added 2026-11-23). `JetBrains Mono Fallback` faces (Capsize: JetBrains Mono over Menlo, Consolas and Courier New) sit after JetBrains Mono in `--font-mono`, so metadata, chips and repo names keep their width and line height during the swap.
-7. **Subset to the page's characters** (added 2026-11-23). `scripts/subsetFonts.ts` runs last in the build: it collects the characters in the built HTML (plus CSS `content` strings, both letter cases and a small margin of digits, Spanish letters and punctuation) and subsets every Fontsource file with `subset-font`. Variable axes are kept. It renames each font and each stylesheet that references one by content hash, so a cached stylesheet never points at a font a later deploy removed. Measured: the fonts a visit downloads drop from about 136 KB to about 46 KB.
+7. **Subset to the page's characters** (added 2026-11-23).
+   `scripts/subsetFonts.ts` runs last in the build: it collects the characters
+   in the built HTML (plus CSS `content` strings, both letter cases and a small
+   margin of digits, Spanish letters and punctuation) and subsets every
+   Fontsource file with `subset-font`. Variable axes are kept. It renames each
+   font and each stylesheet that references one by content hash, so a cached
+   stylesheet never points at a font a later deploy removed. Measured: the fonts
+   a visit downloads drop from about 136 KB to about 46 KB.
 
 ---
 
@@ -490,7 +540,7 @@ Rules:
 Repo convention: `--spacing-N` = N × 4px, written as `calc(<px> * var(--rem-scale))` (§9.2). The same N is UnoCSS's spacing step (`p-4` = `gap-4` = 1rem = 16px), so layout utilities and tokens never disagree.
 
 | Token | px | Uno equivalent | Typical use |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `--spacing-1` | 4 | `p-1` | icon↔text tight |
 | `--spacing-2` | 8 | `p-2` | chip gaps, icon↔label |
 | `--spacing-3` | 12 | `p-3` | card inner padding (LK 12 **[V]**) |
@@ -509,7 +559,7 @@ Applications: `--spacing-gutter: var(--spacing-4)`, `--spacing-stack: var(--spac
 
 ### 5.2 Page blueprint (mapped to galeed.link's real sections)
 
-```
+```text
  ┌───────────────────────────────── viewport (bg: primary ≥640, secondary <640) ───────────────────────┐
  │                                    ↕ page block margin (0 / 32 / 48)                                │
  │        ┌──── .shell  max-width: 30rem (480px) · --border-radius-2 · border · shell shadow ──────┐   │
@@ -545,7 +595,7 @@ Section IDs (fixes issue 1): `#bio`, `#freelance`, `#proyectos`, `#open-source`,
 ### 5.3 Shell & inner grid
 
 | Property | Value |
-|---|---|
+| --- | --- |
 | Container | `--max-w-shell: calc(480 * var(--rem-scale))` (480px). Up from 448 **[GL]** / 460 **[LK]**, so a 2-col bento at 16px gutters gives 216px tiles (≥ LK's 206 **[V]**) |
 | Inner gutter | `--spacing-gutter` 16px left/right for all content below the portrait |
 | Section | `display: flex; flex-direction: column; gap: var(--spacing-stack)` + `scroll-margin-top: calc(var(--height-nav) + var(--spacing-4))` |
@@ -557,7 +607,7 @@ Section IDs (fixes issue 1): `#bio`, `#freelance`, `#proyectos`, `#open-source`,
 ### 5.4 Breakpoints
 
 | Name | Min-width | Behavior |
-|---|---|---|
+| --- | --- | --- |
 | `xs` (base) | 375px design floor (works down to 320) | shell full-bleed, radius 0, no border/shadow, body bg = `surface`. Portrait 5:4 (`object-position: 50% 20%`) so the name lands above the fold. Nav is one horizontally scrolling line. Social 4-col with icon over label |
 | `sm` | `40em` (640px) | shell floats: `margin-block: var(--spacing-8)`, `--border-radius-2`, 1px `border`, shell shadow (Layout module shadows block, §9.6). Page bg = `--background-color-primary`. Portrait 1:1 |
 | `md` | `48em` (768px) | `margin-block: var(--spacing-12)` (GL parity) |
@@ -581,7 +631,7 @@ Breakpoints are written in **`em`**, not `px` (`respect-os-text-scale`: *"Respon
 Both Half-Life references use **0 radius** **[V]**. GL/LK use 16px shells and 8px items **[V]**. The compromise is tight radii that read as precision-cut.
 
 | Token | Value | Applies to |
-|---|---|---|
+| --- | --- | --- |
 | `--border-radius-0` | 0 | rules, system bar, portrait on mobile |
 | `--border-radius-05` | 2px | buttons, chips, the theme toggle, inputs |
 | `--border-radius-1` | 4px | link cards, bento media, repo cards |
@@ -591,7 +641,7 @@ Both Half-Life references use **0 radius** **[V]**. GL/LK use 16px shells and 8p
 ### 6.2 Borders
 
 | Token | Value | Use |
-|---|---|---|
+| --- | --- | --- |
 | `--border-025` | 1px | all dividers, card outlines, shell outline (HL2 `hr`/table cells/footer columns are 1px **[V]**) |
 | `--border-05` | 2px | system-bar accent rule (HL2 nav `border-bottom: 2px` **[V]**), active indicators (BM underline `h-0.5` = 2px **[V]**) |
 
@@ -602,7 +652,7 @@ Colors: `--border-color-primary` (decorative), `--border-color-strong` (controls
 Elevation is flat by default.
 
 | Level | Token | Where |
-|---|---|---|
+| --- | --- | --- |
 | 0 | none | everything, including cards (borders define them, not shadows) |
 | 1 | `--box-shadow-shell-light` / `-dark` | the floating shell at ≥640px (set by the Layout module's shadows block, §9.6, not a utility) |
 
@@ -634,7 +684,7 @@ No glows or colored shadows. Linkd's inset "pillow" card shading **[V]** is skeu
 In forced colors the browser replaces author colors with the user's system palette and removes `box-shadow` and gradient backgrounds. The `color` guide's rule: *"Don't rely on `background-image`, `box-shadow`, or `border-image` to convey borders, separators, or state"*. What changes (each atom's or module's `@media (forced-colors: active)` block, §9.5–§9.6):
 
 | Element | Normal | Forced colors |
-|---|---|---|
+| --- | --- | --- |
 | Nav underline (`::after`) | `background` bar | `border-block-end` in `CanvasText`. The current section uses `Highlight` |
 | Card accent bar (`::before`) | `background` bar | `border-inline-start` in `Highlight` |
 | Theme toggle | border + icon | kept automatically (`ButtonFace` / `ButtonText`). The state is the icon's shape (sun/moon), not a color, so nothing needs redrawing |
@@ -662,7 +712,7 @@ Conventions (§9):
 
 **Anatomy**
 
-```
+```text
 ┌───────────────────────────────────────────────────────────────┐
 │ AR · DISPONIBLE ●                                     [☼]     │  h 48px, px --spacing-gutter
 └━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┘  2px --border-color-accent (decorative)
@@ -700,7 +750,7 @@ Conventions (§9):
 ### 7.3 Profile / hero header
 
 | Part | Spec |
-|---|---|
+| --- | --- |
 | Portrait | `<Picture>` from `astro:assets` (AVIF/WebP, `widths=[375,480,960]`, `sizes="(min-width: 40em) 480px, 100vw"`), explicit `width/height`. `aspect-[5/4] sm:aspect-square`. Module: `object-fit: cover; object-position: 50% 20%`. Grayscale photo kept as-is (GL/LK **[V]**). No tint, no duotone. **Eager** load + `fetchpriority="high"` (it is the LCP element). |
 | Fade | `::after` overlay in the module: `linear-gradient(to bottom, transparent 55%, var(--background-color-secondary))`. Theme-aware automatically |
 | Radius | `--border-radius-0` (it sits under the system bar inside the shell, and the shell clips it) |
@@ -723,7 +773,13 @@ Conventions (§9):
 - `<nav aria-label="Secciones"><ul class="flex flex-wrap justify-center gap-x-1 px-4" role="list">`.
 - Link: `<a class:list={['relative inline-flex items-center min-h-11 px-3', styles.link]}>`. The module adds `@mixin label` and `color: var(--text-color-secondary)`.
 - Indicator (BM **[V]**): `::after` with `inset-inline: var(--spacing-3)`, `inset-block-end: var(--spacing-2)`, `block-size: var(--border-05)`, `background-color: var(--background-color-indicator)`, `scale: 0 1`, origin left. It grows over `--duration-slow` / `--ease-out` only under `no-preference` (code in §9.6).
-- States: hover → `--text-color-primary` + indicator `scale: 1`. **Current section** (`aria-current="true"`, set by a rAF-throttled scroll check: the last section whose heading reached its `scroll-margin-top` line + 24px; at the page bottom the last link; a clicked link stays current until the user scrolls. An IntersectionObserver band was dropped because anchor jumps skip over it, and short final sections never reach it) → `--text-color-primary` + indicator fully shown. Focus-visible → global ring.
+- States: hover → `--text-color-primary` + indicator `scale: 1`. **Current
+  section** (`aria-current="true"`, set by a rAF-throttled scroll check: the
+  last section whose heading reached its `scroll-margin-top` line + 24px; at the
+  page bottom the last link; a clicked link stays current until the user
+  scrolls. An IntersectionObserver band was dropped because anchor jumps skip
+  over it, and short final sections never reach it) → `--text-color-primary` +
+  indicator fully shown. Focus-visible → global ring.
 - **One scrolling line, with an affordance** (fixes issue 2 without wrapping; the owner prefers the original scrolling nav, 2026-11-23).
   - `ul.navbar__list`: `overflow-x: auto`, `py-1` so the focus ring isn't clipped, inline padding 16px / 32px matched by `scroll-padding-inline`.
   - A `mask-image` fades both edges over that padding only, so the first and last links are never covered at the scroll ends.
@@ -733,7 +789,7 @@ Conventions (§9):
 
 ### 7.6 Section header
 
-```
+```text
 ───────────────────────────────────────────────  (top hairline; omitted on first section)
 01  Trabajo freelance                    VER TODO →
 ```
@@ -747,18 +803,22 @@ Conventions (§9):
 
 ### 7.7 Badges / chips
 
+<!-- markdownlint-disable MD013 -->
+
 | Variant | Spec |
-|---|---|
+| --- | --- |
 | **Tech chip** (non-interactive) | Atom `a-chip` (§9.5). It's an inline flex row with a 6px gap, `min-block-size: var(--spacing-7)`, `padding-inline: var(--spacing-2)`, `--border-radius-05`, a `--border-025` border in `--border-color-primary`, and `--background-color-tertiary`. Type: `@mixin micro` in `--text-color-secondary`, `white-space: nowrap`. Optional 14px Simple Icons logo (`aria-hidden`) |
 | **Status chip** | `a-chip a-chip--success` (or `--warning` / `--info` / `--danger`) + a leading `<span class="a-chip__dot">` (6px, `--border-radius-circle`, `currentColor`). The label always states the status ("EN CURSO", "ACTIVO", "ARCHIVADO"). Color is never the only signal |
 | **Collection** | `<ul class="flex flex-wrap gap-2" role="list">`. **Wrap the collection before shrinking labels** (skill: `chip-collection-reflow`). No `+n` hiding on this site (≤8 chips per group) |
 | Long values | Chips stay single-line. If an unpredictable value could overflow (e.g. a repo topic), wrap the text in `<span class="a-chip__label">` (ellipsis, `min-inline-size: 0`), and show the full value in the card body |
 
+<!-- markdownlint-enable MD013 -->
+
 ### 7.8 Link card (Freelance list, generic links)
 
 **Anatomy** (LK geometry **[V]**: 56px min height, 12px padding, 16px gap)
 
-```
+```text
 ┌───────────────────────────────────────────────────────────┐
 ▌ 01   Nombre del cliente · rol                       ↗    │
 │      2024—2025  ·  [EN CURSO ●]                           │
@@ -787,7 +847,15 @@ Conventions (§9):
 ### 7.9 Project / bento card (Side projects)
 
 - Grid: §5.3. The card is an `<a class:list={['flex flex-col gap-2', styles.tile]}>`, with `--border-radius-1` and `--text-color-primary`. There is no border around the whole tile, following LK's open style **[V]**.
-- Media: `<Picture>` in a `<figure class:list={['relative overflow-hidden aspect-video', styles.media]}>` on every tile, featured or not: the project screenshots are 16:9, and a square crop cut them to a third of their width and upscaled them. The `<picture>` wrapper gets `pictureAttributes={{ class: 'block h-full' }}`, so `object-fit: cover` fills the frame even if a screenshot isn't exactly 16:9. The module adds `--border-radius-1`, a `--border-025` border in `--border-color-primary`, and `--background-color-tertiary`. Images use `loading="lazy"` and explicit dimensions (CLS < 0.1).
+- Media: `<Picture>` in a
+  `<figure class:list={['relative overflow-hidden aspect-video', styles.media]}>`
+  on every tile, featured or not: the project screenshots are 16:9, and a square
+  crop cut them to a third of their width and upscaled them. The `<picture>`
+  wrapper gets `pictureAttributes={{ class: 'block h-full' }}`, so
+  `object-fit: cover` fills the frame even if a screenshot isn't exactly 16:9.
+  The module adds `--border-radius-1`, a `--border-025` border in
+  `--border-color-primary`, and `--background-color-tertiary`. Images use
+  `loading="lazy"` and explicit dimensions (CLS < 0.1).
   - Hover: `img { scale: 1.03 }` over 300ms (BM uses 1.05 **[V]**; reduced here to stay subtle).
 - Title: `@mixin body-md var(--fw-bold)` (LK uses 18/500 **[V]**). Meta: `@mixin micro`, `--text-color-tertiary` (stack · year).
 - Description (optional): `@mixin body-sm`, `--text-color-secondary`, `line-clamp-3`. The full text lives on the project page, so the clamp is acceptable.
@@ -804,7 +872,7 @@ Conventions (§9):
 ### 7.11 Buttons & CTAs
 
 | Variant | Spec |
-|---|---|
+| --- | --- |
 | **Primary** (`a-button a-button--primary`) | 44px min height, `--spacing-5` inline padding, `--border-radius-05`, `@mixin label`. Fill `--background-color-accent`, text `--text-color-on-accent`. Hover: `--background-color-hover-accent`. Active: `translate: 0 1px`. **One per page:** the Contacto CTA ("Escribime" → `mailto:`) |
 | **Primary + wipe** (`… a-button--wipe`, opt-in on that same CTA) | `::before` in `--background-color-hover-accent`, `skewX(-33deg) translateX(-110%)` → `translateX(-10%)` on hover/focus-visible (HL2 **[V]**). The `::before` exists only under `no-preference`. Under reduced motion, the base hover fill applies |
 | **Secondary** (`a-button a-button--secondary`) | transparent fill, `--border-color-strong` border, `--text-color-primary`. Hover: **inversion** to `--background-color-inverse` + `--text-color-inverse` (BM `hover:bg-white hover:text-ink` / HL2 `.inverted` **[V]**) |
@@ -852,7 +920,7 @@ All buttons: labels never wrap mid-word. Allow two-line labels only on mobile vi
 ### 8.1 Tokens (aligned with extracted timings)
 
 | Token | Value | Basis |
-|---|---|---|
+| --- | --- | --- |
 | `--duration-instant` | 100ms | press feedback |
 | `--duration-fast` | 150ms | color hovers on nav/text (BM `transition-colors .15s` **[V]**) |
 | `--duration-base` | 200ms | buttons, card border/bg (HL2 & BM 200ms **[V]**) |
@@ -864,7 +932,7 @@ All buttons: labels never wrap mid-word. Allow two-line labels only on mobile vi
 ### 8.2 Behaviors
 
 | Interaction | Property | Duration / easing |
-|---|---|---|
+| --- | --- | --- |
 | Link/text color hover | `color` | fast / standard |
 | Card hover | `border-color`, `background-color` | base / standard |
 | Card accent bar, nav underline | `transform: scaleY/scaleX` | slow / out |
@@ -888,7 +956,7 @@ Rules:
 There is **no global kill switch** (no `transition-duration: 0.01ms` on `*`). The `motion` guide is explicit: *"DO NOT globally apply `animation-duration: 0.01ms;`"*. A global override can make some animations more jarring, and it also removes harmless color feedback. Instead, each moving effect opts in to motion next to its own rule (§9.5–§9.6):
 
 | Effect | `no-preference` | `reduce` |
-|---|---|---|
+| --- | --- | --- |
 | Nav underline, card accent bar | grow over 300ms | **appear instantly** (final state kept, no transition) |
 | Arrow nudge, media zoom | animated | dropped entirely |
 | Primary CTA diagonal wipe | animated | dropped. The plain hover fill applies |
@@ -905,7 +973,7 @@ Pattern: declare the static state by default, and add the transition inside a ne
 This section follows the way the galeed.link repository already organizes CSS. That's **verified** by reading `src/styles`, `postcss.config.js`, `scripts/` and `package.json` at commit `d8011c7`. These are the conventions this section keeps:
 
 | Convention in the repo **[V]** | Kept as |
-|---|---|
+| --- | --- |
 | ITCSS folders (`settings`, `tools`, `generic`, `elements`, `atoms`, `utilities`), each with an `index.css` of `@import`s | same folders. Utilities move to the **end** of the import order (§9.1) |
 | Primitives (`--slate-50`) + applications by property (`--text-color-primary: light-dark(…)`) | same pattern, with this palette (§9.2) |
 | Pixel values written as numbers × `--rem-scale` (`calc(16 * var(--rem-scale))`) | same |
@@ -918,7 +986,7 @@ This section follows the way the galeed.link repository already organizes CSS. T
 
 File layout:
 
-```
+```text
 src/
   styles/
     index.css                      ← §9.1 import order
@@ -972,13 +1040,13 @@ import postcssUtopia from 'postcss-utopia';
 
 /** @type {import('postcss-load-config').Config} */
 const config = {
-	plugins: [
-		// CSS Modules and atoms can call @mixin heading-xl etc. without importing tools/.
-		postcssMixins({ mixinsFiles: './src/styles/tools/*.css' }),
-		postcssCustomProperties({ preserve: false }),
-		postcssUtopia({ minWidth: 360, maxWidth: 448 }),
-		cssnano({ preset: ['advanced', {}] }),
-	],
+  plugins: [
+    // CSS Modules and atoms can call @mixin heading-xl etc. without importing tools/.
+    postcssMixins({ mixinsFiles: './src/styles/tools/*.css' }),
+    postcssCustomProperties({ preserve: false }),
+    postcssUtopia({ minWidth: 360, maxWidth: 448 }),
+    cssnano({ preset: ['advanced', {}] }),
+  ],
 };
 
 export default config;
@@ -1004,12 +1072,12 @@ export default config;
 
 ```ts
 safelist: {
-	standard: [
-		/^data-theme/,   // data-theme, -pref, -switching, -toggle: set at runtime by theme.ts
-		'aria-current',  // set by the section nav scrollspy (§7.5)
-		// …your existing entries
-	],
-	// …
+  standard: [
+    /^data-theme/,   // data-theme, -pref, -switching, -toggle: set at runtime by theme.ts
+    'aria-current',  // set by the section nav scrollspy (§7.5)
+    // …your existing entries
+  ],
+  // …
 },
 ```
 
@@ -1024,10 +1092,23 @@ safelist: {
   - `color-mix()` with `light-dark()` arguments is precomputed into one value per theme.
   - At `safari 17.5`, `light-dark()` passes through untouched.
   - Inline `style.colorScheme` does **not** flip the polyfill switches, which is why the `:root[data-theme]` rules must stay in CSS (§9.2).
-- **Why lightningcss must run last:** `purgeCss.ts` re-runs every PostCSS plugin on `dist/`. When that happens *after* lightningcss, `postcss-custom-properties` sees `--lightningcss-light: initial` and `--lightningcss-dark: ` (empty) in `:root` and inlines them. Every color becomes `oklch(<light>) ;`, so the site is **always light** in every browser. Reproduced with `postcss-custom-properties` 15. The repo's current order (`lightningcss → purge-css`) has exactly this shape. Check your real `dist/` too: the live site did switch themes when inspected (§1.4), so its deployed build may differ.
+- **Why lightningcss must run last:** `purgeCss.ts` re-runs every PostCSS plugin
+  on `dist/`. When that happens *after* lightningcss,
+  `postcss-custom-properties` sees `--lightningcss-light: initial` and
+  `--lightningcss-dark:` (empty) in `:root` and inlines them. Every color
+  becomes `oklch(<light>) ;`, so the site is **always light** in every browser.
+  Reproduced with `postcss-custom-properties` 15. The repo's current order
+  (`lightningcss → purge-css`) has exactly this shape. Check your real `dist/`
+  too: the live site did switch themes when inspected (§1.4), so its deployed
+  build may differ.
 - **PurgeCSS 7.0.2, run with the project's own options:**
   - **It removes the runtime-only theme selectors** (`:root[data-theme="light"]`, `:root[data-theme="dark"]`, the dark shell shadow, the toggle's `[data-when="light"]` rule), because the static HTML never contains `data-theme`.
-  - **The existing safelist patterns protect nothing here.** PurgeCSS compares an attribute selector's *name* (`data-theme`, without brackets), so `/^\[data-.*\]$/` and `/^\[aria-.*\]$/` never match. `/^@media/`, `/^@container/` and `/^@supports/` don't match either, because at-rules aren't selectors. Rules inside `@media` are purged normally. Tested: `@media (…) { .unused {…} }` and `[data-x="1"]` were both removed.
+  - **The existing safelist patterns protect nothing here.** PurgeCSS compares
+    an attribute selector's *name* (`data-theme`, without brackets), so
+    `/^\[data-.*\]$/` and `/^\[aria-.*\]$/` never match. `/^@media/`,
+    `/^@container/` and `/^@supports/` don't match either, because at-rules
+    aren't selectors. Rules inside `@media` are purged normally. Tested:
+    `@media (…) { .unused {…} }` and `[data-x="1"]` were both removed.
   - **Fix:** the two safelist entries above. As belt and braces, `theme.ts` and the head script write `setAttribute('data-theme', …)` (§2.2, §9.8), which puts the literal token into the built HTML/JS. Both fixes verified.
   - `variables: true` drops unused custom properties. That's safe: tokens are either used, inlined, or read at runtime by CSS Modules, which PurgeCSS sees as `var()` uses.
 - **Browser support (project policy):** `light-dark()` is used **without a hand-written fallback**. The guide rates it Baseline *Newly available* (since 2024-05-13: Chrome/Edge 123, Firefox 120, Safari 17.5). Older targets are covered by the lightningcss polyfill above. `oklch()` is Baseline since 2023.
@@ -1056,82 +1137,82 @@ safelist: {
 
 ```css
 :root {
-	/* ---------- Primitives (private: only the applications below use them) ---------- */
-	/* Neutrals: warm "bone" family and pure "charcoal" family (§3.1) */
-	--white: oklch(100% 0 0);                  /* #ffffff */
-	--bone-50: oklch(95.6% 0.014 84.6);        /* #f5f0e6 */
-	--bone-100: oklch(92.7% 0.02 84.6);        /* #ede6d8 */
-	--bone-200: oklch(88.4% 0.007 67.7);       /* #dcd8d4 */
-	--bone-300: oklch(83% 0.016 73.7);         /* #cec6bc */
-	--bone-400: oklch(75.8% 0.02 75.3);        /* #b8afa3 */
-	--bone-500: oklch(55.7% 0.016 67.5);       /* #7a726a */
-	--bone-550: oklch(55% 0.013 63.2);         /* #77706a */
-	--bone-700: oklch(41.1% 0.017 67.3);       /* #514941 */
-	--bone-800: oklch(32.9% 0.016 50.9);       /* #3c332e */
-	--charcoal-700: oklch(30.1% 0 0);          /* #2e2e2e */
-	--charcoal-800: oklch(26% 0 0);            /* #242424 */
-	--charcoal-900: oklch(22.6% 0 0);          /* #1c1c1c */
-	--charcoal-950: oklch(19.1% 0 0);          /* #141414 */
+  /* ---------- Primitives (private: only the applications below use them) ---------- */
+  /* Neutrals: warm "bone" family and pure "charcoal" family (§3.1) */
+  --white: oklch(100% 0 0);                  /* #ffffff */
+  --bone-50: oklch(95.6% 0.014 84.6);        /* #f5f0e6 */
+  --bone-100: oklch(92.7% 0.02 84.6);        /* #ede6d8 */
+  --bone-200: oklch(88.4% 0.007 67.7);       /* #dcd8d4 */
+  --bone-300: oklch(83% 0.016 73.7);         /* #cec6bc */
+  --bone-400: oklch(75.8% 0.02 75.3);        /* #b8afa3 */
+  --bone-500: oklch(55.7% 0.016 67.5);       /* #7a726a */
+  --bone-550: oklch(55% 0.013 63.2);         /* #77706a */
+  --bone-700: oklch(41.1% 0.017 67.3);       /* #514941 */
+  --bone-800: oklch(32.9% 0.016 50.9);       /* #3c332e */
+  --charcoal-700: oklch(30.1% 0 0);          /* #2e2e2e */
+  --charcoal-800: oklch(26% 0 0);            /* #242424 */
+  --charcoal-900: oklch(22.6% 0 0);          /* #1c1c1c */
+  --charcoal-950: oklch(19.1% 0 0);          /* #141414 */
 
-	/* HEV accent (§3.2) */
-	--hev-50: oklch(96.6% 0.021 63.2);         /* #fff1e5 */
-	--hev-200: oklch(82.3% 0.089 60.5);        /* #f0b88a */
-	--hev-300: oklch(80.9% 0.127 56.3);        /* #ffaa6b */
-	--hev-400: oklch(74.3% 0.174 51.8);        /* #ff862c */
-	--hev-text-d: oklch(78.1% 0.143 52.1);     /* #ff9b5a */
-	--hev-text-d-hover: oklch(83.2% 0.109 55.7);/* #ffb581 */
-	--hev-text-l: oklch(42.1% 0.118 46.1);     /* #7f3300 */
-	--hev-text-l-hover: oklch(36.1% 0.1 46.2); /* #662801 */
-	--hev-900: oklch(36.6% 0.069 55.7);        /* #5a3417 */
-	--hev-950: oklch(23.6% 0.035 57.4);        /* #2b1a0d */
+  /* HEV accent (§3.2) */
+  --hev-50: oklch(96.6% 0.021 63.2);         /* #fff1e5 */
+  --hev-200: oklch(82.3% 0.089 60.5);        /* #f0b88a */
+  --hev-300: oklch(80.9% 0.127 56.3);        /* #ffaa6b */
+  --hev-400: oklch(74.3% 0.174 51.8);        /* #ff862c */
+  --hev-text-d: oklch(78.1% 0.143 52.1);     /* #ff9b5a */
+  --hev-text-d-hover: oklch(83.2% 0.109 55.7);/* #ffb581 */
+  --hev-text-l: oklch(42.1% 0.118 46.1);     /* #7f3300 */
+  --hev-text-l-hover: oklch(36.1% 0.1 46.2); /* #662801 */
+  --hev-900: oklch(36.6% 0.069 55.7);        /* #5a3417 */
+  --hev-950: oklch(23.6% 0.035 57.4);        /* #2b1a0d */
 
-	/* Status */
-	--green-700: oklch(39.8% 0.1 147.5);       /* #175525 */
-	--green-300: oklch(74.3% 0.128 148.1);     /* #6fc27d */
-	--amber-700: oklch(41.2% 0.085 78.2);      /* #644400 */
-	--amber-300: oklch(78.5% 0.149 86.2);      /* #e3b12c */
-	--red-700: oklch(43% 0.175 29.5);          /* #990300 */
-	--red-300: oklch(79% 0.121 26.3);          /* #ff9b91 */
-	--blue-700: oklch(38.4% 0.089 255.2);      /* #1f4472 */
-	--blue-300: oklch(75.5% 0.093 253.9);      /* #86b3ea */
+  /* Status */
+  --green-700: oklch(39.8% 0.1 147.5);       /* #175525 */
+  --green-300: oklch(74.3% 0.128 148.1);     /* #6fc27d */
+  --amber-700: oklch(41.2% 0.085 78.2);      /* #644400 */
+  --amber-300: oklch(78.5% 0.149 86.2);      /* #e3b12c */
+  --red-700: oklch(43% 0.175 29.5);          /* #990300 */
+  --red-300: oklch(79% 0.121 26.3);          /* #ff9b91 */
+  --blue-700: oklch(38.4% 0.089 255.2);      /* #1f4472 */
+  --blue-300: oklch(75.5% 0.093 253.9);      /* #86b3ea */
 
-	/* ---------- Applications (semantic, WCAG AAA, §3.3–§3.4) ----------
-	   light-dark(<light>, <dark>) follows the computed color-scheme: the OS by default
-	   (also the no-JS path), or the [data-theme] pin below. Shared values skip light-dark(). */
+  /* ---------- Applications (semantic, WCAG AAA, §3.3–§3.4) ----------
+     light-dark(<light>, <dark>) follows the computed color-scheme: the OS by default
+     (also the no-JS path), or the [data-theme] pin below. Shared values skip light-dark(). */
 
-	/* Background */
-	--background-color-primary: light-dark(var(--bone-100), var(--charcoal-950));
-	--background-color-secondary: light-dark(var(--bone-50), var(--charcoal-900));
-	--background-color-tertiary: light-dark(var(--white), var(--charcoal-800));
-	--background-color-accent: var(--hev-400);
-	--background-color-hover-accent: var(--hev-300);
-	--background-color-accent-subtle: light-dark(var(--hev-50), var(--hev-950));
-	--background-color-indicator: light-dark(var(--hev-text-l), var(--hev-text-d));
-	--background-color-inverse: light-dark(var(--charcoal-900), var(--bone-100));
+  /* Background */
+  --background-color-primary: light-dark(var(--bone-100), var(--charcoal-950));
+  --background-color-secondary: light-dark(var(--bone-50), var(--charcoal-900));
+  --background-color-tertiary: light-dark(var(--white), var(--charcoal-800));
+  --background-color-accent: var(--hev-400);
+  --background-color-hover-accent: var(--hev-300);
+  --background-color-accent-subtle: light-dark(var(--hev-50), var(--hev-950));
+  --background-color-indicator: light-dark(var(--hev-text-l), var(--hev-text-d));
+  --background-color-inverse: light-dark(var(--charcoal-900), var(--bone-100));
 
-	/* Text */
-	--text-color-primary: light-dark(var(--charcoal-900), var(--bone-100));
-	--text-color-secondary: light-dark(var(--bone-800), var(--bone-300));
-	--text-color-tertiary: light-dark(var(--bone-700), var(--bone-400));
-	--text-color-accent: light-dark(var(--hev-text-l), var(--hev-text-d));
-	--text-color-hover-accent: light-dark(var(--hev-text-l-hover), var(--hev-text-d-hover));
-	--text-color-on-accent: light-dark(var(--charcoal-900), var(--charcoal-950));
-	--text-color-inverse: light-dark(var(--bone-50), var(--charcoal-900));
-	--text-color-success: light-dark(var(--green-700), var(--green-300));
-	--text-color-warning: light-dark(var(--amber-700), var(--amber-300));
-	--text-color-danger: light-dark(var(--red-700), var(--red-300));
-	--text-color-info: light-dark(var(--blue-700), var(--blue-300));
+  /* Text */
+  --text-color-primary: light-dark(var(--charcoal-900), var(--bone-100));
+  --text-color-secondary: light-dark(var(--bone-800), var(--bone-300));
+  --text-color-tertiary: light-dark(var(--bone-700), var(--bone-400));
+  --text-color-accent: light-dark(var(--hev-text-l), var(--hev-text-d));
+  --text-color-hover-accent: light-dark(var(--hev-text-l-hover), var(--hev-text-d-hover));
+  --text-color-on-accent: light-dark(var(--charcoal-900), var(--charcoal-950));
+  --text-color-inverse: light-dark(var(--bone-50), var(--charcoal-900));
+  --text-color-success: light-dark(var(--green-700), var(--green-300));
+  --text-color-warning: light-dark(var(--amber-700), var(--amber-300));
+  --text-color-danger: light-dark(var(--red-700), var(--red-300));
+  --text-color-info: light-dark(var(--blue-700), var(--blue-300));
 
-	/* Border */
-	--border-color-primary: light-dark(var(--bone-200), var(--charcoal-700));
-	--border-color-strong: light-dark(var(--bone-500), var(--bone-550));
-	--border-color-accent: var(--hev-400);
-	--border-color-hover-accent: light-dark(var(--hev-200), var(--hev-900));
+  /* Border */
+  --border-color-primary: light-dark(var(--bone-200), var(--charcoal-700));
+  --border-color-strong: light-dark(var(--bone-500), var(--bone-550));
+  --border-color-accent: var(--hev-400);
+  --border-color-hover-accent: light-dark(var(--hev-200), var(--hev-900));
 
-	/* Outline */
-	--outline-color-focus: light-dark(var(--hev-text-l), var(--hev-text-d));
+  /* Outline */
+  --outline-color-focus: light-dark(var(--hev-text-l), var(--hev-text-d));
 
-	color-scheme: light dark;
+  color-scheme: light dark;
 }
 
 /* ---------- Theme pin (written by the head script / theme.ts) ----------
@@ -1139,11 +1220,11 @@ safelist: {
    lightningcss's light-dark() polyfill keys its --lightningcss-light/dark switches
    off color-scheme declarations in the stylesheet, not off inline styles (§9.1). */
 :root[data-theme="light"] {
-	color-scheme: light;
+  color-scheme: light;
 }
 
 :root[data-theme="dark"] {
-	color-scheme: dark;
+  color-scheme: dark;
 }
 ```
 
@@ -1151,8 +1232,8 @@ safelist: {
 
 ```css
 :root {
-	--box-shadow-shell-light: 0 1px 0 oklch(22.6% 0 0 / 0.04), 0 16px 32px -16px oklch(22.6% 0 0 / 0.22);
-	--box-shadow-shell-dark: 0 0 0 1px oklch(100% 0 0 / 0.02), 0 24px 48px -24px oklch(0% 0 0 / 0.8);
+  --box-shadow-shell-light: 0 1px 0 oklch(22.6% 0 0 / 0.04), 0 16px 32px -16px oklch(22.6% 0 0 / 0.22);
+  --box-shadow-shell-dark: 0 0 0 1px oklch(100% 0 0 / 0.02), 0 24px 48px -24px oklch(0% 0 0 / 0.8);
 }
 ```
 
@@ -1160,47 +1241,47 @@ safelist: {
 
 ```css
 :root {
-	/* Use to convert px to rem (repo convention) */
-	--rem-scale: calc(1rem / var(--f-base-number));
-	--f-base-number: 16;
+  /* Use to convert px to rem (repo convention) */
+  --rem-scale: calc(1rem / var(--f-base-number));
+  --f-base-number: 16;
 
-	/* Weight: only the Barlow weights that ship (§4.2) */
-	--fw-normal: 400;
-	--fw-medium: 500;
-	--fw-bold: 700;
-	--fw-extrabold: 800;
+  /* Weight: only the Barlow weights that ship (§4.2) */
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+  --fw-extrabold: 800;
 
-	/* Size: fluid between 360 and 448px viewports (postcss-utopia) */
-	--f-title-xl: utopia.clamp(32, 40);        /* h1 name */
-	--f-title-lg: utopia.clamp(22, 24);        /* section h2 */
-	--f-title-md: calc(18 * var(--rem-scale)); /* role line */
-	--f-body-lg: utopia.clamp(17, 18);         /* lead */
-	--f-body-md: calc(16 * var(--rem-scale));  /* body */
-	--f-body-sm: calc(14 * var(--rem-scale));  /* card descriptions */
-	--f-label: calc(14 * var(--rem-scale));    /* nav, buttons, column headings */
-	--f-micro: calc(12 * var(--rem-scale));    /* metadata only */
+  /* Size: fluid between 360 and 448px viewports (postcss-utopia) */
+  --f-title-xl: utopia.clamp(32, 40);        /* h1 name */
+  --f-title-lg: utopia.clamp(22, 24);        /* section h2 */
+  --f-title-md: calc(18 * var(--rem-scale)); /* role line */
+  --f-body-lg: utopia.clamp(17, 18);         /* lead */
+  --f-body-md: calc(16 * var(--rem-scale));  /* body */
+  --f-body-sm: calc(14 * var(--rem-scale));  /* card descriptions */
+  --f-label: calc(14 * var(--rem-scale));    /* nav, buttons, column headings */
+  --f-micro: calc(12 * var(--rem-scale));    /* metadata only */
 
-	/* Line height */
-	--lh-title-xl: 1.1;
-	--lh-title-lg: 1.2;
-	--lh-title-md: 1.4;
-	--lh-body-lg: 1.6;
-	--lh-body-md: 1.6;
-	--lh-body-sm: 1.5;
-	--lh-label: 1.3;
-	--lh-micro: 1.4;
+  /* Line height */
+  --lh-title-xl: 1.1;
+  --lh-title-lg: 1.2;
+  --lh-title-md: 1.4;
+  --lh-body-lg: 1.6;
+  --lh-body-md: 1.6;
+  --lh-body-sm: 1.5;
+  --lh-label: 1.3;
+  --lh-micro: 1.4;
 
-	/* Letter spacing */
-	--ls-title-xl: -0.005em;
-	--ls-label: 0.06em;
-	--ls-micro: 0.04em;
+  /* Letter spacing */
+  --ls-title-xl: -0.005em;
+  --ls-label: 0.06em;
+  --ls-micro: 0.04em;
 
-	/* Font family (faces come from Fontsource, §4.3; no @font-face here) */
-	--font-fallback: system-ui, -apple-system, "Segoe UI", "Noto Sans", sans-serif;
-	--font-primary: "Barlow", "Barlow Fallback", var(--font-fallback);
-	--font-mono:
-		"JetBrains Mono Variable", "JetBrains Mono", ui-monospace, sfmono-regular,
-		menlo, consolas, "Liberation Mono", monospace;
+  /* Font family (faces come from Fontsource, §4.3; no @font-face here) */
+  --font-fallback: system-ui, -apple-system, "Segoe UI", "Noto Sans", sans-serif;
+  --font-primary: "Barlow", "Barlow Fallback", var(--font-fallback);
+  --font-mono:
+    "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, sfmono-regular,
+    menlo, consolas, "Liberation Mono", monospace;
 }
 ```
 
@@ -1208,45 +1289,45 @@ safelist: {
 
 ```css
 :root {
-	/* Width */
-	--max-w-shell: calc(480 * var(--rem-scale));
-	--max-w-measure: 62ch;
-	--height-nav: calc(56 * var(--rem-scale));
+  /* Width */
+  --max-w-shell: calc(480 * var(--rem-scale));
+  --max-w-measure: 62ch;
+  --height-nav: calc(56 * var(--rem-scale));
 
-	/* Breakpoints are NOT tokens: var() doesn't work in @media.
-	   Use the literal em values: 40em · 48em · 64em · 90em (§5.4). */
+  /* Breakpoints are NOT tokens: var() doesn't work in @media.
+     Use the literal em values: 40em · 48em · 64em · 90em (§5.4). */
 
-	/* Spacing: N × 4px, the same steps as UnoCSS p-N / gap-N */
-	--spacing-0: 0;
-	--spacing-1: calc(4 * var(--rem-scale));
-	--spacing-2: calc(8 * var(--rem-scale));
-	--spacing-3: calc(12 * var(--rem-scale));
-	--spacing-4: calc(16 * var(--rem-scale));
-	--spacing-5: calc(20 * var(--rem-scale));
-	--spacing-6: calc(24 * var(--rem-scale));
-	--spacing-7: calc(28 * var(--rem-scale));
-	--spacing-8: calc(32 * var(--rem-scale));
-	--spacing-9: calc(36 * var(--rem-scale));
-	--spacing-11: calc(44 * var(--rem-scale));
-	--spacing-12: calc(48 * var(--rem-scale));
-	--spacing-14: calc(56 * var(--rem-scale));
-	--spacing-16: calc(64 * var(--rem-scale));
+  /* Spacing: N × 4px, the same steps as UnoCSS p-N / gap-N */
+  --spacing-0: 0;
+  --spacing-1: calc(4 * var(--rem-scale));
+  --spacing-2: calc(8 * var(--rem-scale));
+  --spacing-3: calc(12 * var(--rem-scale));
+  --spacing-4: calc(16 * var(--rem-scale));
+  --spacing-5: calc(20 * var(--rem-scale));
+  --spacing-6: calc(24 * var(--rem-scale));
+  --spacing-7: calc(28 * var(--rem-scale));
+  --spacing-8: calc(32 * var(--rem-scale));
+  --spacing-9: calc(36 * var(--rem-scale));
+  --spacing-11: calc(44 * var(--rem-scale));
+  --spacing-12: calc(48 * var(--rem-scale));
+  --spacing-14: calc(56 * var(--rem-scale));
+  --spacing-16: calc(64 * var(--rem-scale));
 
-	/* Spacing applications */
-	--spacing-gutter: var(--spacing-4);
-	--spacing-stack: var(--spacing-4);
-	--spacing-section: var(--spacing-8);
+  /* Spacing applications */
+  --spacing-gutter: var(--spacing-4);
+  --spacing-stack: var(--spacing-4);
+  --spacing-section: var(--spacing-8);
 
-	/* Border width */
-	--border-025: calc(1 * var(--rem-scale)); /* hairline */
-	--border-05: calc(2 * var(--rem-scale));  /* HEV rule, indicators, focus ring */
+  /* Border width */
+  --border-025: calc(1 * var(--rem-scale)); /* hairline */
+  --border-05: calc(2 * var(--rem-scale));  /* HEV rule, indicators, focus ring */
 
-	/* Border radius ("machined", §6.1) */
-	--border-radius-0: 0;
-	--border-radius-05: calc(2 * var(--rem-scale)); /* buttons, chips, toggle */
-	--border-radius-1: calc(4 * var(--rem-scale));  /* cards, media */
-	--border-radius-2: calc(8 * var(--rem-scale));  /* floating shell */
-	--border-radius-circle: 50%;                    /* status dots */
+  /* Border radius ("machined", §6.1) */
+  --border-radius-0: 0;
+  --border-radius-05: calc(2 * var(--rem-scale)); /* buttons, chips, toggle */
+  --border-radius-1: calc(4 * var(--rem-scale));  /* cards, media */
+  --border-radius-2: calc(8 * var(--rem-scale));  /* floating shell */
+  --border-radius-circle: 50%;                    /* status dots */
 }
 ```
 
@@ -1254,13 +1335,13 @@ safelist: {
 
 ```css
 :root {
-	--duration-instant: 100ms;
-	--duration-fast: 150ms;
-	--duration-base: 200ms;
-	--duration-slow: 300ms;
-	--ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-	--ease-out: cubic-bezier(0, 0, 0.2, 1);
-	--ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --duration-instant: 100ms;
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
 }
 ```
 
@@ -1268,16 +1349,16 @@ safelist: {
 
 ```css
 :root {
-	/* Z-Index Scale (private vars) */
-	--z-index-0: 0;
-	--z-index-10: 10;
-	--z-index-50: 50;
-	--z-index-100: 100;
+  /* Z-Index Scale (private vars) */
+  --z-index-0: 0;
+  --z-index-10: 10;
+  --z-index-50: 50;
+  --z-index-100: 100;
 
-	/* Z-Index Applications */
-	--z-index-10-sticky-nav: var(--z-index-10);
-	--z-index-50-overlay: var(--z-index-50);     /* reserved */
-	--z-index-100-skip-link: var(--z-index-100);
+  /* Z-Index Applications */
+  --z-index-10-sticky-nav: var(--z-index-10);
+  --z-index-50-overlay: var(--z-index-50);     /* reserved */
+  --z-index-100-skip-link: var(--z-index-100);
 }
 ```
 
@@ -1286,83 +1367,83 @@ safelist: {
 ```css
 /* stylelint-disable at-rule-no-unknown */
 @define-mixin heading-xl {
-	/* h1 name */
-	font-family: var(--font-primary);
-	font-size: var(--f-title-xl);
-	font-weight: var(--fw-extrabold);
-	line-height: var(--lh-title-xl);
-	letter-spacing: var(--ls-title-xl);
-	text-wrap: balance;
+  /* h1 name */
+  font-family: var(--font-primary);
+  font-size: var(--f-title-xl);
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-title-xl);
+  letter-spacing: var(--ls-title-xl);
+  text-wrap: balance;
 }
 
 @define-mixin heading-lg {
-	/* section h2 */
-	font-family: var(--font-primary);
-	font-size: var(--f-title-lg);
-	font-weight: var(--fw-extrabold);
-	line-height: var(--lh-title-lg);
-	text-wrap: balance;
+  /* section h2 */
+  font-family: var(--font-primary);
+  font-size: var(--f-title-lg);
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-title-lg);
+  text-wrap: balance;
 }
 
 @define-mixin heading-md {
-	/* role line (a <p>, not a heading) */
-	font-family: var(--font-primary);
-	font-size: var(--f-title-md);
-	font-weight: var(--fw-medium);
-	line-height: var(--lh-title-md);
+  /* role line (a <p>, not a heading) */
+  font-family: var(--font-primary);
+  font-size: var(--f-title-md);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-title-md);
 }
 
 @define-mixin body-lg {
-	font-family: var(--font-primary);
-	font-size: var(--f-body-lg);
-	font-weight: var(--fw-normal);
-	line-height: var(--lh-body-lg);
-	text-wrap: pretty;
+  font-family: var(--font-primary);
+  font-size: var(--f-body-lg);
+  font-weight: var(--fw-normal);
+  line-height: var(--lh-body-lg);
+  text-wrap: pretty;
 }
 
 /* $weight: card titles pass var(--fw-bold). A parameter, not an override: stylelint's
    order/order moves @mixin after declarations, so a sibling font-weight would lose. */
 @define-mixin body-md $weight: var(--fw-normal) {
-	font-family: var(--font-primary);
-	font-size: var(--f-body-md);
-	font-weight: $weight;
-	line-height: var(--lh-body-md);
+  font-family: var(--font-primary);
+  font-size: var(--f-body-md);
+  font-weight: $weight;
+  line-height: var(--lh-body-md);
 }
 
 @define-mixin body-sm {
-	font-family: var(--font-primary);
-	font-size: var(--f-body-sm);
-	font-weight: var(--fw-normal);
-	line-height: var(--lh-body-sm);
+  font-family: var(--font-primary);
+  font-size: var(--f-body-sm);
+  font-weight: var(--fw-normal);
+  line-height: var(--lh-body-sm);
 }
 
 @define-mixin label {
-	font-family: var(--font-primary);
-	font-size: var(--f-label);
-	font-weight: var(--fw-bold);
-	line-height: var(--lh-label);
-	letter-spacing: var(--ls-label);
-	text-transform: uppercase;
+  font-family: var(--font-primary);
+  font-size: var(--f-label);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
 }
 
 @define-mixin micro {
-	/* metadata only: never essential content */
-	font-family: var(--font-mono);
-	font-size: var(--f-micro);
-	font-weight: var(--fw-medium);
-	line-height: var(--lh-micro);
-	letter-spacing: var(--ls-micro);
-	text-transform: uppercase;
-	font-variant-numeric: tabular-nums;
+  /* metadata only: never essential content */
+  font-family: var(--font-mono);
+  font-size: var(--f-micro);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-micro);
+  letter-spacing: var(--ls-micro);
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
 }
 
 @define-mixin visually-hidden {
-	position: absolute;
-	inline-size: 1px;
-	block-size: 1px;
-	overflow: hidden;
-	clip-path: inset(50%);
-	white-space: nowrap;
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 ```
 
@@ -1374,65 +1455,65 @@ safelist: {
 
 ```css
 @layer reset {
-	*,
-	*::before,
-	*::after {
-		box-sizing: border-box;
-	}
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-	* {
-		padding: 0;
-		margin: 0;
-		font: inherit;
-	}
+  * {
+    padding: 0;
+    margin: 0;
+    font: inherit;
+  }
 
-	body {
-		min-block-size: 100dvh;
-		line-height: 1.5;
-	}
+  body {
+    min-block-size: 100dvh;
+    line-height: 1.5;
+  }
 
-	h1, h2, h3, h4, h5, h6 {
-		overflow-wrap: break-word;
-		text-wrap: balance;
-	}
+  h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+    text-wrap: balance;
+  }
 
-	p, li, dd {
-		overflow-wrap: break-word;
-		text-wrap: pretty;
-	}
+  p, li, dd {
+    overflow-wrap: break-word;
+    text-wrap: pretty;
+  }
 
-	img, video, svg, canvas, picture {
-		display: block;
-		block-size: auto;
-		max-inline-size: 100%;
-	}
+  img, video, svg, canvas, picture {
+    display: block;
+    block-size: auto;
+    max-inline-size: 100%;
+  }
 
-	/* Safari drops list semantics with list-style: none, so lists that matter
-	   (nav, social row, chips) carry role="list" in the markup (§7). */
-	li {
-		list-style: none;
-	}
+  /* Safari drops list semantics with list-style: none, so lists that matter
+     (nav, social row, chips) carry role="list" in the markup (§7). */
+  li {
+    list-style: none;
+  }
 
-	input, button, textarea, select {
-		color: currentcolor;
-		font: inherit;
-		letter-spacing: inherit;
-		word-spacing: inherit;
-		/* FIX: no `outline: none`. The focus ring comes from elements/global.css. */
-	}
+  input, button, textarea, select {
+    color: currentcolor;
+    font: inherit;
+    letter-spacing: inherit;
+    word-spacing: inherit;
+    /* FIX: no `outline: none`. The focus ring comes from elements/global.css. */
+  }
 
-	button {
-		border: none;
-		background: none;
-		cursor: pointer;
-	}
+  button {
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
 
-	textarea {
-		field-sizing: content;
-	}
+  textarea {
+    field-sizing: content;
+  }
 
-	/* FIX: no global prefers-reduced-motion override (§8.3). Each effect opts in
-	   to motion next to its own rule; smooth scrolling lives in elements/html.css. */
+  /* FIX: no global prefers-reduced-motion override (§8.3). Each effect opts in
+     to motion next to its own rule; smooth scrolling lives in elements/html.css. */
 }
 ```
 
@@ -1450,16 +1531,16 @@ safelist: {
 
 ```css
 html {
-	block-size: 100%;
-	text-size-adjust: 100%;
-	accent-color: var(--text-color-accent);                                   /* native controls; test indicator contrast in Safari */
-	scrollbar-color: var(--border-color-strong) var(--background-color-primary); /* thumb vs track: 3.81 light / 3.78 dark (≥ 3:1) */
+  block-size: 100%;
+  text-size-adjust: 100%;
+  accent-color: var(--text-color-accent);                                   /* native controls; test indicator contrast in Safari */
+  scrollbar-color: var(--border-color-strong) var(--background-color-primary); /* thumb vs track: 3.81 light / 3.78 dark (≥ 3:1) */
 
-	/* No font-size: inherit the user's default (text-scale, §2.2). */
+  /* No font-size: inherit the user's default (text-scale, §2.2). */
 
-	@media (prefers-reduced-motion: no-preference) {
-		scroll-behavior: smooth;
-	}
+  @media (prefers-reduced-motion: no-preference) {
+    scroll-behavior: smooth;
+  }
 }
 ```
 
@@ -1467,18 +1548,18 @@ html {
 
 ```css
 body {
-	background-color: var(--background-color-secondary); /* < 40em: the shell is full-bleed */
-	color: var(--text-color-primary);
-	font-family: var(--font-primary);
-	font-size-adjust: from-font;                         /* stable x-height during the font swap (§4.3) */
-	font-weight: var(--fw-normal);
-	line-height: var(--lh-body-md);
-	-webkit-font-smoothing: antialiased;
-	font-synthesis: none;
+  background-color: var(--background-color-secondary); /* < 40em: the shell is full-bleed */
+  color: var(--text-color-primary);
+  font-family: var(--font-primary);
+  font-size-adjust: from-font;                         /* stable x-height during the font swap (§4.3) */
+  font-weight: var(--fw-normal);
+  line-height: var(--lh-body-md);
+  -webkit-font-smoothing: antialiased;
+  font-synthesis: none;
 
-	@media (width >= 40em) {
-		background-color: var(--background-color-primary);
-	}
+  @media (width >= 40em) {
+    background-color: var(--background-color-primary);
+  }
 }
 ```
 
@@ -1486,15 +1567,15 @@ body {
 
 ```css
 h1 {
-	@mixin heading-xl;
+  @mixin heading-xl;
 }
 
 h2 {
-	@mixin heading-lg;
+  @mixin heading-lg;
 }
 
 h3 {
-	@mixin label;
+  @mixin label;
 }
 ```
 
@@ -1502,25 +1583,25 @@ h3 {
 
 ```css
 a {
-	color: inherit;
-	text-decoration: none;
-	-webkit-tap-highlight-color: transparent;
-	touch-action: manipulation;
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 /* A bare link in prose (no class) is an inline link. Components always set a
    class, so they opt out. Underlined, so color is not the only signal. */
 a:not([class]) {
-	color: var(--text-color-accent);
-	text-decoration-line: underline;
-	text-decoration-thickness: var(--border-025);
-	text-underline-offset: 0.2em;
-	transition: color var(--duration-fast) var(--ease-standard);
+  color: var(--text-color-accent);
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--border-025);
+  text-underline-offset: 0.2em;
+  transition: color var(--duration-fast) var(--ease-standard);
 
-	&:hover {
-		color: var(--text-color-hover-accent);
-		text-decoration-thickness: var(--border-05);
-	}
+  &:hover {
+    color: var(--text-color-hover-accent);
+    text-decoration-thickness: var(--border-05);
+  }
 }
 ```
 
@@ -1529,17 +1610,17 @@ a:not([class]) {
 ```css
 /* One focus ring for everything (BM pattern: 2px, offset 2px). AAA: ≥ 7:1, §3.5. */
 :focus-visible {
-	outline: var(--border-05) solid var(--outline-color-focus);
-	outline-offset: calc(2 * var(--rem-scale));
+  outline: var(--border-05) solid var(--outline-color-focus);
+  outline-offset: calc(2 * var(--rem-scale));
 }
 
 ::selection {
-	background-color: var(--background-color-accent-subtle);
-	color: var(--text-color-primary);
+  background-color: var(--background-color-accent-subtle);
+  color: var(--text-color-primary);
 }
 
 [id] {
-	scroll-margin-top: calc(var(--height-nav) + var(--spacing-4));
+  scroll-margin-top: calc(var(--height-nav) + var(--spacing-4));
 }
 ```
 
@@ -1547,26 +1628,26 @@ a:not([class]) {
 
 ```css
 .sr-only {
-	@mixin visually-hidden;
+  @mixin visually-hidden;
 }
 
 .skip-link:not(:focus-visible) {
-	@mixin visually-hidden;
+  @mixin visually-hidden;
 }
 
 .skip-link:focus-visible {
-	position: fixed;
-	inset-block-start: var(--spacing-2);
-	inset-inline-start: var(--spacing-2);
-	z-index: var(--z-index-100-skip-link);
+  position: fixed;
+  inset-block-start: var(--spacing-2);
+  inset-inline-start: var(--spacing-2);
+  z-index: var(--z-index-100-skip-link);
 }
 
 /* Suppress transitions during a theme flip (set/removed by theme.ts, §9.8) */
 [data-theme-switching] *,
 [data-theme-switching] *::before,
 [data-theme-switching] *::after {
-	/* stylelint-disable-next-line declaration-no-important -- must beat every component transition */
-	transition: none !important;
+  /* stylelint-disable-next-line declaration-no-important -- must beat every component transition */
+  transition: none !important;
 }
 ```
 
@@ -1584,79 +1665,79 @@ a:not([class]) {
 
 ```css
 .a-button {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: calc(10 * var(--rem-scale));
-	min-block-size: var(--spacing-11);
-	padding-inline: var(--spacing-5);
-	border: var(--border-025) solid transparent;
-	border-radius: var(--border-radius-05);
-	cursor: pointer;
-	user-select: none;
-	touch-action: manipulation;
-	transition:
-		background-color var(--duration-base) var(--ease-standard),
-		border-color var(--duration-base) var(--ease-standard),
-		color var(--duration-base) var(--ease-standard);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(10 * var(--rem-scale));
+  min-block-size: var(--spacing-11);
+  padding-inline: var(--spacing-5);
+  border: var(--border-025) solid transparent;
+  border-radius: var(--border-radius-05);
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  transition:
+    background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
 
-	&:active {
-		translate: 0 1px;
-	}
+  &:active {
+    translate: 0 1px;
+  }
 
-	&:is(:disabled, [aria-disabled="true"]) {
-		opacity: 0.45;
-		cursor: not-allowed;
-		translate: none;
-	}
+  &:is(:disabled, [aria-disabled="true"]) {
+    opacity: 0.45;
+    cursor: not-allowed;
+    translate: none;
+  }
 
-	@mixin label;
+  @mixin label;
 }
 
 .a-button--primary {
-	background-color: var(--background-color-accent);
-	color: var(--text-color-on-accent);
+  background-color: var(--background-color-accent);
+  color: var(--text-color-on-accent);
 
-	&:not(:disabled, [aria-disabled="true"]):hover {
-		background-color: var(--background-color-hover-accent);
-	}
+  &:not(:disabled, [aria-disabled="true"]):hover {
+    background-color: var(--background-color-hover-accent);
+  }
 }
 
 .a-button--secondary {
-	border-color: var(--border-color-strong);
-	background-color: transparent;
-	color: var(--text-color-primary);
+  border-color: var(--border-color-strong);
+  background-color: transparent;
+  color: var(--text-color-primary);
 
-	&:not(:disabled, [aria-disabled="true"]):hover {
-		border-color: var(--background-color-inverse);
-		background-color: var(--background-color-inverse);
-		color: var(--text-color-inverse);
-	}
+  &:not(:disabled, [aria-disabled="true"]):hover {
+    border-color: var(--background-color-inverse);
+    background-color: var(--background-color-inverse);
+    color: var(--text-color-inverse);
+  }
 }
 
 /* Opt-in HL2 diagonal wipe: the single primary CTA only, motion users only.
    Under `reduce` there is no ::before at all; the plain hover fill applies. */
 .a-button--wipe {
-	position: relative;
-	overflow: hidden;
-	isolation: isolate;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
 
-	@media (prefers-reduced-motion: no-preference) {
-		&::before {
-			content: "";
-			position: absolute;
-			inset: 0;
-			inline-size: 120%;
-			z-index: -1;
-			background-color: var(--background-color-hover-accent);
-			transform: skewX(-33deg) translateX(-110%);
-			transition: transform var(--duration-slow) var(--ease-out);
-		}
+  @media (prefers-reduced-motion: no-preference) {
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      inline-size: 120%;
+      z-index: -1;
+      background-color: var(--background-color-hover-accent);
+      transform: skewX(-33deg) translateX(-110%);
+      transition: transform var(--duration-slow) var(--ease-out);
+    }
 
-		&:is(:hover, :focus-visible)::before {
-			transform: skewX(-33deg) translateX(-10%);
-		}
-	}
+    &:is(:hover, :focus-visible)::before {
+      transform: skewX(-33deg) translateX(-10%);
+    }
+  }
 }
 ```
 
@@ -1664,31 +1745,31 @@ a:not([class]) {
 
 ```css
 .a-link-action {
-	display: inline-flex;
-	align-items: center;
-	gap: calc(6 * var(--rem-scale));
-	min-block-size: var(--spacing-11);
-	color: var(--text-color-accent);
-	transition: color var(--duration-fast) var(--ease-standard);
+  display: inline-flex;
+  align-items: center;
+  gap: calc(6 * var(--rem-scale));
+  min-block-size: var(--spacing-11);
+  color: var(--text-color-accent);
+  transition: color var(--duration-fast) var(--ease-standard);
 
-	&:hover {
-		color: var(--text-color-hover-accent);
-	}
+  &:hover {
+    color: var(--text-color-hover-accent);
+  }
 
-	@mixin label;
+  @mixin label;
 }
 
 .a-link-action__icon {
-	inline-size: var(--spacing-4);
-	block-size: var(--spacing-4);
+  inline-size: var(--spacing-4);
+  block-size: var(--spacing-4);
 
-	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-		transition: translate var(--duration-base) var(--ease-out);
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    transition: translate var(--duration-base) var(--ease-out);
 
-		.a-link-action:hover & {
-			translate: 2px 0;
-		}
-	}
+    .a-link-action:hover & {
+      translate: 2px 0;
+    }
+  }
 }
 ```
 
@@ -1696,19 +1777,19 @@ a:not([class]) {
 
 ```css
 .a-chip {
-	display: inline-flex;
-	align-items: center;
-	gap: calc(6 * var(--rem-scale));
-	min-block-size: var(--spacing-7);
-	max-inline-size: 100%;
-	padding-inline: var(--spacing-2);
-	border: var(--border-025) solid var(--border-color-primary);
-	border-radius: var(--border-radius-05);
-	background-color: var(--background-color-tertiary);
-	color: var(--text-color-secondary);
-	white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(6 * var(--rem-scale));
+  min-block-size: var(--spacing-7);
+  max-inline-size: 100%;
+  padding-inline: var(--spacing-2);
+  border: var(--border-025) solid var(--border-color-primary);
+  border-radius: var(--border-radius-05);
+  background-color: var(--background-color-tertiary);
+  color: var(--text-color-secondary);
+  white-space: nowrap;
 
-	@mixin micro;
+  @mixin micro;
 }
 
 .a-chip--success { color: var(--text-color-success); }
@@ -1717,63 +1798,71 @@ a:not([class]) {
 .a-chip--info    { color: var(--text-color-info); }
 
 .a-chip__dot {
-	flex-shrink: 0;
-	inline-size: calc(6 * var(--rem-scale));
-	block-size: calc(6 * var(--rem-scale));
-	border-radius: var(--border-radius-circle);
-	background-color: currentcolor;
+  flex-shrink: 0;
+  inline-size: calc(6 * var(--rem-scale));
+  block-size: calc(6 * var(--rem-scale));
+  border-radius: var(--border-radius-circle);
+  background-color: currentcolor;
 
-	/* The text label carries the meaning; the dot just stays visible (§6.6). */
-	@media (forced-colors: active) {
-		forced-color-adjust: none;
-		background-color: CanvasText;
-	}
+  /* The text label carries the meaning; the dot just stays visible (§6.6). */
+  @media (forced-colors: active) {
+    forced-color-adjust: none;
+    background-color: CanvasText;
+  }
 }
 
 .a-chip__label {
-	min-inline-size: 0;
-	overflow: hidden;
-	text-overflow: ellipsis;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 ```
 
 ### 9.6 Components (CSS Modules)
 
-Each component keeps its own `styles.module.css` (repo pattern). **Class names follow BEM with the component as the block**, as the repo does (`styles.navbar__link`). The short names below (`.link`, `.card`, `.title`) stand for `<block>__<element>`: `.link` in the Navbar module is `.navbar__link`, `.title` in LinkCard is `.link-card__title`, and so on. In Astro, combine layout utilities and the module class with `class:list={['flex …', styles.name]}`. Motion follows §8.3: static by default, with the transition nested under `no-preference`. Forced Colors Mode fixes live next to the rule they fix (§6.6). The modules for the patterns that need more than tokens:
+Each component keeps its own `styles.module.css` (repo pattern). **Class names
+follow BEM with the component as the block**, as the repo does
+(`styles.navbar__link`). The short names below (`.link`, `.card`, `.title`)
+stand for `<block>__<element>`: `.link` in the Navbar module is `.navbar__link`,
+`.title` in LinkCard is `.link-card__title`, and so on. In Astro, combine layout
+utilities and the module class with `class:list={['flex …', styles.name]}`.
+Motion follows §8.3: static by default, with the transition nested under
+`no-preference`. Forced Colors Mode fixes live next to the rule they fix (§6.6).
+The modules for the patterns that need more than tokens:
 
 `layouts/Layout/styles.module.css`: shell + the separate shadows block:
 
 ```css
 .shell {
-	inline-size: 100%;
-	max-inline-size: var(--max-w-shell);
-	margin-inline: auto;
-	overflow: clip;
-	background-color: var(--background-color-secondary);
+  inline-size: 100%;
+  max-inline-size: var(--max-w-shell);
+  margin-inline: auto;
+  overflow: clip;
+  background-color: var(--background-color-secondary);
 
-	@media (width >= 40em) {
-		margin-block: var(--spacing-8);
-		border: var(--border-025) solid var(--border-color-primary);
-		border-radius: var(--border-radius-2);
-		box-shadow: var(--box-shadow-shell-light);
+  @media (width >= 40em) {
+    margin-block: var(--spacing-8);
+    border: var(--border-025) solid var(--border-color-primary);
+    border-radius: var(--border-radius-2);
+    box-shadow: var(--box-shadow-shell-light);
 
-		/* Shadows block: light-dark() takes colors only, so the theme is matched here.
-		   It sets box-shadow directly (not a token override), so the build's
-		   postcss-custom-properties step can't inline it away (§9.1). */
-		:root[data-theme="dark"] & {
-			box-shadow: var(--box-shadow-shell-dark);
-		}
+    /* Shadows block: light-dark() takes colors only, so the theme is matched here.
+       It sets box-shadow directly (not a token override), so the build's
+       postcss-custom-properties step can't inline it away (§9.1). */
+    :root[data-theme="dark"] & {
+      box-shadow: var(--box-shadow-shell-dark);
+    }
 
-		@media (prefers-color-scheme: dark) {
-			:root:not([data-theme]) & {
-				box-shadow: var(--box-shadow-shell-dark); /* no-JS */
-			}
-		}
-	}
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme]) & {
+        box-shadow: var(--box-shadow-shell-dark); /* no-JS */
+      }
+    }
+  }
 
-	@media (width >= 48em) {
-		margin-block: var(--spacing-12);
-	}
+  @media (width >= 48em) {
+    margin-block: var(--spacing-12);
+  }
 }
 ```
 
@@ -1781,42 +1870,42 @@ Each component keeps its own `styles.module.css` (repo pattern). **Class names f
 
 ```css
 .toggle {
-	position: relative;
-	border: var(--border-025) solid var(--border-color-strong);
-	border-radius: var(--border-radius-05);
-	background-color: var(--background-color-tertiary);
-	color: var(--text-color-tertiary);
-	touch-action: manipulation;
-	transition: color var(--duration-fast) var(--ease-standard);
+  position: relative;
+  border: var(--border-025) solid var(--border-color-strong);
+  border-radius: var(--border-radius-05);
+  background-color: var(--background-color-tertiary);
+  color: var(--text-color-tertiary);
+  touch-action: manipulation;
+  transition: color var(--duration-fast) var(--ease-standard);
 
-	&::after {
-		content: "";
-		position: absolute;
-		inset: -4px; /* 36 + 8 = 44px hit area */
-	}
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -4px; /* 36 + 8 = 44px hit area */
+  }
 
-	&:hover {
-		color: var(--text-color-primary);
-	}
+  &:hover {
+    color: var(--text-color-primary);
+  }
 
-	&:active {
-		translate: 0 1px;
-	}
+  &:active {
+    translate: 0 1px;
+  }
 
-	/* An author `display` (the Uno `grid` class) would beat the UA [hidden] rule */
-	&[hidden] {
-		display: none;
-	}
+  /* An author `display` (the Uno `grid` class) would beat the UA [hidden] rule */
+  &[hidden] {
+    display: none;
+  }
 
-	/* Show only the rendered state. display: none also removes the other label from
-	   the a11y tree, so the name stays right when the OS theme changes (no JS). */
-	:root:not([data-theme="dark"]) & [data-when="dark"],
-	:root[data-theme="dark"] & [data-when="light"] {
-		display: none;
-	}
+  /* Show only the rendered state. display: none also removes the other label from
+     the a11y tree, so the name stays right when the OS theme changes (no JS). */
+  :root:not([data-theme="dark"]) & [data-when="dark"],
+  :root[data-theme="dark"] & [data-when="light"] {
+    display: none;
+  }
 
-	/* Forced colors: nothing to redraw. It is a native <button> (ButtonFace/ButtonText
-	   + border), and its state is the icon's shape, not a color. */
+  /* Forced colors: nothing to redraw. It is a native <button> (ButtonFace/ButtonText
+     + border), and its state is the icon's shape, not a color. */
 }
 ```
 
@@ -1824,52 +1913,52 @@ Each component keeps its own `styles.module.css` (repo pattern). **Class names f
 
 ```css
 .link {
-	color: var(--text-color-secondary);
-	transition: color var(--duration-fast) var(--ease-standard);
+  color: var(--text-color-secondary);
+  transition: color var(--duration-fast) var(--ease-standard);
 
-	&::after {
-		content: "";
-		position: absolute;
-		inset-inline: var(--spacing-3);
-		inset-block-end: var(--spacing-2);
-		block-size: var(--border-05);
-		background-color: var(--background-color-indicator);
-		scale: 0 1;
-		transform-origin: left;
+  &::after {
+    content: "";
+    position: absolute;
+    inset-inline: var(--spacing-3);
+    inset-block-end: var(--spacing-2);
+    block-size: var(--border-05);
+    background-color: var(--background-color-indicator);
+    scale: 0 1;
+    transform-origin: left;
 
-		@media (prefers-reduced-motion: no-preference) {
-			transition: scale var(--duration-slow) var(--ease-out);
-		}
-	}
+    @media (prefers-reduced-motion: no-preference) {
+      transition: scale var(--duration-slow) var(--ease-out);
+    }
+  }
 
-	&:is(:hover, :focus-visible, [aria-current="true"]) {
-		color: var(--text-color-primary);
+  &:is(:hover, :focus-visible, [aria-current="true"]) {
+    color: var(--text-color-primary);
 
-		&::after {
-			scale: 1;
-		}
-	}
+    &::after {
+      scale: 1;
+    }
+  }
 
-	@mixin label;
+  @mixin label;
 
-	@media (forced-colors: active) {
-		&::after {
-			background: none;
-			border-block-end: var(--border-05) solid CanvasText;
-		}
+  @media (forced-colors: active) {
+    &::after {
+      background: none;
+      border-block-end: var(--border-05) solid CanvasText;
+    }
 
-		&[aria-current="true"]::after {
-			border-color: Highlight;
-		}
-	}
+    &[aria-current="true"]::after {
+      border-color: Highlight;
+    }
+  }
 }
 
 .bar {
-	@media (width >= 64em) {
-		z-index: var(--z-index-10-sticky-nav);
-		border-block-end: var(--border-025) solid var(--border-color-primary);
-		background-color: var(--background-color-secondary);
-	}
+  @media (width >= 64em) {
+    z-index: var(--z-index-10-sticky-nav);
+    border-block-end: var(--border-025) solid var(--border-color-primary);
+    background-color: var(--background-color-secondary);
+  }
 }
 ```
 
@@ -1877,79 +1966,79 @@ Each component keeps its own `styles.module.css` (repo pattern). **Class names f
 
 ```css
 .card {
-	border: var(--border-025) solid var(--border-color-primary);
-	border-radius: var(--border-radius-1);
-	background-color: var(--background-color-tertiary);
-	color: var(--text-color-primary);
-	transition:
-		border-color var(--duration-base) var(--ease-standard),
-		background-color var(--duration-base) var(--ease-standard);
+  border: var(--border-025) solid var(--border-color-primary);
+  border-radius: var(--border-radius-1);
+  background-color: var(--background-color-tertiary);
+  color: var(--text-color-primary);
+  transition:
+    border-color var(--duration-base) var(--ease-standard),
+    background-color var(--duration-base) var(--ease-standard);
 
-	/* Accent bar: reaches its final state instantly under `reduce` */
-	&::before {
-		content: "";
-		position: absolute;
-		inset-block: -1px;
-		inset-inline-start: -1px;
-		inline-size: var(--border-05);
-		background-color: var(--background-color-indicator);
-		scale: 1 0;
-		transform-origin: bottom;
+  /* Accent bar: reaches its final state instantly under `reduce` */
+  &::before {
+    content: "";
+    position: absolute;
+    inset-block: -1px;
+    inset-inline-start: -1px;
+    inline-size: var(--border-05);
+    background-color: var(--background-color-indicator);
+    scale: 1 0;
+    transform-origin: bottom;
 
-		@media (prefers-reduced-motion: no-preference) {
-			transition: scale var(--duration-slow) var(--ease-out);
-		}
-	}
+    @media (prefers-reduced-motion: no-preference) {
+      transition: scale var(--duration-slow) var(--ease-out);
+    }
+  }
 
-	&:hover {
-		border-color: var(--border-color-hover-accent);
-	}
+  &:hover {
+    border-color: var(--border-color-hover-accent);
+  }
 
-	&:is(:hover, :focus-visible)::before {
-		scale: 1;
-	}
+  &:is(:hover, :focus-visible)::before {
+    scale: 1;
+  }
 
-	&:active {
-		background-color: var(--background-color-accent-subtle);
-	}
+  &:active {
+    background-color: var(--background-color-accent-subtle);
+  }
 
-	@media (forced-colors: active) {
-		&::before {
-			background: none;
-			border-inline-start: var(--border-05) solid Highlight;
-		}
-	}
+  @media (forced-colors: active) {
+    &::before {
+      background: none;
+      border-inline-start: var(--border-05) solid Highlight;
+    }
+  }
 }
 
 .title {
-	@mixin body-md var(--fw-bold);
+  @mixin body-md var(--fw-bold);
 }
 
 .meta,
 .index {
-	color: var(--text-color-tertiary);
+  color: var(--text-color-tertiary);
 
-	@mixin micro;
+  @mixin micro;
 }
 
 /* Icon: color feedback always; the spatial nudge only with hover + motion */
 .icon {
-	color: var(--text-color-tertiary);
-	transition: color var(--duration-fast) var(--ease-standard);
+  color: var(--text-color-tertiary);
+  transition: color var(--duration-fast) var(--ease-standard);
 
-	.card:is(:hover, :focus-visible) & {
-		color: var(--text-color-accent);
-	}
+  .card:is(:hover, :focus-visible) & {
+    color: var(--text-color-accent);
+  }
 
-	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-		transition:
-			color var(--duration-fast) var(--ease-standard),
-			translate var(--duration-base) var(--ease-out);
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      translate var(--duration-base) var(--ease-out);
 
-		.card:hover & {
-			translate: 2px 0;
-		}
-	}
+    .card:hover & {
+      translate: 2px 0;
+    }
+  }
 }
 ```
 
@@ -1957,24 +2046,24 @@ Each component keeps its own `styles.module.css` (repo pattern). **Class names f
 
 ```css
 .tile {
-	border-radius: var(--border-radius-1);
-	color: var(--text-color-primary);
+  border-radius: var(--border-radius-1);
+  color: var(--text-color-primary);
 }
 
 .media {
-	border: var(--border-025) solid var(--border-color-primary);
-	border-radius: var(--border-radius-1);
-	background-color: var(--background-color-tertiary);
+  border: var(--border-025) solid var(--border-color-primary);
+  border-radius: var(--border-radius-1);
+  background-color: var(--background-color-tertiary);
 
-	& img {
-		@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-			transition: scale var(--duration-slow) var(--ease-out);
+  & img {
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+      transition: scale var(--duration-slow) var(--ease-out);
 
-			.tile:hover & {
-				scale: 1.03;
-			}
-		}
-	}
+      .tile:hover & {
+        scale: 1.03;
+      }
+    }
+  }
 }
 ```
 
@@ -2276,7 +2365,7 @@ for (const v of ['--box-shadow-shell-light', '--box-shadow-shell-dark'])
 **Observed on the references. Do not copy:**
 
 | Anti-pattern | Where seen |
-|---|---|
+| --- | --- |
 | White text on orange (2.41 / 3.13:1) | HL2 nav, BM CTA |
 | Ultra-light body weights (200/300) | HL2, BM |
 | Content invisible until scroll-triggered animation fires | LK |
@@ -2322,7 +2411,15 @@ for (const v of ['--box-shadow-shell-light', '--box-shadow-shell-dark'])
 - [ ] **Build order is `astro build && purge-css && lightningcss`** (lightningcss last, §9.1). In `dist/`, `--lightningcss-light` must never appear inlined as a bare value.
 - [ ] **UnoCSS output is layout only:** the inspector (`/__unocss`) shows no color, type, border, radius, shadow or transition utilities (blocklist, §9.7).
 - [ ] Every `@mixin` used in a CSS Module resolves (postcss-mixins `mixinsFiles`, §9.1): grep `dist/` for a leftover `@mixin`.
-- [ ] **Build output** (`dist/`): `:root[data-theme="light"]`, `:root[data-theme="dark"]`, the Layout module's dark shell rule (`:root[data-theme="dark"] ._shell_…`), `[data-theme-switching]`, and the nav module's `[aria-current="true"]` rule are still present (PurgeCSS, §9.1). Then: use sites contain `light-dark(` or lightningcss's `--lightningcss-light/dark` polyfill. `:root[data-theme="dark"]` sets `color-scheme: dark` (plus the polyfill switches). The toggle and the no-JS OS path both turn **everything** dark, including `color-mix()` tints (lightningcss precomputes them per theme) and the shell shadow.
+- [ ] **Build output** (`dist/`): `:root[data-theme="light"]`,
+      `:root[data-theme="dark"]`, the Layout module's dark shell rule
+      (`:root[data-theme="dark"] ._shell_…`), `[data-theme-switching]`, and the
+      nav module's `[aria-current="true"]` rule are still present (PurgeCSS,
+      §9.1). Then: use sites contain `light-dark(` or lightningcss's
+      `--lightningcss-light/dark` polyfill. `:root[data-theme="dark"]` sets
+      `color-scheme: dark` (plus the polyfill switches). The toggle and the
+      no-JS OS path both turn **everything** dark, including `color-mix()` tints
+      (lightningcss precomputes them per theme) and the shell shadow.
 - [ ] Borders, dividers, and the shell edge are visible in **both** themes (the regression from §1.4 issue 4).
 - [ ] With JS disabled, the system theme still applies and the toggle stays hidden.
 
@@ -2356,7 +2453,7 @@ for (const v of ['--box-shadow-shell-light', '--box-shadow-shell-dark'])
 ### 11.1 Inspection method
 
 | URL | Viewports | Methods | Result |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | half-life.com/en/halflife2 | 1440×900 | `getComputedStyle` sampling (body, h1–h4, p, a, button, footer, sections), `document.fonts`, CSSOM `@font-face` / `:hover` / `@media` rule scan, screenshot | loaded ✓ |
 | blackmesagame.com | 1440×900 | same + recursive CSSOM walk for custom properties (Tailwind v4 `@layer` tokens), `.type-*` rule extraction, screenshot | loaded ✓ |
 | galeed.link | 1440×900, 390×844, emulated dark | computed styles, geometry, `[id]` scan, href scan, CSSOM custom properties, lab→hex conversion via canvas, accessibility snapshot, screenshots | loaded ✓ |
@@ -2369,7 +2466,7 @@ for (const v of ['--box-shadow-shell-light', '--box-shadow-shell-dark'])
 Every CSS variable referenced by the atoms, CSS Modules, `elements/`, `utilities/` and the component specs:
 
 | Variable group | Declared in | How it switches theme |
-|---|---|---|
+| --- | --- | --- |
 | Primitives: `--white`, `--bone-*`, `--charcoal-*`, `--hev-*`, `--green-*`, `--amber-*`, `--red-*`, `--blue-*` | `settings/colors.css` `:root` | they don't: each primitive is one fixed color |
 | `--background-color-*` (8), `--text-color-*` (11), `--border-color-*` (4), `--outline-color-focus` | `settings/colors.css` `:root`, once each | `light-dark()` over two primitives |
 | `--background-color-accent`, `--background-color-hover-accent`, `--border-color-accent` | `settings/colors.css` `:root` | none: the same primitive in both themes |
