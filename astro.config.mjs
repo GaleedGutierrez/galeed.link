@@ -30,7 +30,7 @@ export default defineConfig({
 		host: true,
 	},
 	integrations: [
-		sitemap(),
+		sitemap({ lastmod: new Date() }),
 		icon(),
 		process.env.ENABLE_SOURCEMAP === 'true' &&
 			Sonda({ server: true, open: false }),

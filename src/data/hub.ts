@@ -20,10 +20,10 @@ import { personalSchema } from './personalSchema';
 
 /** Hub-wide facts. Edit here, not in components. */
 export const PROFILE = {
-	name: 'Galeed Gutierrez',
-	role: 'Frontend developer',
+	name: personalSchema.name,
+	role: personalSchema.jobTitle,
 	location: 'Jujuy, AR',
-	isAvailable: true,
+	isAvailable: true as boolean, // toggles the system bar and llms.txt
 	email: 'galeedeveloper@gmail.com',
 	portfolioUrl: personalSchema.socialLinks.personalWebsite,
 } as const;

@@ -9,9 +9,10 @@ import "@styles/index.css";
 import barlow400 from "@fontsource/barlow/files/barlow-latin-400-normal.woff2?url";
 import barlow700 from "@fontsource/barlow/files/barlow-latin-700-normal.woff2?url";
 import barlow800 from "@fontsource/barlow/files/barlow-latin-800-normal.woff2?url";
+import { SEO } from "astro-seo";
 import { Schema } from "astro-seo-schema";
 
-import { personalSchema } from "@/data/personalSchema";
+import { personalSchema, SITE_URL } from "@/data/personalSchema";
 
 import styles from "./styles.module.css";
 
@@ -21,9 +22,22 @@ interface Props {
 }
 
 const {
-	title = "Galeed Gutierrez · Frontend developer",
-	description = "Frontend developer en Jujuy, Argentina. Trabajo freelance, side projects, open source y contacto.",
+	title = `${personalSchema.name} · ${personalSchema.jobTitle}`,
+	description = "Galeed Gutierrez, desarrollador frontend en Jujuy, Argentina. React, Astro y TypeScript. Trabajo freelance, side projects, open source y contacto.",
 } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, SITE_URL).href;
+const personId = `${SITE_URL}/#person`;
+// public/og.jpg: 1200×630 link-preview card, rendered from the site's own
+// tokens and fonts. Regenerate it when the name, role or portrait change.
+// JPEG, because some networks don't render WebP previews.
+const ogImage = {
+	url: `${SITE_URL}/og.jpg`,
+	alt: `${personalSchema.name}, ${personalSchema.jobTitle} en Jujuy, Argentina.`,
+	width: 1200,
+	height: 630,
+};
+const [firstName, ...lastNames] = personalSchema.name.split(" ");
 ---
 
 <!doctype html>
@@ -109,35 +123,87 @@ const {
 			href="/sitemap-index.xml"
 			rel="sitemap"
 		/>
-		<meta
-			content={description}
-			name="description"
+		<SEO
+			canonical={canonical}
+			description={description}
+			extend={{
+				link: [
+					{
+						rel: "alternate",
+						type: "text/plain",
+						href: "/llms.txt",
+						title: "llms.txt",
+					},
+				],
+				meta: [
+					{ property: "profile:first_name", content: firstName },
+					{
+						property: "profile:last_name",
+						content: lastNames.join(" "),
+					},
+					{ name: "author", content: personalSchema.name },
+				],
+			}}
+			openGraph={{
+				basic: {
+					title,
+					type: "profile",
+					image: ogImage.url,
+					url: canonical,
+				},
+				optional: {
+					description,
+					locale: "es_AR",
+					siteName: personalSchema.name,
+				},
+				image: {
+					alt: ogImage.alt,
+					height: ogImage.height,
+					type: "image/jpeg",
+					width: ogImage.width,
+				},
+			}}
+			title={title}
+			twitter={{
+				card: "summary_large_image",
+				creator: personalSchema.xHandle,
+				imageAlt: ogImage.alt,
+			}}
 		/>
+		<!-- ProfilePage + Person: the page is about one person (Google's
+			 profile-page rich result; also what AI answer engines read). -->
 		<Schema
 			item={{
 				"@context": "https://schema.org",
-				"@type": "Person",
-				name: personalSchema.name,
-				alternateName: personalSchema.alternateName,
-				url: "https://galeed.link",
-				image: "https://galeed.link/profile.webp",
-				jobTitle: "Frontend Developer",
-				description:
-					"Desarrollador frontend con experiencia en React, Astro y pruebas E2E. Apasionado por crear interfaces limpias, funcionales y accesibles.",
-				sameAs: [
-					personalSchema.socialLinks.github,
-					personalSchema.socialLinks.linkedin,
-					personalSchema.socialLinks.x,
-					personalSchema.socialLinks.personalWebsite,
-					personalSchema.socialLinks.portfolio,
-				],
-				knowsAbout: personalSchema.skills,
-				alumniOf: personalSchema.education,
-				hasOccupation: personalSchema.jobProfile,
-				hasPart: personalSchema.relatedProjects,
+				"@type": "ProfilePage",
+				"@id": `${SITE_URL}/#profile`,
+				url: canonical,
+				name: title,
+				description,
+				inLanguage: "es-AR",
+				dateModified: new Date().toISOString(),
+				mainEntity: {
+					"@type": "Person",
+					"@id": personId,
+					name: personalSchema.name,
+					alternateName: personalSchema.alternateName,
+					givenName: firstName,
+					familyName: lastNames.join(" "),
+					url: SITE_URL,
+					image: `${SITE_URL}/profile.webp`,
+					jobTitle: personalSchema.jobTitle,
+					description: personalSchema.description,
+					address: personalSchema.address,
+					nationality: { "@type": "Country", name: "Argentina" },
+					sameAs: Object.values(personalSchema.socialLinks),
+					knowsAbout: personalSchema.skills,
+					knowsLanguage: "es",
+					alumniOf: personalSchema.education,
+					hasCredential: personalSchema.credentials,
+					hasOccupation: personalSchema.jobProfile,
+				},
 			}}
 		/>
-		<title>{title}</title>
 	</head>
 	<body>
 		<a

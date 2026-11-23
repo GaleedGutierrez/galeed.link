@@ -1,23 +1,36 @@
+// Identity data shared by the JSON-LD, the meta tags and /llms.txt.
+// Keep one canonical spelling of the name everywhere: search engines and
+// AI answer engines match an entity by name, @id and sameAs.
+export const SITE_URL = 'https://galeed.link';
+
 export const personalSchema = {
-	name: 'Galeed Gutiérrez',
-	alternateName: 'Galeed',
+	name: 'Galeed Gutierrez',
+	alternateName: ['Galeed', 'Galeed Gutiérrez'],
+	jobTitle: 'Frontend developer',
+	description:
+		'Desarrollador frontend en Jujuy, Argentina. Construye interfaces accesibles y rápidas con React, Astro y TypeScript, y las prueba con Vitest y Playwright.',
+	address: {
+		'@type': 'PostalAddress',
+		addressRegion: 'Jujuy',
+		addressCountry: 'AR',
+	},
 	education: [
 		{
 			'@type': 'CollegeOrUniversity',
 			name: 'Universidad Nacional de Jujuy',
 			alternateName: 'UNJu',
-			'@id': 'https://www.unju.edu.ar',
-			description:
-				'Estudiante de la carrera Analista Programador Universitario...',
+			url: 'https://www.unju.edu.ar',
 		},
+	],
+	credentials: [
 		{
-			'@type': 'EducationalOccupationalProgram',
+			'@type': 'EducationalOccupationalCredential',
 			name: 'Curso de Creación de Páginas Web con Astro',
-			'@id': 'https://platzi.com/cursos/astro',
-			provider: {
+			url: 'https://platzi.com/cursos/astro',
+			recognizedBy: {
 				'@type': 'EducationalOrganization',
 				name: 'Platzi',
-				'@id': 'https://platzi.com',
+				url: 'https://platzi.com',
 			},
 		},
 	],
@@ -32,18 +45,20 @@ export const personalSchema = {
 		'Vitest',
 		'Playwright',
 		'Vite',
+		'Accesibilidad web',
 	],
+	// galeed.dev is owned but has no content yet: add it to sameAs once it
+	// is published, not before (an empty site weakens the identity match).
 	socialLinks: {
 		github: 'https://github.com/galeedgutierrez',
 		linkedin: 'https://linkedin.com/in/galeedgutierrez',
 		x: 'https://x.com/gutierrezgaleed',
 		personalWebsite: 'https://galeedgutierrez.com',
-		portfolio: 'https://galeed.dev',
 	},
+	xHandle: '@gutierrezgaleed',
 	jobProfile: {
 		'@type': 'Occupation',
-		'@id': 'https://galeed.link#occupation',
-		name: 'Desarrollador Web',
+		name: 'Desarrollador frontend',
 		description:
 			'Especializado en interfaces frontend modernas usando herramientas del ecosistema JavaScript.',
 		occupationLocation: {
@@ -58,32 +73,4 @@ export const personalSchema = {
 			'Transformación de ideas en productos reales',
 		],
 	},
-	relatedProjects: [
-		{
-			'@type': 'CreativeWork',
-			name: 'Linktree personal',
-			url: 'https://galeed.link',
-			description:
-				'Sitio personal donde comparto mis redes, proyectos, colaboraciones open source y formación',
-		},
-		{
-			'@type': 'CreativeWork',
-			name: 'Proyectos personales',
-			description:
-				'Pequeñas herramientas web, componentes reutilizables, experimentos de UI/UX y miniapps.',
-		},
-		{
-			'@type': 'CreativeWork',
-			name: 'Proyectos freelance',
-			description:
-				'Desarrollo de sitios y aplicaciones web a medida para clientes con necesidades específicas',
-		},
-		{
-			'@type': 'CreativeWork',
-			name: 'Contribuciones open source',
-			url: 'https://github.com/galeedgutierrez',
-			description:
-				'Colaboraciones en proyectos de código abierto con foco en el ecosistema JavaScript',
-		},
-	],
 };
