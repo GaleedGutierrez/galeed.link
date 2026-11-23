@@ -114,10 +114,26 @@ const [firstName, ...lastNames] = personalSchema.name.split(" ");
 			rel="preload"
 			type="font/woff2"
 		/>
+		<!-- G in a ring (public/favicon.svg is the source; the .ico and PNGs
+			 are rendered from it). sizes="32x32" keeps browsers that support
+			 SVG from picking the .ico. -->
+		<link
+			href="/favicon.ico"
+			rel="icon"
+			sizes="32x32"
+		/>
 		<link
 			href="/favicon.svg"
 			rel="icon"
 			type="image/svg+xml"
+		/>
+		<link
+			href="/apple-touch-icon.png"
+			rel="apple-touch-icon"
+		/>
+		<link
+			href="/site.webmanifest"
+			rel="manifest"
 		/>
 		<link
 			href="/sitemap-index.xml"
