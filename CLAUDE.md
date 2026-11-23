@@ -188,12 +188,17 @@ docs are English.
   site is static, so no nonces) and adds the header to the `/*` rule of
   `dist/_headers`. Never add a second `/*` rule: on Cloudflare it replaces the
   first one, which dropped HSTS and the other headers. Editing an inline script
-  needs no manual hash update. Never add `'unsafe-inline'` or `'unsafe-eval'`:
-  `tests/csp.test.ts` checks it.
+  needs no manual hash update. Never add `'unsafe-inline'` or `'unsafe-eval'` to
+  the page policy: `tests/csp.test.ts` checks it.
   - It ships as `Content-Security-Policy-Report-Only`; enforcing it is the
     `CSP_HEADER` constant in `csp.ts`.
-  - `/~partytown/*` detaches the header: Partytown's sandbox runs gtag through
-    an inline script, eval and blob workers.
+  - Cloudflare served only the most specific matching `_headers` rule (its docs
+    say matching rules are joined): `/_astro/*` files get no HSTS or CSP. A rule
+    that needs a `/*` header must set it again.
+  - `/~partytown/*` gets its own `PARTYTOWN_POLICY` plus HSTS: Partytown's
+    sandbox runs gtag through an inline script, eval and blob workers, so the
+    `'unsafe-*'` exceptions live only there. The rule detaches each value before
+    setting it, so it is right whether or not Cloudflare joins rules.
   - `astro preview` ignores `_headers`. Test the policy in a browser by adding
     the header to the preview's responses (e.g. a Playwright route), or on a
     Cloudflare preview deploy.

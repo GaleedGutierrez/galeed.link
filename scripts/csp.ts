@@ -110,34 +110,80 @@ export const buildPolicy = ({ scripts, styles }: PolicyHashes): string =>
 		.map((directive) => directive.join(' '))
 		.join('; ');
 
+/**
+ * Policy for Partytown's own files (`/~partytown/*`). Its sandbox page runs an
+ * inline script, and its worker runs gtag through `eval` / `new Function`
+ * from a `blob:` URL, so this path needs what the page policy forbids. The
+ * files are fixed vendor code from the build, so the exceptions stay here and
+ * the rest still limits where they connect and who can frame them.
+ */
+export const PARTYTOWN_POLICY = [
+	['default-src', "'self'"],
+	[
+		'script-src',
+		"'self'",
+		"'unsafe-inline'",
+		"'unsafe-eval'",
+		'blob:',
+		TAG_MANAGER,
+	],
+	['img-src', "'self'", ...ANALYTICS],
+	['connect-src', "'self'", ...ANALYTICS],
+	['worker-src', "'self'", 'blob:'],
+	['object-src', "'none'"],
+	['base-uri', "'none'"],
+	['form-action', "'none'"],
+	// The page frames the sandbox; nobody else may.
+	['frame-ancestors', "'self'"],
+]
+	.map((directive) => directive.join(' '))
+	.join('; ');
+
 const WILDCARD_RULE = '/*';
+const HSTS_HEADER = 'Strict-Transport-Security';
 
 const PARTYTOWN_MARKER =
-	'# Partytown runs gtag through an inline script, eval and blob workers in its';
+	"# Partytown's files get their own policy (PARTYTOWN_POLICY in scripts/csp.ts).";
 
 // Cloudflare rejects longer lines in _headers.
 const MAX_LINE_LENGTH = 2000;
 
 /**
- * Adds the policy to a `_headers` file.
- *
- * The header goes inside the existing `/*` rule: a second `/*` rule replaces
- * the first one on Cloudflare instead of adding to it, which dropped the
- * other security headers. Partytown's paths then detach it; rules apply in
- * file order, so the detach comes last. Applying it twice gives the same file.
- * @param headersFile - The `_headers` file as copied from `public/`.
- * @param policy - The header value.
- * @returns The file with the policy.
+ * The CSP line of a rule, checked against Cloudflare's limit.
+ * @param policy - Header value.
+ * @returns The indented line.
  */
-export const applyPolicy = (headersFile: string, policy: string): string => {
-	const policyLine = `  ${CSP_HEADER}: ${policy}`;
+const policyLine = (policy: string): string => {
+	const line = `  ${CSP_HEADER}: ${policy}`;
 
-	if (policyLine.length > MAX_LINE_LENGTH) {
+	if (line.length > MAX_LINE_LENGTH) {
 		throw new Error(
-			`The CSP line is ${policyLine.length} characters; Cloudflare allows ${MAX_LINE_LENGTH}.`,
+			`The CSP line is ${line.length} characters; Cloudflare allows ${MAX_LINE_LENGTH}.`,
 		);
 	}
 
+	return line;
+};
+
+/**
+ * Adds the policies to a `_headers` file.
+ *
+ * The page policy goes inside the existing `/*` rule: a second `/*` rule
+ * replaces the first one on Cloudflare, which dropped the other security
+ * headers.
+ *
+ * Partytown's rule comes last. Cloudflare served only the most specific
+ * matching rule, although its docs say matching rules are joined, so the rule
+ * works both ways: it detaches the `/*` values it replaces (a no-op when
+ * nothing was joined) and sets its own CSP and HSTS. HSTS is detached too:
+ * a joined copy would repeat `max-age`, and browsers ignore an HSTS header
+ * with a repeated directive. Applying it twice gives the same file.
+ * @param headersFile - The `_headers` file as copied from `public/`.
+ * @param policy - The page policy.
+ * @returns The file with both policies.
+ */
+export const applyPolicy = (headersFile: string, policy: string): string => {
+	const pageLine = policyLine(policy);
 	const markerIndex = headersFile.indexOf(PARTYTOWN_MARKER);
 	const lines = (
 		markerIndex === -1 ? headersFile : headersFile.slice(0, markerIndex)
@@ -148,20 +194,19 @@ export const applyPolicy = (headersFile: string, policy: string): string => {
 	const ruleIndex = lines.indexOf(WILDCARD_RULE);
 
 	if (ruleIndex === -1) {
-		lines.push('', WILDCARD_RULE, policyLine);
+		lines.push('', WILDCARD_RULE, pageLine);
 	} else {
-		lines.splice(ruleIndex + 1, 0, policyLine);
+		lines.splice(ruleIndex + 1, 0, pageLine);
 	}
 
-	return [
-		...lines,
-		'',
+	const hstsLine = lines.find((line) => line.startsWith(`  ${HSTS_HEADER}:`));
+	const partytownRule = [
 		PARTYTOWN_MARKER,
-		'# sandbox, so its files must not get the page policy.',
 		'/~partytown/*',
 		`  ! ${CSP_HEADER}`,
-		'',
-	]
-		.join('\n')
-		.trimStart();
+		policyLine(PARTYTOWN_POLICY),
+		...(hstsLine ? [`  ! ${HSTS_HEADER}`, hstsLine] : []),
+	];
+
+	return [...lines, '', ...partytownRule, ''].join('\n').trimStart();
 };

@@ -26,7 +26,7 @@ const run = (): void => {
 	console.info('🛡️  Generating the Content-Security-Policy...');
 
 	// Partytown's sandbox page is vendor code with its own inline script; it
-	// doesn't get this policy (`applyPolicy` detaches it there).
+	// gets its own policy instead (`PARTYTOWN_POLICY`).
 	const htmlFiles = globSync('**/*.html', {
 		cwd: distributionPath,
 		exclude: ['~partytown/**'],
