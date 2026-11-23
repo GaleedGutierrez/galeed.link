@@ -1,9 +1,9 @@
+/* Sticky at every width: one compact row (~52px), so it stays well under
+   12% of a phone's viewport. */
 .navbar {
-	@media (width >= 64em) {
-		z-index: var(--z-index-10-sticky-nav);
-		border-block-end: var(--border-025) solid var(--border-color-primary);
-		background-color: var(--background-color-secondary);
-	}
+	z-index: var(--z-index-10-sticky-nav);
+	border-block-end: var(--border-025) solid var(--border-color-primary);
+	background-color: var(--background-color-secondary);
 }
 
 /* One scrolling line (the original hub's pattern). The edges fade so it's

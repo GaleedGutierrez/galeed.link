@@ -15,7 +15,7 @@ const { sections } = Astro.props;
 
 <nav
 	aria-label="Secciones"
-	class:list={["lg:(sticky top-0) mt-6", styles["navbar"]]}
+	class:list={["sticky top-0 mt-6", styles["navbar"]]}
 >
 	<ul
 		class:list={[
@@ -52,8 +52,7 @@ const { sections } = Astro.props;
 		"(prefers-reduced-motion: reduce)",
 	);
 
-	// Scrolls the list only (never the page), so a non-sticky nav that is out
-	// of view stays where it is.
+	// Scrolls the list only, never the page.
 	const revealInList = (link: HTMLAnchorElement): void => {
 		if (!list) {
 			return;

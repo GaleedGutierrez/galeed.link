@@ -146,7 +146,7 @@ Issues verified during inspection:
 | --- | --- | --- |
 | Shell | single centered column, grayscale portrait with fade, full-bleed on mobile | width 448 → **480px** to fit a 2-col bento. Radius 16 → **8px** ("machined"). Shell gets a hairline border, so the edge stays visible in dark mode (fixes issue 4) |
 | Hero | name, role, social row with **visible labels** (better than Linkd's icon-only row) | role becomes `<p>`. New slim **system bar** above the photo with mono metadata, theme toggle, and HL2's 2px orange underline rule |
-| Nav | same five destinations | IDs fixed to match labels, uppercase DIN-style labels, **one scrolling line with faded edges** (owner's choice, 2026-11-23), BM accent underline indicator, sticky ≥1024px |
+| Nav | same five destinations | IDs fixed to match labels, uppercase DIN-style labels, **one scrolling line with faded edges** (owner's choice, 2026-11-23), BM accent underline indicator, sticky at every width (owner's choice, 2026-11-23) |
 | Bio | two-column "Sobre mí / Stack tech" with **1px vertical rule** (HL2 uses the same footer-column rule) | emoji → SVG icons and mono tech chips. Optional lead paragraph |
 | New sections | — | Freelance (link cards), Side projects (bento), Open source (repo cards), Contacto (one primary CTA), all built from Linkd's 56px card / 16px gap / 32px section rhythm |
 | Color | light + dark | slate/blue-black → bone `#ede6d8` / charcoal `#1c1c1c` + HEV orange, authored in `oklch()`, **WCAG AAA** text contrast. Manual toggle with System default |
@@ -570,7 +570,7 @@ Applications: `--spacing-gutter: var(--spacing-4)`, `--spacing-stack: var(--spac
  │        │                    Galeed Gutierrez          ← h1 @mixin heading-xl                    │   │
  │        │                    Frontend developer        ← p  @mixin heading-md                    │   │
  │        │          [in LinkedIn]  [X/Twitter]  [GitHub]  [Web]   ← 4-col social row               │   │
- │        │   BIO   FREELANCE   PROYECTOS   OPEN SOURCE   CONTACTO  ← nav (scrolls; sticky ≥1024)  │   │
+ │        │   BIO   FREELANCE   PROYECTOS   OPEN SOURCE   CONTACTO  ← nav (scrolls; sticky)        │   │
  │        │ ─────────────────────────────────────────────── hairline                                │   │
  │        │ 01  Bio                                                                                │   │
  │        │     lead paragraph (optional)                                                          │   │
@@ -608,10 +608,10 @@ Section IDs (fixes issue 1): `#bio`, `#freelance`, `#proyectos`, `#open-source`,
 
 | Name | Min-width | Behavior |
 | --- | --- | --- |
-| `xs` (base) | 375px design floor (works down to 320) | shell full-bleed, radius 0, no border/shadow, body bg = `surface`. Portrait 5:4 (`object-position: 50% 20%`) so the name lands above the fold. Nav is one horizontally scrolling line. Social 4-col with icon over label |
+| `xs` (base) | 375px design floor (works down to 320) | shell full-bleed, radius 0, no border/shadow, body bg = `surface`. Portrait 5:4 (`object-position: 50% 20%`) so the name lands above the fold. Nav is one horizontally scrolling line, sticky at `top: 0` (§7.5). Social 4-col with icon over label |
 | `sm` | `40em` (640px) | shell floats: `margin-block: var(--spacing-8)`, `--border-radius-2`, 1px `border`, shell shadow (Layout module shadows block, §9.6). Page bg = `--background-color-primary`. Portrait 1:1 |
 | `md` | `48em` (768px) | `margin-block: var(--spacing-12)` (GL parity) |
-| `lg` | `64em` (1024px) | section nav becomes `position: sticky; top: 0` inside the shell (surface bg + bottom hairline, `z-index: var(--z-index-10-sticky-nav)`). Nothing else changes, on purpose |
+| `lg` | `64em` (1024px) | no layout change, on purpose. (The section nav used to turn sticky here; since 2026-11-23 it is sticky at every width, §7.5.) |
 | `xl` | `90em` (1440px) | no layout change. Verify that only the canvas grows. (BM caps its frame at 1440 **[V]**. The shell never approaches that.) |
 
 Breakpoints are written in **`em`**, not `px` (`respect-os-text-scale`: *"Responsive breakpoints MUST NOT assume that text will remain at its default size"*). The pixel values in parentheses are at the default 16px text size. When someone enlarges their text, the layout switches as if the screen were narrower, so the larger text still fits.
@@ -785,7 +785,13 @@ Conventions (§9):
   - A `mask-image` fades both edges over that padding only, so the first and last links are never covered at the scroll ends.
   - Scrollbar hidden on touch; `scrollbar-width: thin` under `(hover: hover) and (pointer: fine)`, so mouse users can reach the last links.
   - The current link is scrolled into view inside the list (never the page) when the observer marks it.
-- ≥1024px: `lg:(sticky top-0)`. The module adds `background-color: var(--background-color-secondary)`, a `--border-025` bottom hairline in `--border-color-primary`, and `z-index: var(--z-index-10-sticky-nav)`. `--height-nav` keeps anchored headings clear via `scroll-margin-top`.
+- Sticky at every width: `sticky top-0` (owner's choice, 2026-11-23; it used to
+  be ≥1024px only, which left phones without it). It is one row of about 52px,
+  under 12% of a phone's viewport. The module adds
+  `background-color: var(--background-color-secondary)`, a `--border-025` bottom
+  hairline in `--border-color-primary`, and
+  `z-index: var(--z-index-10-sticky-nav)`. `--height-nav` keeps anchored
+  headings clear via `scroll-margin-top`.
 
 ### 7.6 Section header
 
@@ -1954,11 +1960,9 @@ The modules for the patterns that need more than tokens:
 }
 
 .bar {
-  @media (width >= 64em) {
-    z-index: var(--z-index-10-sticky-nav);
-    border-block-end: var(--border-025) solid var(--border-color-primary);
-    background-color: var(--background-color-secondary);
-  }
+  z-index: var(--z-index-10-sticky-nav);
+  border-block-end: var(--border-025) solid var(--border-color-primary);
+  background-color: var(--background-color-secondary);
 }
 ```
 
