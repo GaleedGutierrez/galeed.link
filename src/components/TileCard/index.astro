@@ -10,9 +10,12 @@ interface Props {
 }
 
 const { item } = Astro.props;
+// The column caps the cards before the 40em breakpoint, so the mobile
+// values are capped too: without min(), a 480–639px viewport asked for
+// a wider file than the card ever shows.
 const sizes = item.featured
-	? "(min-width: 40em) 448px, calc(100vw - 32px)"
-	: "(min-width: 40em) 218px, calc(50vw - 22px)";
+	? "(min-width: 40em) 448px, min(calc(100vw - 32px), 448px)"
+	: "(min-width: 40em) 218px, min(calc(50vw - 22px), 218px)";
 ---
 
 <a
