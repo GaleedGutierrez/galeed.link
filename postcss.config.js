@@ -11,7 +11,9 @@ const config = {
 		postcssCustomProperties({ preserve: false }),
 		postcssUtopia({ minWidth: 360, maxWidth: 448 }),
 		cssnano({
-			preset: ['advanced', {}],
+			// discardUnused runs per file, so it deleted every Fontsource
+			// @font-face (each file declares a face it doesn't use itself).
+			preset: ['advanced', { discardUnused: false }],
 		}),
 	],
 };

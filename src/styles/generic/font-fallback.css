@@ -1,10 +1,26 @@
 /* Metric-matched fallback for Barlow, so the swap from Arial doesn't shift
    the layout (DESIGN_SYSTEM.md §4.3). Values generated with Capsize
    (@capsizecss/core createFontStack + @capsizecss/metrics barlow/arial).
-   Regenerate them instead of editing by hand. */
+   Regenerate them instead of editing by hand.
+
+   Two faces, because body has `font-synthesis: none`: with only the regular
+   face, every bold role (headings, labels, buttons) would render at 400
+   until Barlow arrives. The bold face reuses the regular overrides, as
+   fontaine does; Arial Bold's vertical metrics are the same. */
 @font-face {
 	font-family: "Barlow Fallback";
 	src: local("Arial"), local("ArialMT");
+	font-weight: normal 500;
+	size-adjust: 96.68%;
+	ascent-override: 103.4341%;
+	descent-override: 20.6868%;
+	line-gap-override: 0%;
+}
+
+@font-face {
+	font-family: "Barlow Fallback";
+	src: local("Arial Bold"), local("Arial-BoldMT");
+	font-weight: bold 800;
 	size-adjust: 96.68%;
 	ascent-override: 103.4341%;
 	descent-override: 20.6868%;
