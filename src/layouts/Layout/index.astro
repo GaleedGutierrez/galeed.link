@@ -198,7 +198,9 @@ const [firstName, ...lastNames] = personalSchema.name.split(" ");
 					sameAs: Object.values(personalSchema.socialLinks),
 					knowsAbout: personalSchema.skills,
 					knowsLanguage: "es",
-					alumniOf: personalSchema.education,
+					alumniOf: personalSchema.studies.map(
+						({ school }) => school,
+					),
 					hasCredential: personalSchema.credentials,
 					hasOccupation: personalSchema.jobProfile,
 				},

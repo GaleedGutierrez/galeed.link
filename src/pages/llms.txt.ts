@@ -22,7 +22,7 @@ export const GET: APIRoute = async () => {
 		'',
 		`> ${personalSchema.description}`,
 		'',
-		`${personalSchema.name} es desarrollador frontend en ${PROFILE.location.replace(', AR', ', Argentina')}.${PROFILE.isAvailable ? ' Está disponible para proyectos freelance.' : ''} Estudia Analista Programador Universitario en la Universidad Nacional de Jujuy (UNJu).`,
+		`${personalSchema.name} es desarrollador frontend en ${PROFILE.location.replace(', AR', ', Argentina')}.${PROFILE.isAvailable ? ' Está disponible para proyectos freelance.' : ''} Estudia ${new Intl.ListFormat('es').format(personalSchema.studies.map(({ program, school }) => `${program} en la ${school.name} (${school.alternateName})`))}.`,
 		'',
 		`Tecnologías: ${personalSchema.skills.join(', ')}.`,
 		'',

@@ -14,12 +14,26 @@ export const personalSchema = {
 		addressRegion: 'Jujuy',
 		addressCountry: 'AR',
 	},
-	education: [
+	// Current studies. The JSON-LD lists the schools (alumniOf); /llms.txt
+	// also names the programs (as prose, with their article).
+	studies: [
 		{
-			'@type': 'CollegeOrUniversity',
-			name: 'Universidad Nacional de Jujuy',
-			alternateName: 'UNJu',
-			url: 'https://www.unju.edu.ar',
+			program: 'la carrera de Analista Programador Universitario',
+			school: {
+				'@type': 'CollegeOrUniversity',
+				name: 'Universidad Nacional de Jujuy',
+				alternateName: 'UNJu',
+				url: 'https://www.unju.edu.ar',
+			},
+		},
+		{
+			program: 'la Tecnicatura en Ciencia de Datos',
+			school: {
+				'@type': 'CollegeOrUniversity',
+				name: 'Universidad Nacional de Chilecito',
+				alternateName: 'UNdeC',
+				url: 'https://www.undec.edu.ar',
+			},
 		},
 	],
 	credentials: [
