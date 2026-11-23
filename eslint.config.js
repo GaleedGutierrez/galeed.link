@@ -2,6 +2,7 @@
 import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import vitest from '@vitest/eslint-plugin';
+import { defineConfig } from 'eslint/config';
 // const compat = new FlatCompat();
 import eslintPluginAstro from 'eslint-plugin-astro';
 import checkFile from 'eslint-plugin-check-file';
@@ -25,7 +26,8 @@ import tseslint from 'typescript-eslint';
 
 const CODE_FILES = ['**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,astro}'];
 
-export default tseslint.config(
+// defineConfig replaces the deprecated tseslint.config() and supports `extends`.
+export default defineConfig(
 	{
 		ignores: [
 			'**/__snapshots__/**',
