@@ -52,6 +52,10 @@ docs are English.
 - One test file: `npx vitest run tests/tokens.test.ts`.
 - `npm run test:e2e` is defined, but Playwright is not installed and there are
   no end-to-end tests yet.
+- `npm run test:performance` audits `http://localhost:4173/`: build, start
+  `npm run preview` (pinned to 4173 so it never collides with the dev server on
+  4321), then run it. Antivirus web shields that inject scripts (Kaspersky) skew
+  the scores; add `--blocked-url-patterns` when one is active.
 
 ## Structure
 
