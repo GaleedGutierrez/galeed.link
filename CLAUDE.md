@@ -54,8 +54,9 @@ docs are English.
   no end-to-end tests yet.
 - `npm run test:performance` audits `http://localhost:4173/`: build, start
   `npm run preview` (pinned to 4173 so it never collides with the dev server on
-  4321), then run it. Antivirus web shields that inject scripts (Kaspersky) skew
-  the scores; add `--blocked-url-patterns` when one is active.
+  4321), then run it. The script blocks Kaspersky's injected script
+  (`--blocked-url-patterns`), which skews the scores; add a pattern for any
+  other antivirus web shield that injects one.
 
 ## Structure
 
@@ -92,7 +93,8 @@ docs are English.
 - `src/types/designTokens.ts`: token lists and card models.
   `src/scripts/theme.ts`: theme logic. `tests/`: Vitest (token invariants from
   §9.9).
-- `scripts/`: post-build `purgeCss.ts`, `lightningcss.ts` and `subsetFonts.ts`.
+- `scripts/`: post-build `purgeCss.ts`, `lightningcss.ts`, `subsetFonts.ts` and
+  `cspHeaders.ts` (policy and hash helpers in `csp.ts`).
 - Path aliases in use: `@/*`, `@components/*`, `@layouts/*`, `@styles/*`,
   `@images/*`.
 
@@ -173,12 +175,26 @@ docs are English.
 
 ## Build pipeline gotchas
 
-- Build order is `astro build && purge-css && lightningcss && subset-fonts`.
+- Build order is
+  `astro build && purge-css && lightningcss && subset-fonts && csp-headers`.
   lightningcss must come after purge-css: `purgeCss.ts` re-runs
   `postcss-custom-properties`, which would inline the `light-dark()` polyfill
-  switches and pin every color to light. `subset-fonts` must stay last: it
+  switches and pin every color to light. `subset-fonts` must come after both: it
   renames fonts and style sheets by content hash, so any later step that
-  rewrites the CSS would leave a stale hash.
+  rewrites the CSS would leave a stale hash. `csp-headers` stays last: it hashes
+  the final HTML.
+- The Content-Security-Policy is generated, not written in `public/_headers`.
+  `cspHeaders.ts` hashes every inline script and `<style>` in `dist/*.html` (the
+  site is static, so no nonces) and appends the header to `dist/_headers`.
+  Editing an inline script needs no manual hash update. Never add
+  `'unsafe-inline'` or `'unsafe-eval'`: `tests/csp.test.ts` checks it.
+  - It ships as `Content-Security-Policy-Report-Only`; enforcing it is the
+    `CSP_HEADER` constant in `csp.ts`.
+  - `/~partytown/*` detaches the header: Partytown's sandbox runs gtag through
+    an inline script, eval and blob workers.
+  - `astro preview` ignores `_headers`. Test the policy in a browser by adding
+    the header to the preview's responses (e.g. a Playwright route), or on a
+    Cloudflare preview deploy.
 - `subsetFonts.ts` keeps only the characters in the built HTML (plus CSS
   `content`, both cases and a small margin). Text a client script inserts at
   runtime isn't in the HTML: add its characters to `SAFETY_CHARACTERS`.
