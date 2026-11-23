@@ -1,5 +1,11 @@
 {
-	"ignores": ["./.github/CODEOWNERS", "LICENSE"],
+	"ignores": [
+		"./.github/CODEOWNERS",
+		"LICENSE",
+		"DESIGN_SYSTEM.md",
+		".agents/**",
+		".claude/**"
+	],
 	"config": {
 		"MD046": {
 			"style": "fenced"

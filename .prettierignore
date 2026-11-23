@@ -9,3 +9,6 @@
 /playwright-report/*
 **/fonts/*
 **/font/*
+DESIGN_SYSTEM.md
+/.agents/*
+/.claude/*
