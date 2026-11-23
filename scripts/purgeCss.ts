@@ -22,13 +22,10 @@ const purgeCssConfig: Omit<UserDefinedOptions, 'css'> = {
 			'a:hover',
 			'a:focus-visible',
 			'a:active',
-			/^\[data-.*\]$/,
-			/^\[aria-.*\]$/,
 
-			// Media queries y clases responsivas
-			/^@media/,
-			/^@container/,
-			/^@supports/,
+			// Attributes set at runtime. PurgeCSS matches the attribute NAME.
+			/^data-theme/, // data-theme, -pref, -switching, -toggle (theme.ts)
+			'aria-current', // section nav IntersectionObserver
 
 			// Clases con prefijos responsivos (Tailwind-style)
 			/^sm:/,
@@ -184,10 +181,6 @@ const purgeCssConfig: Omit<UserDefinedOptions, 'css'> = {
 			/::part$/,
 			/::slotted$/,
 
-			// Media queries para deep scanning
-			/^@media/,
-			/^@container/,
-
 			// Clases responsivas
 			/^sm:/,
 			/^md:/,
@@ -195,8 +188,6 @@ const purgeCssConfig: Omit<UserDefinedOptions, 'css'> = {
 			/^xl:/,
 			/^2xl:/,
 		],
-		// Preservar todas las reglas dentro de media queries
-		greedy: [/^@media/, /^@container/, /^@supports/],
 	},
 	keyframes: true,
 	fontFace: true,
