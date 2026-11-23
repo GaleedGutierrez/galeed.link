@@ -719,7 +719,7 @@ Conventions (§9):
 - `<nav aria-label="Secciones"><ul class="flex flex-wrap justify-center gap-x-1 px-4" role="list">`.
 - Link: `<a class:list={['relative inline-flex items-center min-h-11 px-3', styles.link]}>`. The module adds `@mixin label` and `color: var(--text-color-secondary)`.
 - Indicator (BM **[V]**): `::after` with `inset-inline: var(--spacing-3)`, `inset-block-end: var(--spacing-2)`, `block-size: var(--border-05)`, `background-color: var(--background-color-indicator)`, `scale: 0 1`, origin left. It grows over `--duration-slow` / `--ease-out` only under `no-preference` (code in §9.6).
-- States: hover → `--text-color-primary` + indicator `scale: 1`. **Current section** (`aria-current="true"`, set by an IntersectionObserver with `rootMargin: "-40% 0px -55% 0px"`) → `--text-color-primary` + indicator fully shown. Focus-visible → global ring.
+- States: hover → `--text-color-primary` + indicator `scale: 1`. **Current section** (`aria-current="true"`, set by a rAF-throttled scroll check: the last section whose heading reached its `scroll-margin-top` line + 24px; at the page bottom the last link; a clicked link stays current until the user scrolls. An IntersectionObserver band was dropped because anchor jumps skip over it, and short final sections never reach it) → `--text-color-primary` + indicator fully shown. Focus-visible → global ring.
 - **One scrolling line, with an affordance** (fixes issue 2 without wrapping; the owner prefers the original scrolling nav, 2026-11-23).
   - `ul.navbar__list`: `overflow-x: auto`, `py-1` so the focus ring isn't clipped, inline padding 16px / 32px matched by `scroll-padding-inline`.
   - A `mask-image` fades both edges over that padding only, so the first and last links are never covered at the scroll ends.
@@ -1002,7 +1002,7 @@ export default config;
 safelist: {
 	standard: [
 		/^data-theme/,   // data-theme, -pref, -switching, -toggle: set at runtime by theme.ts
-		'aria-current',  // set by the section nav's IntersectionObserver (§7.5)
+		'aria-current',  // set by the section nav scrollspy (§7.5)
 		// …your existing entries
 	],
 	// …
@@ -2337,7 +2337,7 @@ for (const v of ['--box-shadow-shell-light', '--box-shadow-shell-dark'])
 **Performance**
 - [ ] Portrait via `<Picture>` (AVIF/WebP), `fetchpriority="high"`, explicit dimensions. Tiles are lazy-loaded with dimensions. CLS < 0.1.
 - [ ] Only Barlow 400 + 800 latin preloaded. Fallback face metric-matched, plus `font-size-adjust: from-font` verified by blocking the font files. No Google Fonts CSS request.
-- [ ] No GSAP or animation libraries. JS limited to `theme.ts` and the nav IntersectionObserver.
+- [ ] No GSAP or animation libraries. JS limited to `theme.ts` and the nav scrollspy.
 
 ### 10.3 Maintenance rules
 

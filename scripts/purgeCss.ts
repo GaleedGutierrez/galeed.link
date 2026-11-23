@@ -25,7 +25,7 @@ const purgeCssConfig: Omit<UserDefinedOptions, 'css'> = {
 
 			// Attributes set at runtime. PurgeCSS matches the attribute NAME.
 			/^data-theme/, // data-theme, -pref, -switching, -toggle (theme.ts)
-			'aria-current', // section nav IntersectionObserver
+			'aria-current', // section nav scrollspy
 
 			// Clases con prefijos responsivos (Tailwind-style)
 			/^sm:/,

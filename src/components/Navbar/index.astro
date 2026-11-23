@@ -77,31 +77,103 @@ const { sections } = Astro.props;
 		});
 	};
 
-	const observer = new IntersectionObserver(
-		(entries) => {
-			for (const entry of entries) {
-				if (!entry.isIntersecting) {
-					continue;
-				}
+	// Current section = the last one whose heading has reached the line where
+	// an anchor jump lands it (its scroll-margin-top, plus some slack).
+	// Computed from positions on scroll, not with an IntersectionObserver
+	// band: anchor jumps skip over a band without ever intersecting it.
+	// At the bottom of the page the last link wins, since the last sections
+	// are too short for their headings to reach the line. A clicked link
+	// stays current until the user scrolls on their own.
+	const LINE_SLACK = 24;
+	const targets = links.flatMap((link) => {
+		const heading = document.querySelector<HTMLElement>(link.hash);
 
-				for (const link of links) {
-					if (link.hash === `#${entry.target.id}`) {
-						link.setAttribute("aria-current", "true");
-						revealInList(link);
-					} else {
-						link.removeAttribute("aria-current");
-					}
-				}
+		return heading ? [{ heading, link }] : [];
+	});
+	const lastLink = links.at(-1);
+	let currentLink: HTMLAnchorElement | undefined;
+	let pinnedLink: HTMLAnchorElement | undefined;
+
+	const activationLine = (heading: HTMLElement): number =>
+		Number.parseFloat(getComputedStyle(heading).scrollMarginTop) +
+		LINE_SLACK;
+
+	const isAtPageBottom = (): boolean =>
+		globalThis.innerHeight + globalThis.scrollY >=
+		document.documentElement.scrollHeight - 2;
+
+	const setCurrent = (next: HTMLAnchorElement | undefined): void => {
+		if (next === currentLink) {
+			return;
+		}
+
+		currentLink?.removeAttribute("aria-current");
+		next?.setAttribute("aria-current", "true");
+		currentLink = next;
+
+		if (next) {
+			revealInList(next);
+		}
+	};
+
+	const update = (): void => {
+		if (pinnedLink) {
+			setCurrent(pinnedLink);
+
+			return;
+		}
+
+		if (isAtPageBottom()) {
+			setCurrent(lastLink);
+
+			return;
+		}
+
+		const passed = targets.filter(
+			({ heading }) =>
+				heading.getBoundingClientRect().top <= activationLine(heading),
+		);
+
+		setCurrent(passed.at(-1)?.link);
+	};
+
+	let isUpdateQueued = false;
+
+	globalThis.addEventListener(
+		"scroll",
+		() => {
+			if (isUpdateQueued) {
+				return;
 			}
+
+			isUpdateQueued = true;
+			requestAnimationFrame(() => {
+				isUpdateQueued = false;
+				update();
+			});
 		},
-		{ rootMargin: "-40% 0px -55% 0px" },
+		{ passive: true },
 	);
+	globalThis.addEventListener("resize", update, { passive: true });
 
 	for (const link of links) {
-		const target = document.querySelector(link.hash);
-
-		if (target) {
-			observer.observe(target);
-		}
+		link.addEventListener("click", () => {
+			pinnedLink = link;
+			setCurrent(link);
+		});
 	}
+
+	// User-driven scrolling releases the pin. pointerdown fires before a
+	// nav link's click, which then pins that link again.
+	for (const type of ["wheel", "touchmove", "keydown", "pointerdown"]) {
+		globalThis.addEventListener(
+			type,
+			() => {
+				pinnedLink = undefined;
+			},
+			{ passive: true },
+		);
+	}
+
+	update();
 </script>
