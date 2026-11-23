@@ -34,6 +34,7 @@ docs are English.
 | Task                 | Command                                       |
 | -------------------- | --------------------------------------------- |
 | Dev server           | `npm run dev`                                 |
+| Dev server on LAN    | `npm run dev -- --host` (only when needed)    |
 | Build                | `npm run build`                               |
 | Preview build        | `npm run preview`                             |
 | Lint TS/Astro/JSON   | `npm run lint` · `npm run lint:fix`           |

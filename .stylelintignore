@@ -2,7 +2,6 @@
 **/*_normalize.scss
 **/font/*
 **/fonts/**
-**/googleAnalytics.js
 **/__snapshots__/**
 **/node_modules/**
 **/dist/**

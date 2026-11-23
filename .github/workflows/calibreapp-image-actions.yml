@@ -16,13 +16,19 @@ jobs:
   build:
     if: github.event.pull_request.head.repo.full_name == github.repository
     name: calibreapp/image-actions
-    permissions: write-all
+    # The action commits the compressed images and comments on the PR:
+    # nothing else needs write access.
+    permissions:
+      contents: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: 👍 Checkout Repo
         uses: actions/checkout@v4
 
       - name: 🗜️ Compress Images
-        uses: calibreapp/image-actions@main
+        # Pinned to a commit SHA: a branch ref would run whatever the upstream
+        # main holds, with this job's write token.
+        uses: calibreapp/image-actions@9d037c06280028c110ff61c433ad4dc7d33c3c43 # 1.5.0
         with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

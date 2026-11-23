@@ -26,7 +26,6 @@ import tseslint from 'typescript-eslint';
 export default tseslint.config(
 	{
 		ignores: [
-			'**/googleAnalytics.js',
 			'**/__snapshots__/**',
 			'**/node_modules/**',
 			'**/dist/**',

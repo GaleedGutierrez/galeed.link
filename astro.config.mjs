@@ -26,9 +26,6 @@ export default defineConfig({
 			sourcemap: process.env.ENABLE_SOURCEMAP === 'true',
 		},
 	},
-	server: {
-		host: true,
-	},
 	integrations: [
 		sitemap({ lastmod: new Date() }),
 		icon(),

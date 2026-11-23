@@ -8,11 +8,11 @@ import {
 	SOCIAL_LINKS,
 } from '@/data/hub';
 import { personalSchema, SITE_URL } from '@/data/personalSchema';
+import { markdownLink as link, toMarkdownText } from '@/utils/markdown';
 
 // /llms.txt (https://llmstxt.org): a Markdown summary for AI answer engines
 // (GEO). Built from the same data as the page, so it never drifts from it.
-const link = (label: string, href: string, note?: string): string =>
-	`- [${label}](${href})${note ? `: ${note}` : ''}`;
+// shared-assets text is escaped, so it can't add links or headings.
 
 export const GET: APIRoute = async () => {
 	const projects = await getProjectTiles();
@@ -44,7 +44,7 @@ export const GET: APIRoute = async () => {
 						href,
 						[meta, status?.label].filter(Boolean).join(' · '),
 					)
-				: `- ${title}: ${[meta, status?.label, 'proyecto privado'].filter(Boolean).join(' · ')}`,
+				: `- ${toMarkdownText(`${title}: ${[meta, status?.label, 'proyecto privado'].filter(Boolean).join(' · ')}`)}`,
 		),
 		'',
 		'## Side projects recientes',

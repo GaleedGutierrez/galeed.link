@@ -13,9 +13,20 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# environment variables
+# environment variables (Vite also loads .env.local and .env.[mode])
 .env
-.env.production
+.env.*
+
+# keys and certificates
+*.pem
+*.key
+
+# Lighthouse output
+lighthouse-report/
+.lighthouseci/
+
+# local Claude Code settings
+.claude/settings.local.json
 
 # macOS-specific files
 .DS_Store

@@ -15,6 +15,7 @@ import type {
 	Status,
 	TileItem,
 } from '@/types/designTokens';
+import { toSafeUrl } from '@/utils/safeUrl';
 
 import { personalSchema } from './personalSchema';
 
@@ -67,12 +68,9 @@ const FREELANCE_STATUS: Record<FreelanceProject['status'], Status> = {
 	'on-hold': { label: 'En pausa', tone: 'warning' },
 };
 
-const toUrl = (value?: string): string | undefined =>
-	value && URL.canParse(value) ? value : undefined;
-
 export const freelanceItems: LinkItem[] = freelanceProjects.map(
 	(project): LinkItem => {
-		const href = project.isPrivate ? undefined : toUrl(project.demoUrl);
+		const href = project.isPrivate ? undefined : toSafeUrl(project.demoUrl);
 
 		return {
 			title: project.title,
@@ -102,12 +100,18 @@ const byDateDesc = (a: PersonalProject, b: PersonalProject): number =>
 	b.date.getTime() - a.date.getTime();
 
 export const getProjectTiles = async (): Promise<TileItem[]> => {
+	// A tile is a link: projects without a safe URL are skipped.
 	const latest = personalProjects
-		.toSorted(byDateDesc)
+		.flatMap((project) => {
+			const href = toSafeUrl(project.url);
+
+			return href ? [{ project, href }] : [];
+		})
+		.toSorted((a, b) => byDateDesc(a.project, b.project))
 		.slice(0, FEATURED_PROJECTS_COUNT);
 
 	return Promise.all(
-		latest.map(async (project, index): Promise<TileItem> => {
+		latest.map(async ({ project, href }, index): Promise<TileItem> => {
 			const screenshot = (await project.screenshots.webp
 				.large) as unknown as {
 				default: ImageMetadata;
@@ -115,7 +119,7 @@ export const getProjectTiles = async (): Promise<TileItem[]> => {
 
 			return {
 				title: project.title,
-				href: project.url,
+				href,
 				alt: `Captura de ${project.title}`,
 				image: screenshot.default,
 				meta: `${project.technologies.slice(0, 3).join(' · ')} · ${project.date.getFullYear()}`,
@@ -135,20 +139,30 @@ const PR_STATUS: Record<
 	closed: { label: 'Cerrado', tone: 'danger' },
 };
 
-export const repoItems: RepoItem[] = openSourceProjects.map(
-	(project): RepoItem => {
+export const repoItems: RepoItem[] = openSourceProjects.flatMap(
+	(project): RepoItem[] => {
 		const contribution = project.contributions.at(0);
 		const { owner, name, url, language } = project.repository;
+		const href = toSafeUrl(contribution?.url) ?? toSafeUrl(url);
 
-		return {
-			repo: `${owner}/${name}`,
-			href: contribution?.url ?? url,
-			description: contribution?.title ?? project.description,
-			chips: [
-				language,
-				...(contribution ? [`PR #${contribution.number}`] : []),
-			],
-			status: contribution ? PR_STATUS[contribution.status] : undefined,
-		};
+		// A repo card is a link: skip entries without a safe URL.
+		if (!href) {
+			return [];
+		}
+
+		return [
+			{
+				repo: `${owner}/${name}`,
+				href,
+				description: contribution?.title ?? project.description,
+				chips: [
+					language,
+					...(contribution ? [`PR #${contribution.number}`] : []),
+				],
+				status: contribution
+					? PR_STATUS[contribution.status]
+					: undefined,
+			},
+		];
 	},
 );
