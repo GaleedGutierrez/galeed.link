@@ -1,4 +1,4 @@
-import type { CreativeWork, SoftwareSourceCode } from 'schema-dts';
+import type { CreativeWork } from 'schema-dts';
 
 import type { LinkItem, RepoItem, TileItem } from '@/types/designTokens';
 
@@ -12,14 +12,28 @@ interface WorksInput {
 	repos: RepoItem[];
 }
 
-export type Work = CreativeWork | SoftwareSourceCode;
+export type Work = CreativeWork & { '@id': string };
+
+/**
+ * Turns a card title into a URL fragment for the node's `@id`.
+ * @param value - Card title.
+ * @returns Lowercase ASCII words joined by hyphens.
+ */
+const slug = (value: string): string =>
+	value
+		.normalize('NFD')
+		.replaceAll(/\p{Diacritic}/gu, '')
+		.toLowerCase()
+		.replaceAll(/[^a-z\d]+/g, '-')
+		.replaceAll(/^-|-$/g, '');
 
 /**
  * Turns the cards on the page into JSON-LD nodes for the ProfilePage graph.
  * Built from the card models, not from shared-assets, so the markup never
  * claims more than the page shows (Google's structured data guidelines).
- * Each node points back to the Person by `@id`: `creator` for side projects,
- * `contributor` for client work and pull requests to other people's repos.
+ * Each node has its own `@id` (the ProfilePage lists them in `mentions`) and
+ * points back to the Person by `@id`: `creator` for side projects,
+ * `contributor` for client work, `author` for pull requests.
  * @param input - The Person's `@id`, the site origin and the card models.
  * @returns One node per card, in page order.
  */
@@ -32,8 +46,9 @@ export const buildWorksSchema = ({
 }: WorksInput): Work[] => {
 	const person = { '@id': personId };
 
-	const sideProjects = tiles.map((tile): CreativeWork => ({
+	const sideProjects = tiles.map((tile): Work => ({
 		'@type': 'CreativeWork',
+		'@id': `${siteUrl}/#proyecto-${slug(tile.title)}`,
 		name: tile.title,
 		url: tile.href,
 		description: tile.description,
@@ -43,21 +58,30 @@ export const buildWorksSchema = ({
 		creator: person,
 	}));
 
-	const clientWork = freelance.map((item): CreativeWork => ({
+	const clientWork = freelance.map((item): Work => ({
 		'@type': 'CreativeWork',
+		'@id': `${siteUrl}/#freelance-${slug(item.title)}`,
 		name: item.title,
 		// Private work has no public URL.
 		url: item.href,
 		contributor: person,
 	}));
 
-	const openSource = repos.map((repo): SoftwareSourceCode => ({
-		'@type': 'SoftwareSourceCode',
-		name: repo.repo,
-		description: repo.description,
-		codeRepository: repo.repositoryUrl,
-		programmingLanguage: repo.language,
-		contributor: person,
+	// The card links to a pull request (or to the repo when there is none).
+	// The node is the contribution; the repository is what it is part of.
+	const openSource = repos.map((repo): Work => ({
+		'@type': 'CreativeWork',
+		'@id': repo.href,
+		// The PR title; a repo without a PR has its own description.
+		name: repo.description || repo.repo,
+		url: repo.href,
+		author: person,
+		isPartOf: {
+			'@type': 'SoftwareSourceCode',
+			name: repo.repo,
+			codeRepository: repo.repositoryUrl,
+			programmingLanguage: repo.language,
+		},
 	}));
 
 	return [...clientWork, ...sideProjects, ...openSource];

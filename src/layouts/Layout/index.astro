@@ -12,8 +12,15 @@ import barlow800 from "@fontsource/barlow/files/barlow-latin-800-normal.woff2?ur
 import { SEO } from "astro-seo";
 import { Schema } from "astro-seo-schema";
 
-import { PERSON_ID, personalSchema, SITE_URL } from "@/data/personalSchema";
+import {
+	PERSON_ID,
+	personalSchema,
+	SITE_CREATED,
+	SITE_URL,
+	WEBSITE_ID,
+} from "@/data/personalSchema";
 import type { Work } from "@/data/worksSchema";
+import { getLastModified } from "@/utils/lastModified";
 
 import styles from "./styles.module.css";
 
@@ -27,7 +34,7 @@ interface Props {
 }
 
 const {
-	title = `${personalSchema.name} · ${personalSchema.jobTitle}`,
+	title = `${personalSchema.name} · ${personalSchema.jobProfile.name} en Jujuy, Argentina`,
 	description = "Galeed Gutierrez, desarrollador frontend en Jujuy, Argentina. React, Astro y TypeScript. Trabajo freelance, side projects, open source y contacto.",
 	noindex = false,
 	works = [],
@@ -49,6 +56,8 @@ const ogImage = {
 	height: 630,
 };
 const [firstName, ...lastNames] = personalSchema.name.split(" ");
+// Last content commit, not the build time (src/utils/lastModified.ts).
+const dateModified = getLastModified().toISOString();
 ---
 
 <!doctype html>
@@ -197,6 +206,8 @@ const [firstName, ...lastNames] = personalSchema.name.split(" ");
 			twitter={{
 				card: "summary_large_image",
 				creator: personalSchema.xHandle,
+				title,
+				description,
 				imageAlt: ogImage.alt,
 			}}
 		/>
@@ -210,13 +221,27 @@ const [firstName, ...lastNames] = personalSchema.name.split(" ");
 					"@context": "https://schema.org",
 					"@graph": [
 						{
+							"@type": "WebSite",
+							"@id": WEBSITE_ID,
+							url: `${SITE_URL}/`,
+							name: personalSchema.name,
+							alternateName: "galeed.link",
+							inLanguage: "es-AR",
+							publisher: { "@id": personId },
+						},
+						{
 							"@type": "ProfilePage",
 							"@id": `${SITE_URL}/#profile`,
 							url: canonical,
 							name: title,
 							description,
 							inLanguage: "es-AR",
-							dateModified: new Date().toISOString(),
+							isPartOf: { "@id": WEBSITE_ID },
+							dateCreated: SITE_CREATED,
+							dateModified,
+							mentions: works.map((work) => ({
+								"@id": work["@id"],
+							})),
 							mainEntity: {
 								"@type": "Person",
 								"@id": personId,
@@ -224,7 +249,7 @@ const [firstName, ...lastNames] = personalSchema.name.split(" ");
 								alternateName: personalSchema.alternateName,
 								givenName: firstName,
 								familyName: lastNames.join(" "),
-								url: SITE_URL,
+								url: `${SITE_URL}/`,
 								image: `${SITE_URL}/profile.webp`,
 								jobTitle: personalSchema.jobTitle,
 								description: personalSchema.description,
@@ -238,7 +263,8 @@ const [firstName, ...lastNames] = personalSchema.name.split(" ");
 								),
 								knowsAbout: personalSchema.skills,
 								knowsLanguage: "es",
-								alumniOf: personalSchema.studies.map(
+								// Still studying: alumniOf means "graduated from".
+								affiliation: personalSchema.studies.map(
 									({ school }) => school,
 								),
 								hasCredential: personalSchema.credentials,

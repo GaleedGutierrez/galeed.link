@@ -4,6 +4,10 @@
 export const SITE_URL = 'https://galeed.link';
 /** The Person node's `@id`: the works on the page point back to it. */
 export const PERSON_ID = `${SITE_URL}/#person`;
+/** The WebSite node's `@id`: the ProfilePage is part of it. */
+export const WEBSITE_ID = `${SITE_URL}/#website`;
+/** First commit of the site, for the ProfilePage `dateCreated`. */
+export const SITE_CREATED = '2025-07-13T21:59:58-03:00';
 
 export const personalSchema = {
 	name: 'Galeed Gutierrez',
@@ -16,8 +20,9 @@ export const personalSchema = {
 		addressRegion: 'Jujuy',
 		addressCountry: 'AR',
 	},
-	// Current studies. The JSON-LD lists the schools (alumniOf); /llms.txt
-	// also names the programs (as prose, with their article).
+	// Current studies. The JSON-LD lists the schools as `affiliation`
+	// (`alumniOf` means graduated from); /llms.txt also names the programs
+	// (as prose, with their article).
 	studies: [
 		{
 			program: 'la carrera de Analista Programador Universitario',
@@ -60,14 +65,14 @@ export const personalSchema = {
 		'Astro',
 		'Vitest',
 		'Playwright',
-		'Vite',
+		'Node.js',
 		'Accesibilidad web',
 	],
 	// galeed.dev is owned but has no content yet: add it to sameAs once it
 	// is published, not before (an empty site weakens the identity match).
 	socialLinks: {
 		github: 'https://github.com/galeedgutierrez',
-		linkedin: 'https://linkedin.com/in/galeedgutierrez',
+		linkedin: 'https://www.linkedin.com/in/galeedgutierrez',
 		x: 'https://x.com/gutierrezgaleed',
 		personalWebsite: 'https://galeedgutierrez.com',
 	},
