@@ -270,23 +270,26 @@ const processCSSFile = async (cssFile: string): Promise<number | undefined> => {
 	logMessage(`📂 Processing: ${cssFile} (${beforeSize})`);
 
 	try {
-		const purgeCSSResult = await new PurgeCSS().purge({
+		// Pass the CSS as raw text: PurgeCSS 9 globs `css` paths, and a
+		// Windows path (D:\…) matches nothing, so it returned no result.
+		const purgeResults = await new PurgeCSS().purge({
 			...purgeCssConfig,
-			css: [cssFilePath],
+			css: [{ raw: fs.readFileSync(cssFilePath, 'utf8') }],
 		});
+		const purged = purgeResults.at(0);
+
+		if (!purged) {
+			throw new Error(`PurgeCSS returned no result for ${cssFile}`);
+		}
 
 		logMessage(`✅ PurgeCSS completed for ${cssFile}`);
 
-		if (purgeCSSResult[0]) {
-			const validPlugins = getValidPostCSSPlugins(postcssConfig.plugins);
+		const validPlugins = getValidPostCSSPlugins(postcssConfig.plugins);
+		const result = await postcss(validPlugins).process(purged.css, {
+			from: undefined,
+		});
 
-			const result = await postcss(validPlugins).process(
-				purgeCSSResult[0].css,
-				{ from: undefined },
-			);
-
-			fs.writeFileSync(cssFilePath, result.css);
-		}
+		fs.writeFileSync(cssFilePath, result.css);
 
 		const afterSize = calculateFileSize(cssFilePath);
 		const afterBytes = fs.statSync(cssFilePath).size;
