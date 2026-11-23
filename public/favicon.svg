@@ -1,8 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 	<title>G</title>
-	<!-- Charcoal disc (charcoal-950), HEV-orange ring and G (hev-400).
-	     The disc keeps the orange readable on light and dark tab strips. -->
-	<circle cx="32" cy="32" r="32" fill="#141414"/>
-	<circle cx="32" cy="32" r="26" fill="none" stroke="#ff862c" stroke-width="4"/>
-	<path d="M41.9 20.9A15 15 0 1 0 47 32H33" fill="none" stroke="#ff862c" stroke-width="7" stroke-linejoin="miter"/>
+	<!-- Follows the browser's color scheme, not the site toggle: the icon sits
+	     in the browser's tab strip. See DESIGN_SYSTEM.md §2.4.
+	     Both are AAA (≥ 7:1), mark on disc. The ring's outer edge (r 28) stays
+	     inside the disc (r 32), so the tab strip never touches the mark.
+	     Dark (default, matches the .ico and PNGs): hev-400 on charcoal-950,
+	     7.63:1.
+	     Light: hev-text-l on bone-50, 7.78:1. hev-400 on bone-50 is only
+	     2.13:1. -->
+	<style>
+		.disc { fill: #141414; }
+		.mark { stroke: #ff862c; }
+		@media (prefers-color-scheme: light) {
+			.disc { fill: #f5f0e6; }
+			.mark { stroke: #7f3300; }
+		}
+	</style>
+	<circle class="disc" cx="32" cy="32" r="32"/>
+	<circle class="mark" cx="32" cy="32" r="26" fill="none" stroke-width="4"/>
+	<path class="mark" d="M41.9 20.9A15 15 0 1 0 47 32H33" fill="none" stroke-width="7" stroke-linejoin="miter"/>
 </svg>
