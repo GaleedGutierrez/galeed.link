@@ -1,0 +1,6 @@
+.contact__lead {
+	max-inline-size: var(--max-w-measure);
+	color: var(--text-color-secondary);
+
+	@mixin body-lg;
+}

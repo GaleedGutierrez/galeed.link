@@ -1,0 +1,43 @@
+---
+import Chip from "@components/Chip/index.astro";
+import styles from "@components/LinkCard/styles.module.css";
+import { Icon } from "astro-icon/components";
+
+import type { RepoItem } from "@/types/designTokens";
+
+interface Props {
+	item: RepoItem;
+}
+
+const { item } = Astro.props;
+---
+
+<a
+	class:list={["relative flex flex-col gap-2 p-4", styles["link-card"]]}
+	href={item.href}
+	rel="noopener"
+	target="_blank"
+>
+	<span class="flex items-start justify-between gap-3">
+		<span class={styles["link-card__repo"]}>{item.repo}</span>
+		<Icon
+			aria-hidden="true"
+			class={styles["link-card__icon"]}
+			name="lucide:arrow-up-right"
+			size={18}
+		/>
+	</span>
+	<span class={styles["link-card__description"]}>{item.description}</span>
+	<span class="flex flex-wrap gap-2">
+		{item.chips.map((chip) => <Chip label={chip} />)}
+		{
+			item.status && (
+				<Chip
+					label={item.status.label}
+					tone={item.status.tone}
+				/>
+			)
+		}
+	</span>
+	<span class="sr-only">(se abre en una pestaña nueva)</span>
+</a>

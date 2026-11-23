@@ -1,0 +1,43 @@
+.tile-card {
+	border-radius: var(--border-radius-1);
+	color: var(--text-color-primary);
+}
+
+.tile-card__media {
+	border: var(--border-025) solid var(--border-color-primary);
+	border-radius: var(--border-radius-1);
+	background-color: var(--background-color-tertiary);
+
+	& img {
+		@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+			transition: scale var(--duration-slow) var(--ease-out);
+
+			.tile-card:hover & {
+				scale: 1.03;
+			}
+		}
+	}
+}
+
+.tile-card__initial {
+	color: var(--text-color-tertiary);
+
+	@mixin heading-xl;
+}
+
+.tile-card__title {
+	@mixin body-md var(--fw-bold);
+}
+
+.tile-card__meta {
+	color: var(--text-color-tertiary);
+
+	@mixin micro;
+}
+
+.tile-card__description {
+	color: var(--text-color-secondary);
+	hyphens: auto;
+
+	@mixin body-sm;
+}

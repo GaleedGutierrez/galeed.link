@@ -1,0 +1,35 @@
+---
+import { Icon } from "astro-icon/components";
+
+import type { StatusTone } from "@/types/designTokens";
+
+interface Props {
+	label: string;
+	/** A status chip: tone + dot. The label always states the status. */
+	tone?: StatusTone;
+	icon?: string;
+}
+
+const { label, tone, icon } = Astro.props;
+---
+
+<span class:list={["a-chip", tone && `a-chip--${tone}`]}>
+	{
+		tone && (
+			<span
+				aria-hidden="true"
+				class="a-chip__dot"
+			/>
+		)
+	}
+	{
+		icon && (
+			<Icon
+				aria-hidden="true"
+				name={icon}
+				size={14}
+			/>
+		)
+	}
+	<span class="a-chip__label">{label}</span>
+</span>

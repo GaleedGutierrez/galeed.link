@@ -1,0 +1,21 @@
+.system-bar {
+	border-block-end: var(--border-05) solid var(--border-color-accent);
+	background-color: var(--background-color-secondary);
+}
+
+.system-bar__meta {
+	overflow: hidden;
+	min-inline-size: 0;
+	color: var(--text-color-tertiary);
+	white-space: nowrap;
+	text-overflow: ellipsis;
+
+	@mixin micro;
+}
+
+.system-bar__status {
+	display: inline-flex;
+	gap: calc(6 * var(--rem-scale));
+	align-items: center;
+	color: var(--text-color-success);
+}

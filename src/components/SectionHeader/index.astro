@@ -1,0 +1,54 @@
+---
+import { Icon } from "astro-icon/components";
+
+import styles from "./styles.module.css";
+
+interface Props {
+	id: string;
+	index: string;
+	title: string;
+	isFirst?: boolean;
+	action?: {
+		href: string;
+		label: string;
+		/** Read before the label, so the link name is specific (SC 2.4.9). */
+		srContext: string;
+	};
+}
+
+const { id, index, title, isFirst = false, action } = Astro.props;
+---
+
+<header
+	class:list={[
+		"flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1",
+		!isFirst && ["pt-6", styles["section-header"]],
+	]}
+>
+	<h2 id={id}>
+		<span
+			aria-hidden="true"
+			class={styles["section-header__index"]}
+			>{index}</span
+		>{title}
+	</h2>
+	{
+		action && (
+			<a
+				class="a-link-action"
+				href={action.href}
+				rel="noopener"
+				target="_blank"
+			>
+				<span class="sr-only">{action.srContext}</span>
+				{action.label}
+				<Icon
+					aria-hidden="true"
+					class="a-link-action__icon"
+					name="lucide:arrow-up-right"
+				/>
+				<span class="sr-only">(se abre en una pestaña nueva)</span>
+			</a>
+		)
+	}
+</header>

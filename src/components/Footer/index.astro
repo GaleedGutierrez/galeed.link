@@ -1,0 +1,34 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { PROFILE } from "@/data/hub";
+
+import styles from "./styles.module.css";
+
+const year = new Date().getFullYear();
+---
+
+<footer
+	class:list={[
+		"mt-8 flex flex-col items-center gap-1 px-4 pb-4 pt-8",
+		styles["footer"],
+	]}
+>
+	<p class={styles["footer__line"]}>
+		© {year}
+		{PROFILE.name}
+		<span aria-hidden="true"> λ </span>
+		Hecho con Astro
+	</p>
+	<a
+		class="a-link-action"
+		href="#top"
+	>
+		Volver arriba
+		<Icon
+			aria-hidden="true"
+			class="a-link-action__icon"
+			name="lucide:arrow-up"
+		/>
+	</a>
+</footer>

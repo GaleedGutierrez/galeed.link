@@ -1,20 +1,161 @@
 ---
-import Bio from "@components/Bio.astro";
+import Bio from "@components/Bio/index.astro";
+import Contact from "@components/Contact/index.astro";
+import Footer from "@components/Footer/index.astro";
 import Hero from "@components/Hero/index.astro";
+import LinkCard from "@components/LinkCard/index.astro";
 import Navbar from "@components/Navbar/index.astro";
+import RepoCard from "@components/RepoCard/index.astro";
+import SectionHeader from "@components/SectionHeader/index.astro";
+import SystemBar from "@components/SystemBar/index.astro";
+import TileCard from "@components/TileCard/index.astro";
 import Layout from "@layouts/Layout/index.astro";
 
-import styles from "./_styles.module.css";
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import {
+	freelanceItems,
+	getProjectTiles,
+	PROFILE,
+	repoItems,
+} from "@/data/hub";
+
+const projectTiles = await getProjectTiles();
+
+// A section without content is left out of the page and the nav.
+const sections = [
+	{ id: "bio", label: "Bio", title: "Bio", isVisible: true },
+	{
+		id: "freelance",
+		label: "Freelance",
+		title: "Trabajo freelance",
+		isVisible: freelanceItems.length > 0,
+	},
+	{
+		id: "proyectos",
+		label: "Proyectos",
+		title: "Side projects",
+		isVisible: projectTiles.length > 0,
+	},
+	{
+		id: "open-source",
+		label: "Open source",
+		title: "Open source",
+		isVisible: repoItems.length > 0,
+	},
+	{ id: "contacto", label: "Contacto", title: "Contacto", isVisible: true },
+]
+	.filter((section) => section.isVisible)
+	.map((section, position) => ({
+		...section,
+		index: String(position + 1).padStart(2, "0"),
+		isFirst: position === 0,
+	}));
+
+const section = Object.fromEntries(sections.map((item) => [item.id, item]));
 ---
 
 <Layout>
-	<main class="pb-8">
-		<Hero />
-		<div class={`${styles.main__navbar} mt-2`}>
-			<Navbar />
-		</div>
-		<Bio />
+	<SystemBar />
+	<Hero />
+	<Navbar sections={sections} />
+	<main
+		class="mt-6 flex flex-col gap-8"
+		id="main"
+	>
+		{
+			section.bio && (
+				<section
+					aria-labelledby="bio"
+					class="flex flex-col gap-4 px-4"
+				>
+					<SectionHeader {...section.bio} />
+					<Bio />
+				</section>
+			)
+		}
+		{
+			section.freelance && (
+				<section
+					aria-labelledby="freelance"
+					class="flex flex-col gap-4 px-4"
+				>
+					<SectionHeader {...section.freelance} />
+					<ul
+						class="flex flex-col gap-4"
+						role="list"
+					>
+						{freelanceItems.map((item, position) => (
+							<li>
+								<LinkCard
+									index={String(position + 1).padStart(
+										2,
+										"0",
+									)}
+									item={item}
+								/>
+							</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
+		{
+			section.proyectos && (
+				<section
+					aria-labelledby="proyectos"
+					class="flex flex-col gap-4 px-4"
+				>
+					<SectionHeader
+						{...section.proyectos}
+						action={{
+							href: PROFILE.portfolioUrl,
+							label: "Ver todos",
+							srContext: "Proyectos: ",
+						}}
+					/>
+					<ul
+						class="grid grid-cols-2 gap-3"
+						role="list"
+					>
+						{projectTiles.map((item) => (
+							<li class:list={[item.featured && "col-span-full"]}>
+								<TileCard item={item} />
+							</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
+		{
+			section["open-source"] && (
+				<section
+					aria-labelledby="open-source"
+					class="flex flex-col gap-4 px-4"
+				>
+					<SectionHeader {...section["open-source"]} />
+					<ul
+						class="flex flex-col gap-4"
+						role="list"
+					>
+						{repoItems.map((item) => (
+							<li>
+								<RepoCard item={item} />
+							</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
+		{
+			section.contacto && (
+				<section
+					aria-labelledby="contacto"
+					class="flex flex-col gap-4 px-4"
+				>
+					<SectionHeader {...section.contacto} />
+					<Contact />
+				</section>
+			)
+		}
 	</main>
+	<Footer />
 </Layout>

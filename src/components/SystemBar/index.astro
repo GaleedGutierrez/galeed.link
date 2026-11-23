@@ -1,0 +1,33 @@
+---
+import ThemeToggle from "@components/ThemeToggle/index.astro";
+
+import { PROFILE } from "@/data/hub";
+
+import styles from "./styles.module.css";
+---
+
+<div
+	class:list={[
+		"flex min-h-12 items-center justify-between gap-4 px-4",
+		styles["system-bar"],
+	]}
+>
+	<p class={styles["system-bar__meta"]}>
+		{PROFILE.location}
+		{
+			PROFILE.isAvailable && (
+				<>
+					<span aria-hidden="true"> · </span>
+					<span class={styles["system-bar__status"]}>
+						<span
+							aria-hidden="true"
+							class="a-chip__dot"
+						/>
+						Disponible
+					</span>
+				</>
+			)
+		}
+	</p>
+	<ThemeToggle />
+</div>

@@ -1,0 +1,76 @@
+---
+import Chip from "@components/Chip/index.astro";
+import { Icon } from "astro-icon/components";
+
+import type { LinkItem } from "@/types/designTokens";
+
+import styles from "./styles.module.css";
+
+interface Props {
+	item: LinkItem;
+	index: string;
+}
+
+const { item, index } = Astro.props;
+const isLink = Boolean(item.href);
+const Tag = isLink ? "a" : "div";
+const linkProps = isLink
+	? {
+			href: item.href,
+			...(item.external && { rel: "noopener", target: "_blank" }),
+		}
+	: {};
+---
+
+<Tag
+	class:list={[
+		"relative grid min-h-14 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 px-4 py-3",
+		styles["link-card"],
+	]}
+	{...linkProps}
+>
+	<span
+		aria-hidden="true"
+		class={styles["link-card__index"]}
+		>{index}</span
+	>
+	<span class="flex min-w-0 flex-col gap-1">
+		<span class={styles["link-card__title"]}>{item.title}</span>
+		<span
+			class:list={[
+				"flex flex-wrap items-center gap-2",
+				styles["link-card__meta"],
+			]}
+		>
+			{item.meta && <span>{item.meta}</span>}
+			{
+				item.status && (
+					<Chip
+						label={item.status.label}
+						tone={item.status.tone}
+					/>
+				)
+			}
+			{item.chips?.map((chip) => <Chip label={chip} />)}
+		</span>
+	</span>
+	{
+		isLink && (
+			<Icon
+				aria-hidden="true"
+				class={styles["link-card__icon"]}
+				name={
+					item.external
+						? "lucide:arrow-up-right"
+						: "lucide:arrow-right"
+				}
+				size={18}
+			/>
+		)
+	}
+	{
+		item.external && (
+			<span class="sr-only">(se abre en una pestaña nueva)</span>
+		)
+	}
+</Tag>

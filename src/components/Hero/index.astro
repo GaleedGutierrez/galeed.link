@@ -1,60 +1,30 @@
 ---
-import SocialMediaLink from "@components/SocialMediaLink/index.astro";
+import SocialLinks from "@components/SocialLinks/index.astro";
 import authorPhoto from "@images/me/jpg/me.jpg";
 import { Picture } from "astro:assets";
 
-import styles from "./styles.module.css";
+import { PROFILE } from "@/data/hub";
 
-const socialMediaLinks = [
-	{
-		href: "https://linkedin.com/in/galeedgutierrez",
-		icon: "lucide:linkedin",
-		label: "LinkedIn",
-	},
-	{
-		href: "https://x.com/gutierrezgaleed",
-		icon: "lucide:twitter",
-		label: "Twitter",
-	},
-	{
-		href: "https://github.com/galeedgutierrez",
-		icon: "lucide:github",
-		label: "GitHub",
-	},
-	{
-		href: "https://galeedgutierrez.com",
-		icon: "lucide:globe",
-		label: "Web",
-	},
-];
+import styles from "./styles.module.css";
 ---
 
-<section class={styles["hero"]}>
-	<div class={styles["hero__image-container"]}>
-		<div class={styles["hero__image-gradient"]}></div>
+<header class="flex flex-col">
+	<div class={styles["hero__portrait"]}>
 		<Picture
-			alt="Galeed Gutierrez foto de perfil."
-			class={styles["hero__image"]}
-			formats={["avif", "webp", "jpg"]}
-			layout="constrained"
-			loading={"eager"}
-			priority
+			alt={`Retrato de ${PROFILE.name}.`}
+			class:list={[
+				"aspect-[5/4] w-full sm:aspect-square",
+				styles["hero__image"],
+			]}
+			fetchpriority="high"
+			formats={["avif", "webp"]}
+			loading="eager"
+			sizes="(min-width: 40em) 480px, 100vw"
 			src={authorPhoto}
+			widths={[375, 480, 960]}
 		/>
 	</div>
-	<div class={styles["hero__text-container"]}>
-		<h1 class={styles["hero__title"]}>Galeed Gutierrez</h1>
-		<h2 class={styles["hero__subtitle"]}>Frontend developer</h2>
-	</div>
-	<div class={styles["hero__socials"]}>
-		{
-			socialMediaLinks.map((socialMedia) => (
-				<SocialMediaLink
-					href={socialMedia.href}
-					icon={socialMedia.icon}
-					label={socialMedia.label}
-				/>
-			))
-		}
-	</div>
-</section>
+	<h1 class:list={["px-4", styles["hero__name"]]}>{PROFILE.name}</h1>
+	<p class:list={["mt-2 px-4", styles["hero__role"]]}>{PROFILE.role}</p>
+	<SocialLinks class="mt-6" />
+</header>

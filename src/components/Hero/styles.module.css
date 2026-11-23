@@ -1,56 +1,40 @@
-.hero__image-container {
+.hero__portrait {
 	position: relative;
 
-	.hero__image-gradient {
+	&::after {
 		position: absolute;
 		inset: 0;
-		z-index: var(--z-index-1-screen-foreground);
-		block-size: 100%;
-		inline-size: 100%;
 		background: linear-gradient(
-			180deg,
-			var(--slate-50-opacity-0) 65%,
-			var(--background-color-primary) 98%
+			to bottom,
+			transparent 55%,
+			var(--background-color-secondary)
 		);
-	}
-}
+		content: "";
+		pointer-events: none;
 
-.hero__image {
-	filter: grayscale(1);
-	aspect-ratio: 1 / 1;
-
-	/* var(--screen-tablet) */
-	@media screen and (width >= 768px) {
-		& {
-			border-start-start-radius: var(--border-radius-4);
-			border-start-end-radius: var(--border-radius-4);
+		/* Decorative: drop it rather than draw a system-color gradient (§6.6). */
+		@media (forced-colors: active) {
+			display: none;
 		}
 	}
 }
 
-.hero__text-container {
-	display: flex;
-	flex-direction: column;
-	gap: var(--spacing-2);
-
-	.hero__title {
-		letter-spacing: -0.144px;
-		text-align: center;
-	}
-
-	.hero__subtitle {
-		color: var(--text-color-secondary);
-		font-weight: var(--fw-medium);
-		text-align: center;
-		text-transform: capitalize;
-	}
+.hero__image {
+	object-fit: cover;
+	object-position: 50% 20%;
+	border-radius: var(--border-radius-0);
 }
 
-.hero__socials {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	gap: var(--spacing-8);
-	inline-size: min-content;
-	margin-inline: auto;
-	margin-block-start: var(--spacing-5);
+.hero__name {
+	position: relative;
+	margin-block-start: calc(var(--spacing-6) * -1);
+	text-align: center;
+}
+
+.hero__role {
+	overflow-wrap: anywhere;
+	color: var(--text-color-secondary);
+	text-align: center;
+
+	@mixin heading-md;
 }

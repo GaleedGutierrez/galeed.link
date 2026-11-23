@@ -1,11 +1,31 @@
-.main {
-	max-width: var(--max-w-md);
+.shell {
+	overflow: clip;
+	inline-size: 100%;
+	max-inline-size: var(--max-w-shell);
 	margin-inline: auto;
+	background-color: var(--background-color-secondary);
 
-	/* var(--screen-tablet) */
-	@media screen and (width >= 768px) {
-		& {
-			border-radius: var(--border-radius-4);
+	@media (width >= 40em) {
+		border: var(--border-025) solid var(--border-color-primary);
+		border-radius: var(--border-radius-2);
+		margin-block: var(--spacing-8);
+		box-shadow: var(--box-shadow-shell-light);
+
+		/* light-dark() takes colors only, so the theme is matched here. It sets
+		   box-shadow directly (not a token override), so the build's
+		   postcss-custom-properties step can't inline it away (§9.1). */
+		:root[data-theme="dark"] & {
+			box-shadow: var(--box-shadow-shell-dark);
 		}
+
+		@media (prefers-color-scheme: dark) {
+			:root:not([data-theme]) & {
+				box-shadow: var(--box-shadow-shell-dark); /* no-JS */
+			}
+		}
+	}
+
+	@media (width >= 48em) {
+		margin-block: var(--spacing-12);
 	}
 }

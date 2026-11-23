@@ -1,0 +1,94 @@
+/* Shared by LinkCard and RepoCard. Interactive states only apply to links
+   (:any-link), so a private project renders as a quiet static block. */
+.link-card {
+	border: var(--border-025) solid var(--border-color-primary);
+	border-radius: var(--border-radius-1);
+	background-color: var(--background-color-tertiary);
+	color: var(--text-color-primary);
+	transition:
+		border-color var(--duration-base) var(--ease-standard),
+		background-color var(--duration-base) var(--ease-standard);
+
+	&:any-link {
+		/* Accent bar: reaches its final state instantly under `reduce` */
+		&::before {
+			position: absolute;
+			inset-block: -1px;
+			inset-inline-start: -1px;
+			inline-size: var(--border-05);
+			background-color: var(--background-color-indicator);
+			transform-origin: bottom;
+			content: "";
+			scale: 1 0;
+
+			@media (prefers-reduced-motion: no-preference) {
+				transition: scale var(--duration-slow) var(--ease-out);
+			}
+		}
+
+		&:hover {
+			border-color: var(--border-color-hover-accent);
+		}
+
+		&:is(:hover, :focus-visible)::before {
+			scale: 1;
+		}
+
+		&:active {
+			background-color: var(--background-color-accent-subtle);
+		}
+
+		@media (forced-colors: active) {
+			&::before {
+				border-inline-start: var(--border-05) solid Highlight;
+				background: none;
+			}
+		}
+	}
+}
+
+.link-card__title {
+	@mixin body-md var(--fw-bold);
+}
+
+.link-card__meta,
+.link-card__index {
+	color: var(--text-color-tertiary);
+
+	@mixin micro;
+}
+
+.link-card__repo {
+	overflow-wrap: anywhere;
+	color: var(--text-color-primary);
+	font-family: var(--font-mono);
+	font-size: var(--f-body-sm);
+	font-weight: var(--fw-medium);
+}
+
+.link-card__description {
+	color: var(--text-color-secondary);
+
+	@mixin body-sm;
+}
+
+/* Icon: color feedback always; the spatial nudge only with hover + motion */
+.link-card__icon {
+	flex-shrink: 0;
+	color: var(--text-color-tertiary);
+	transition: color var(--duration-fast) var(--ease-standard);
+
+	.link-card:is(:hover, :focus-visible) & {
+		color: var(--text-color-accent);
+	}
+
+	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+		transition:
+			color var(--duration-fast) var(--ease-standard),
+			translate var(--duration-base) var(--ease-out);
+
+		.link-card:hover & {
+			translate: 2px 0;
+		}
+	}
+}

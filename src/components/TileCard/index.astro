@@ -1,0 +1,67 @@
+---
+import { Picture } from "astro:assets";
+
+import type { TileItem } from "@/types/designTokens";
+
+import styles from "./styles.module.css";
+
+interface Props {
+	item: TileItem;
+}
+
+const { item } = Astro.props;
+const sizes = item.featured
+	? "(min-width: 40em) 448px, calc(100vw - 32px)"
+	: "(min-width: 40em) 218px, calc(50vw - 22px)";
+---
+
+<a
+	class:list={["flex flex-col gap-2", styles["tile-card"]]}
+	href={item.href}
+	rel="noopener"
+	target="_blank"
+>
+	<figure
+		class:list={[
+			"relative overflow-hidden",
+			item.featured ? "aspect-video" : "aspect-square",
+			styles["tile-card__media"],
+		]}
+	>
+		{
+			item.image ? (
+				<Picture
+					alt={item.alt}
+					class="h-full w-full object-cover object-top"
+					formats={["avif", "webp"]}
+					loading="lazy"
+					sizes={sizes}
+					src={item.image}
+					widths={[240, 480, 960]}
+				/>
+			) : (
+				<span
+					aria-hidden="true"
+					class:list={[
+						"grid h-full place-items-center",
+						styles["tile-card__initial"],
+					]}
+				>
+					{item.title.charAt(0)}
+				</span>
+			)
+		}
+	</figure>
+	<span class={styles["tile-card__title"]}>{item.title}</span>
+	{item.meta && <span class={styles["tile-card__meta"]}>{item.meta}</span>}
+	{
+		item.description && (
+			<span
+				class:list={["line-clamp-3", styles["tile-card__description"]]}
+			>
+				{item.description}
+			</span>
+		)
+	}
+	<span class="sr-only">(se abre en una pestaña nueva)</span>
+</a>

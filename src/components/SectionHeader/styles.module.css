@@ -1,0 +1,10 @@
+.section-header {
+	border-block-start: var(--border-025) solid var(--border-color-primary);
+}
+
+.section-header__index {
+	margin-inline-end: var(--spacing-2);
+	color: var(--text-color-accent);
+
+	@mixin micro;
+}

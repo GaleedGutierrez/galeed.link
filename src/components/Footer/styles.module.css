@@ -1,0 +1,10 @@
+.footer {
+	border-block-start: var(--border-025) solid var(--border-color-primary);
+	text-align: center;
+}
+
+.footer__line {
+	color: var(--text-color-tertiary);
+
+	@mixin micro;
+}

@@ -1,46 +1,74 @@
 ---
 import styles from "./styles.module.css";
+
+export interface NavSection {
+	id: string;
+	label: string;
+}
+
+interface Props {
+	sections: NavSection[];
+}
+
+const { sections } = Astro.props;
 ---
 
 <nav
-	aria-label="Navegación principal"
-	class={styles.navbar}
+	aria-label="Secciones"
+	class:list={["lg:(sticky top-0) mt-6", styles["navbar"]]}
 >
-	<ul class={styles.navbar__list}>
-		<li class={styles.navbar__item}>
-			<a
-				class={styles.navbar__link}
-				href="#bio"
-				>Bio</a
-			>
-		</li>
-		<li class={styles.navbar__item}>
-			<a
-				class={styles.navbar__link}
-				href="#blog"
-				>Trabajo freelance</a
-			>
-		</li>
-		<li class={styles.navbar__item}>
-			<a
-				class={styles.navbar__link}
-				href="#about"
-				>Side projects</a
-			>
-		</li>
-		<li class={styles.navbar__item}>
-			<a
-				class={styles.navbar__link}
-				href="#open-source"
-				>Open source</a
-			>
-		</li>
-		<li class={styles.navbar__item}>
-			<a
-				class={styles.navbar__link}
-				href="#contact"
-				>Contacto</a
-			>
-		</li>
+	<ul
+		class="flex flex-wrap justify-center gap-x-1 px-4"
+		role="list"
+	>
+		{
+			sections.map((section) => (
+				<li>
+					<a
+						class:list={[
+							"relative inline-flex min-h-11 items-center px-3",
+							styles["navbar__link"],
+						]}
+						data-nav-link
+						href={`#${section.id}`}
+					>
+						{section.label}
+					</a>
+				</li>
+			))
+		}
 	</ul>
 </nav>
+<script>
+	// Mark the section in view as current (§7.5).
+	const links = [
+		...document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]"),
+	];
+
+	const observer = new IntersectionObserver(
+		(entries) => {
+			for (const entry of entries) {
+				if (!entry.isIntersecting) {
+					continue;
+				}
+
+				for (const link of links) {
+					if (link.hash === `#${entry.target.id}`) {
+						link.setAttribute("aria-current", "true");
+					} else {
+						link.removeAttribute("aria-current");
+					}
+				}
+			}
+		},
+		{ rootMargin: "-40% 0px -55% 0px" },
+	);
+
+	for (const link of links) {
+		const target = document.querySelector(link.hash);
+
+		if (target) {
+			observer.observe(target);
+		}
+	}
+</script>

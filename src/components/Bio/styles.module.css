@@ -1,0 +1,19 @@
+.bio__heading {
+	color: var(--text-color-tertiary);
+}
+
+.bio__item {
+	color: var(--text-color-primary);
+
+	@mixin body-md;
+}
+
+.bio__icon {
+	flex-shrink: 0;
+	margin-block-start: calc(3 * var(--rem-scale));
+	color: var(--text-color-tertiary);
+}
+
+.bio__rule {
+	background-color: var(--border-color-primary);
+}

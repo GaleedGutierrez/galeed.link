@@ -1,21 +1,95 @@
 ---
+import "@fontsource/barlow/400.css";
+import "@fontsource/barlow/500.css";
+import "@fontsource/barlow/700.css";
+import "@fontsource/barlow/800.css";
+import "@fontsource-variable/jetbrains-mono";
 import "@styles/index.css";
 
+import barlow400 from "@fontsource/barlow/files/barlow-latin-400-normal.woff2?url";
+import barlow800 from "@fontsource/barlow/files/barlow-latin-800-normal.woff2?url";
 import { Schema } from "astro-seo-schema";
 
 import { personalSchema } from "@/data/personalSchema";
 
 import styles from "./styles.module.css";
-// import { SEO } from "astro-seo";
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = "Galeed Gutierrez · Frontend developer",
+	description = "Frontend developer en Jujuy, Argentina. Trabajo freelance, side projects, open source y contacto.",
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="es">
 	<head>
-		<meta charset="utf8" />
+		<meta charset="utf-8" />
 		<meta
-			content="width=device-width"
+			content="width=device-width, initial-scale=1"
 			name="viewport"
+		/>
+		<!-- Follow the OS text size. Requires never setting font-size on html. -->
+		<meta
+			content="scale"
+			name="text-scale"
+		/>
+		<meta
+			content="light dark"
+			name="color-scheme"
+		/>
+		<meta
+			content="#ede6d8"
+			media="(prefers-color-scheme: light)"
+			name="theme-color"
+		/>
+		<meta
+			content="#141414"
+			media="(prefers-color-scheme: dark)"
+			name="theme-color"
+		/>
+		<!-- Resolve the theme before first paint (DESIGN_SYSTEM.md §2.2). -->
+		<script is:inline>
+			(() => {
+				const KEY = "galeed:theme";
+				const root = document.documentElement;
+				let pref = "system";
+				try {
+					const stored = localStorage.getItem(KEY);
+					if (stored === "light" || stored === "dark") pref = stored;
+				} catch {
+					/* storage blocked: stay on system */
+				}
+				const resolved =
+					pref === "system"
+						? window.matchMedia("(prefers-color-scheme: dark)")
+								.matches
+							? "dark"
+							: "light"
+						: pref;
+				// setAttribute (not dataset): PurgeCSS must see "data-theme".
+				root.setAttribute("data-theme", resolved);
+				root.setAttribute("data-theme-pref", pref);
+				root.style.colorScheme = resolved;
+			})();
+		</script>
+		<link
+			as="font"
+			crossorigin
+			href={barlow400}
+			rel="preload"
+			type="font/woff2"
+		/>
+		<link
+			as="font"
+			crossorigin
+			href={barlow800}
+			rel="preload"
+			type="font/woff2"
 		/>
 		<link
 			href="/favicon.svg"
@@ -26,30 +100,10 @@ import styles from "./styles.module.css";
 			href="/sitemap-index.xml"
 			rel="sitemap"
 		/>
-		<!-- <SEO
-			title="Galeed Gutierrez"
-			titleTemplate="%s | Galeed Gutierrez"
-			titleDefault="Galeed Gutierrez"
-			description="Frontend developer especializado en la creación de interfaces de usuario con un enfoque en el rendimiento y la accesibilidad."
-			canonical="https://galeed.link"
-			charset="utf8"
-			lang="es"
-			robots="index, follow"
-			openGraph={{
-				basic: {
-					title: "Galeed Gutierrez",
-					type: "website",
-					// image: ""
-				},
-				image: {
-					alt: "Galeed Gutierrez profile picture",
-				},
-			}}
-			canonical="/"
-			noindex={false}
-			nofollow={false}
-			surpressWarnings={true}
-		/> -->
+		<meta
+			content={description}
+			name="description"
+		/>
 		<Schema
 			item={{
 				"@context": "https://schema.org",
@@ -74,31 +128,20 @@ import styles from "./styles.module.css";
 				hasPart: personalSchema.relatedProjects,
 			}}
 		/>
-		<title>Galeed Gutierrez</title>
+		<title>{title}</title>
 	</head>
-	<body class="md:py-12">
+	<body>
+		<a
+			class="skip-link a-button a-button--primary"
+			href="#main"
+			>Saltar al contenido</a
+		>
 		<div
-			class={`${styles.main} shadow-xl dark:shadow-slate-50/20 flex flex-col`}
+			class={styles.shell}
+			id="top"
 		>
 			<slot />
 		</div>
-		<script>
-			import { loadFonts } from "@utils/loadFonts";
-
-			loadFonts(["1em Manrope"]);
-			const theme = window.matchMedia("(prefers-color-scheme: dark)");
-			if (theme.matches) {
-				document.documentElement.classList.add("dark");
-			}
-
-			theme.addEventListener("change", (event) => {
-				if (event.matches) {
-					document.documentElement.classList.add("dark");
-				} else {
-					document.documentElement.classList.remove("dark");
-				}
-			});
-		</script>
 		<script
 			defer
 			src={"https://www.googletagmanager.com/gtag/js?id=G-XEPRCKCX47"}

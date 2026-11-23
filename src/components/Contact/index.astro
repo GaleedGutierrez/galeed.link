@@ -1,0 +1,31 @@
+---
+import { PROFILE, SOCIAL_LINKS } from "@/data/hub";
+
+import styles from "./styles.module.css";
+
+const linkedin = SOCIAL_LINKS.find((link) => link.label === "LinkedIn");
+---
+
+<p class={styles["contact__lead"]}>
+	¿Tenés un proyecto en mente o una propuesta? Escribime y lo charlamos.
+</p>
+<div class="flex flex-wrap gap-3">
+	<a
+		class="a-button a-button--primary a-button--wipe"
+		href={`mailto:${PROFILE.email}`}
+		>Escribime</a
+	>
+	{
+		linkedin && (
+			<a
+				class="a-button a-button--secondary"
+				href={linkedin.href}
+				rel="me noopener"
+				target="_blank"
+			>
+				LinkedIn
+				<span class="sr-only">(se abre en una pestaña nueva)</span>
+			</a>
+		)
+	}
+</div>

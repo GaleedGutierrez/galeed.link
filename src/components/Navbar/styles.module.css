@@ -1,16 +1,48 @@
 .navbar {
-	overflow-x: scroll;
-	padding-block: var(--spacing-5);
-	padding-inline: var(--spacing-4);
-	scrollbar-width: none;
-}
-
-.navbar__list {
-	display: flex;
-	gap: var(--spacing-4);
-	width: max-content;
+	@media (width >= 64em) {
+		z-index: var(--z-index-10-sticky-nav);
+		border-block-end: var(--border-025) solid var(--border-color-primary);
+		background-color: var(--background-color-secondary);
+	}
 }
 
 .navbar__link {
-	color: var(--color-text-primary);
+	color: var(--text-color-secondary);
+	transition: color var(--duration-fast) var(--ease-standard);
+
+	&::after {
+		position: absolute;
+		inset-inline: var(--spacing-3);
+		inset-block-end: var(--spacing-2);
+		block-size: var(--border-05);
+		background-color: var(--background-color-indicator);
+		transform-origin: left;
+		content: "";
+		scale: 0 1;
+
+		@media (prefers-reduced-motion: no-preference) {
+			transition: scale var(--duration-slow) var(--ease-out);
+		}
+	}
+
+	&:is(:hover, :focus-visible, [aria-current="true"]) {
+		color: var(--text-color-primary);
+
+		&::after {
+			scale: 1;
+		}
+	}
+
+	@mixin label;
+
+	@media (forced-colors: active) {
+		&::after {
+			border-block-end: var(--border-05) solid CanvasText;
+			background: none;
+		}
+
+		&[aria-current="true"]::after {
+			border-color: Highlight;
+		}
+	}
 }
