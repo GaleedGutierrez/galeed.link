@@ -7,6 +7,7 @@ import {
 	hashSource,
 	inlineScripts,
 	inlineStyles,
+	PARTYTOWN_POLICY,
 } from '../scripts/csp.ts';
 
 /**
@@ -124,11 +125,27 @@ describe('applyPolicy', () => {
 		]);
 	});
 
-	it("detaches it from Partytown's files, after the rule that adds it", () => {
-		const detach = lines.indexOf('/~partytown/*');
+	it("gives Partytown's files their own CSP and HSTS, after the /* rule", () => {
+		const rule = lines.indexOf('/~partytown/*');
 
-		expect(detach).toBeGreaterThan(lines.indexOf('/*'));
-		expect(lines[detach + 1]).toBe(`  ! ${CSP_HEADER}`);
+		expect(rule).toBeGreaterThan(lines.indexOf('/*'));
+		// Each value is detached first, so a joined /* copy never doubles it.
+		expect(lines.slice(rule + 1, rule + 5)).toStrictEqual([
+			`  ! ${CSP_HEADER}`,
+			`  ${CSP_HEADER}: ${PARTYTOWN_POLICY}`,
+			'  ! Strict-Transport-Security',
+			'  Strict-Transport-Security: max-age=31536000',
+		]);
+	});
+
+	it("keeps the eval and inline exceptions to Partytown's policy", () => {
+		const directives = parse(PARTYTOWN_POLICY);
+
+		expect(directives.get('script-src')).toContain("'unsafe-eval'");
+		expect(directives.get('worker-src')).toStrictEqual(["'self'", 'blob:']);
+		// The page frames the sandbox; no other site may.
+		expect(directives.get('frame-ancestors')).toStrictEqual(["'self'"]);
+		expect(directives.get('object-src')).toStrictEqual(["'none'"]);
 	});
 
 	it('gives the same file when applied twice', () => {
