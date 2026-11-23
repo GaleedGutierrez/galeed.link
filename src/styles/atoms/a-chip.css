@@ -1,0 +1,51 @@
+.a-chip {
+	display: inline-flex;
+	gap: calc(6 * var(--rem-scale));
+	align-items: center;
+	min-block-size: var(--spacing-7);
+	max-inline-size: 100%;
+	padding-inline: var(--spacing-2);
+	border: var(--border-025) solid var(--border-color-primary);
+	border-radius: var(--border-radius-05);
+	background-color: var(--background-color-tertiary);
+	color: var(--text-color-secondary);
+	white-space: nowrap;
+
+	@mixin micro;
+}
+
+.a-chip--success {
+	color: var(--text-color-success);
+}
+
+.a-chip--warning {
+	color: var(--text-color-warning);
+}
+
+.a-chip--danger {
+	color: var(--text-color-danger);
+}
+
+.a-chip--info {
+	color: var(--text-color-info);
+}
+
+.a-chip__dot {
+	flex-shrink: 0;
+	block-size: calc(6 * var(--rem-scale));
+	inline-size: calc(6 * var(--rem-scale));
+	border-radius: var(--border-radius-circle);
+	background-color: currentcolor;
+
+	/* The text label carries the meaning; the dot just stays visible (§6.6). */
+	@media (forced-colors: active) {
+		forced-color-adjust: none;
+		background-color: CanvasText;
+	}
+}
+
+.a-chip__label {
+	overflow: hidden;
+	min-inline-size: 0;
+	text-overflow: ellipsis;
+}

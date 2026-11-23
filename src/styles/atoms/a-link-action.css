@@ -1,0 +1,27 @@
+.a-link-action {
+	display: inline-flex;
+	gap: calc(6 * var(--rem-scale));
+	align-items: center;
+	min-block-size: var(--spacing-11);
+	color: var(--text-color-accent);
+	transition: color var(--duration-fast) var(--ease-standard);
+
+	&:hover {
+		color: var(--text-color-hover-accent);
+	}
+
+	@mixin label;
+}
+
+.a-link-action__icon {
+	block-size: var(--spacing-4);
+	inline-size: var(--spacing-4);
+
+	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+		transition: translate var(--duration-base) var(--ease-out);
+
+		.a-link-action:hover & {
+			translate: 2px 0;
+		}
+	}
+}

@@ -1,58 +1,75 @@
 .a-button {
-	padding-block: var(--space-3);
-	padding-inline: var(--space-6);
-	border-radius: var(--border-radius-3);
-	color: var(--text-color-quaternary);
-	font-size: var(--f-title-sm);
-	font-weight: var(--fw-bold);
-	line-height: var(--lh-title-sm);
-	word-spacing: var(--ws-title-sm);
+	display: inline-flex;
+	gap: calc(10 * var(--rem-scale));
+	justify-content: center;
+	align-items: center;
+	min-block-size: var(--spacing-11);
+	padding-inline: var(--spacing-5);
+	border: var(--border-025) solid transparent;
+	border-radius: var(--border-radius-05);
+	transition:
+		background-color var(--duration-base) var(--ease-standard),
+		border-color var(--duration-base) var(--ease-standard),
+		color var(--duration-base) var(--ease-standard);
+	cursor: pointer;
+	user-select: none;
+	touch-action: manipulation;
+
+	&:active {
+		translate: 0 1px;
+	}
+
+	&:is(:disabled, [aria-disabled="true"]) {
+		cursor: not-allowed;
+		opacity: 0.45;
+		translate: none;
+	}
+
+	@mixin label;
 }
 
 .a-button--primary {
-	background-color: var(--background-tertiary);
+	background-color: var(--background-color-accent);
+	color: var(--text-color-on-accent);
 
-	&:hover {
-		background-color: var(--background-tertiary-hover);
-	}
-
-	&:active {
-		background-color: var(--background-tertiary);
+	&:not(:disabled, [aria-disabled="true"]):hover {
+		background-color: var(--background-color-hover-accent);
 	}
 }
 
 .a-button--secondary {
-	background-color: var(--background-septenary);
+	border-color: var(--border-color-strong);
+	background-color: transparent;
+	color: var(--text-color-primary);
 
-	&:hover {
-		background-color: var(--background-septenary-hover);
-	}
-
-	&:active {
-		background-color: var(--background-septenary);
-	}
-}
-
-.a-button--tertiary {
-	background-color: var(--background-senary);
-
-	&:hover {
-		background-color: var(--background-senary-hover);
-	}
-
-	&:active {
-		background-color: var(--background-senary);
+	&:not(:disabled, [aria-disabled="true"]):hover {
+		border-color: var(--background-color-inverse);
+		background-color: var(--background-color-inverse);
+		color: var(--text-color-inverse);
 	}
 }
 
-.a-button--quaternary {
-	background-color: var(--background-quaternary);
+/* Opt-in HL2 diagonal wipe: the single primary CTA only, motion users only.
+   Under `reduce` there is no ::before at all; the plain hover fill applies. */
+.a-button--wipe {
+	position: relative;
+	overflow: hidden;
+	isolation: isolate;
 
-	&:hover {
-		background-color: var(--background-quaternary-hover);
-	}
+	@media (prefers-reduced-motion: no-preference) {
+		&::before {
+			position: absolute;
+			inset: 0;
+			z-index: -1;
+			inline-size: 120%;
+			background-color: var(--background-color-hover-accent);
+			transition: transform var(--duration-slow) var(--ease-out);
+			transform: skewX(-33deg) translateX(-110%);
+			content: "";
+		}
 
-	&:active {
-		background-color: var(--background-quaternary);
+		&:is(:hover, :focus-visible)::before {
+			transform: skewX(-33deg) translateX(-10%);
+		}
 	}
 }
