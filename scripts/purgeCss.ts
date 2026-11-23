@@ -14,6 +14,11 @@ const distributionPath = path.join(import.meta.dirname, '..', 'dist');
 let beforeTotalSize = 0;
 const purgeCssConfig: Omit<UserDefinedOptions, 'css'> = {
 	content: ['dist/**/*.html', 'dist/**/*.js'],
+	// The default extractor splits on [ ] ( ) / , so UnoCSS arbitrary values
+	// (grid-cols-[1fr_1px_1fr], aspect-[5/4]) never matched and were purged.
+	// Same idea as Tailwind's extractor: any run of non-delimiters.
+	defaultExtractor: (content) =>
+		content.match(/[^\s"'`<>=]*[^\s"'`<>=:]/g) ?? [],
 	safelist: {
 		standard: [
 			'html',
@@ -33,18 +38,6 @@ const purgeCssConfig: Omit<UserDefinedOptions, 'css'> = {
 			/^lg:/,
 			/^xl:/,
 			/^2xl:/,
-
-			// Clases responsivas específicas
-			/^md\\:/,
-			/^lg\\:/,
-			/^xl\\:/,
-			/^2xl\\:/,
-
-			// Escapar caracteres especiales en nombres de clase
-			/\\:/,
-			/\\./,
-			/\\\[/,
-			/\\]/,
 
 			// Pseudo-clases básicas
 			/:hover$/,

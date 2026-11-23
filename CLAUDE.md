@@ -160,6 +160,10 @@ docs are English.
   entry by **attribute name** (`/^data-theme/`, `'aria-current'`). Patterns like
   `/^\[data-.*\]$/` or `/^@media/` match nothing. `fontFace` is off because it
   dropped the `Barlow Fallback` face.
+- `purgeCss.ts` has a custom `defaultExtractor`. The default one split UnoCSS
+  arbitrary values (`grid-cols-[1fr_1px_1fr]`, `aspect-[5/4]`) at the brackets,
+  so they were silently purged. After adding an arbitrary class, check it
+  survives in `dist/_astro/*.css`.
 - `@galeedgutierrez/shared-assets` is in `vite.ssr.noExternal`: it imports its
   screenshots and `svg?raw` icons, which plain Node can't load at prerender. It
   also makes Vite emit every project screenshot into `dist/`, even unused ones.
