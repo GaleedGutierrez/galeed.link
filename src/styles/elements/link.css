@@ -1,12 +1,21 @@
 a {
-	color: var(--text-color-primary);
+	color: inherit;
 	text-decoration: none;
+	-webkit-tap-highlight-color: transparent;
+	touch-action: manipulation;
+}
+
+/* A bare link in prose (no class) is an inline link. Components always set a
+   class, so they opt out. Underlined, so color is not the only signal. */
+a:not([class]) {
+	color: var(--text-color-accent);
+	text-decoration-line: underline;
+	text-decoration-thickness: var(--border-025);
+	text-underline-offset: 0.2em;
+	transition: color var(--duration-fast) var(--ease-standard);
 
 	&:hover {
-		color: var(--text-color-hover-primary);
-	}
-
-	&:active {
-		color: var(--text-color-active-primary);
+		color: var(--text-color-hover-accent);
+		text-decoration-thickness: var(--border-05);
 	}
 }

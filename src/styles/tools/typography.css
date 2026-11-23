@@ -1,58 +1,79 @@
-/* stylelint-disable at-rule-no-unknown */
-@define-mixin font-fallback {
-	font-family: var(--font-fallback-primary);
-	letter-spacing: 0.3px;
-	word-spacing: -0.05px;
-}
-
-@define-mixin font-primary {
-	font-family: var(--font-primary);
-	letter-spacing: initial;
-	word-spacing: initial;
-}
-
 @define-mixin heading-xl {
+	/* h1 name */
+	font-family: var(--font-primary);
 	font-size: var(--f-title-xl);
-	font-weight: var(--fw-bold);
+	font-weight: var(--fw-extrabold);
 	line-height: var(--lh-title-xl);
-	word-spacing: var(--ws-title-xl);
+	letter-spacing: var(--ls-title-xl);
+	text-wrap: balance;
 }
 
 @define-mixin heading-lg {
+	/* section h2 */
+	font-family: var(--font-primary);
 	font-size: var(--f-title-lg);
-	font-weight: var(--fw-bold);
+	font-weight: var(--fw-extrabold);
 	line-height: var(--lh-title-lg);
-	word-spacing: var(--ws-title-lg);
+	text-wrap: balance;
 }
 
 @define-mixin heading-md {
+	/* role line (a <p>, not a heading) */
+	font-family: var(--font-primary);
 	font-size: var(--f-title-md);
-	font-weight: var(--fw-bold);
+	font-weight: var(--fw-medium);
 	line-height: var(--lh-title-md);
-	word-spacing: var(--ws-title-md);
-}
-
-@define-mixin heading-sm {
-	font-size: var(--f-title-sm);
-	font-weight: var(--fw-bold);
-	line-height: var(--lh-title-sm);
-	word-spacing: var(--ws-title-sm);
 }
 
 @define-mixin body-lg {
+	font-family: var(--font-primary);
 	font-size: var(--f-body-lg);
 	font-weight: var(--fw-normal);
 	line-height: var(--lh-body-lg);
+	text-wrap: pretty;
 }
 
-@define-mixin body-md {
+/* $weight: card titles pass var(--fw-bold). A parameter, not an override:
+   stylelint's order/order moves @mixin after declarations. */
+@define-mixin body-md $weight: var(--fw-normal) {
+	font-family: var(--font-primary);
 	font-size: var(--f-body-md);
-	font-weight: var(--fw-normal);
+	font-weight: $weight;
 	line-height: var(--lh-body-md);
 }
 
 @define-mixin body-sm {
+	font-family: var(--font-primary);
 	font-size: var(--f-body-sm);
-	font-weight: var(--fw-semibold);
+	font-weight: var(--fw-normal);
 	line-height: var(--lh-body-sm);
+}
+
+@define-mixin label {
+	font-family: var(--font-primary);
+	font-size: var(--f-label);
+	font-weight: var(--fw-bold);
+	line-height: var(--lh-label);
+	letter-spacing: var(--ls-label);
+	text-transform: uppercase;
+}
+
+@define-mixin micro {
+	/* metadata only: never essential content */
+	font-family: var(--font-mono);
+	font-size: var(--f-micro);
+	font-weight: var(--fw-medium);
+	font-variant-numeric: tabular-nums;
+	line-height: var(--lh-micro);
+	letter-spacing: var(--ls-micro);
+	text-transform: uppercase;
+}
+
+@define-mixin visually-hidden {
+	position: absolute;
+	overflow: hidden;
+	block-size: 1px;
+	inline-size: 1px;
+	white-space: nowrap;
+	clip-path: inset(50%);
 }

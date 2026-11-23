@@ -3,3 +3,12 @@
 	outline: var(--border-05) solid var(--outline-color-focus);
 	outline-offset: calc(2 * var(--rem-scale));
 }
+
+::selection {
+	background-color: var(--background-color-accent-subtle);
+	color: var(--text-color-primary);
+}
+
+[id] {
+	scroll-margin-top: calc(var(--height-nav) + var(--spacing-4));
+}

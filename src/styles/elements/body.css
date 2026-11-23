@@ -1,19 +1,17 @@
 body {
-	background-color: var(--background-color-primary);
+	/* < 40em: the shell is full-bleed */
+	background-color: var(--background-color-secondary);
 	color: var(--text-color-primary);
-	font-size: var(--f-body-lg);
+	font-family: var(--font-primary);
 	font-weight: var(--fw-normal);
-	line-height: var(--lh-body-lg);
-}
 
-/* .font-fallback */
-body:not(.fonts-loaded) {
-	/* stylelint-disable-next-line at-rule-no-unknown */
-	@mixin font-fallback;
-}
+	/* stable x-height during the font swap (§4.3) */
+	font-size-adjust: from-font;
+	font-synthesis: none;
+	line-height: var(--lh-body-md);
+	-webkit-font-smoothing: antialiased;
 
-/* .font-primary */
-body.fonts-loaded {
-	/* stylelint-disable-next-line at-rule-no-unknown */
-	@mixin font-primary;
+	@media (width >= 40em) {
+		background-color: var(--background-color-primary);
+	}
 }

@@ -1,0 +1,7 @@
+/* Suppress transitions during a theme flip (set/removed by theme.ts, §9.8) */
+[data-theme-switching] *,
+[data-theme-switching] *::before,
+[data-theme-switching] *::after {
+	/* stylelint-disable-next-line declaration-no-important -- must beat every component transition */
+	transition: none !important;
+}

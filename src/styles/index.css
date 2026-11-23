@@ -1,17 +1,17 @@
-/* Custom Properties */
+/* Settings: custom properties only (no selectors besides :root) */
 @import "./settings/index.css";
 
-/* Mixins */
+/* Tools: mixins (they produce no CSS on their own) */
 @import "./tools/index.css";
 
-/* Generic */
+/* Generic: reset, in @layer reset */
 @import "./generic/index.css";
 
-/* Elements */
+/* Elements: bare HTML elements */
 @import "./elements/index.css";
 
-/* Utilities */
-@import "./utilities/index.css";
-
-/* Atoms */
+/* Atoms: global a- blocks */
 @import "./atoms/index.css";
+
+/* Utilities: last, so they win (ITCSS order) */
+@import "./utilities/index.css";

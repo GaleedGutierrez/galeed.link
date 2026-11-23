@@ -1,5 +1,14 @@
 html {
-	height: 100%;
-	font-size: var(--f-base);
-	scroll-behavior: smooth;
+	block-size: 100%;
+	text-size-adjust: 100%;
+	accent-color: var(--text-color-accent);
+
+	/* thumb vs track: 3.81 light / 3.78 dark (≥ 3:1) */
+	scrollbar-color: var(--border-color-strong) var(--background-color-primary);
+
+	/* No font-size: inherit the user's default (text-scale, §2.2). */
+
+	@media (prefers-reduced-motion: no-preference) {
+		scroll-behavior: smooth;
+	}
 }

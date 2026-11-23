@@ -1,35 +1,11 @@
 h1 {
-	font-size: var(--f-title-xl);
-	font-weight: var(--fw-bold);
-
-	/* line-height: var(--lh-title-xl); */
-
-	/* word-spacing: var(--ws-title-xl); */
+	@mixin heading-xl;
 }
 
 h2 {
-	font-size: var(--f-title-lg);
-	font-weight: var(--fw-semibold);
-
-	/* line-height: var(--lh-title-lg); */
-
-	/* word-spacing: var(--ws-title-lg); */
+	@mixin heading-lg;
 }
 
 h3 {
-	font-size: var(--f-title-md);
-	font-weight: var(--fw-semibold);
-
-	/* line-height: var(--lh-title-md); */
-
-	/* word-spacing: var(--ws-title-md); */
-}
-
-h4 {
-	font-size: var(--f-title-sm);
-	font-weight: var(--fw-semibold);
-
-	/* line-height: var(--lh-title-sm); */
-
-	/* word-spacing: var(--ws-title-sm); */
+	@mixin label;
 }
