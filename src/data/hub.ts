@@ -117,14 +117,19 @@ export const getProjectTiles = async (): Promise<TileItem[]> => {
 				default: ImageMetadata;
 			};
 
+			const technologies = project.technologies.slice(0, 3);
+			const year = project.date.getFullYear();
+
 			return {
 				title: project.title,
 				href,
 				alt: `Captura de ${project.title}`,
 				image: screenshot.default,
-				meta: `${project.technologies.slice(0, 3).join(' · ')} · ${project.date.getFullYear()}`,
+				meta: `${technologies.join(' · ')} · ${year}`,
 				description: toPlainText(project.description),
 				featured: index === 0,
+				technologies,
+				year,
 			};
 		}),
 	);
@@ -162,6 +167,8 @@ export const repoItems: RepoItem[] = openSourceProjects.flatMap(
 				status: contribution
 					? PR_STATUS[contribution.status]
 					: undefined,
+				repositoryUrl: toSafeUrl(url),
+				language,
 			},
 		];
 	},

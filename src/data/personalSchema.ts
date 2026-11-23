@@ -2,6 +2,8 @@
 // Keep one canonical spelling of the name everywhere: search engines and
 // AI answer engines match an entity by name, @id and sameAs.
 export const SITE_URL = 'https://galeed.link';
+/** The Person node's `@id`: the works on the page point back to it. */
+export const PERSON_ID = `${SITE_URL}/#person`;
 
 export const personalSchema = {
 	name: 'Galeed Gutierrez',
@@ -10,7 +12,7 @@ export const personalSchema = {
 	description:
 		'Desarrollador frontend en Jujuy, Argentina. Construye interfaces accesibles y rápidas con React, Astro y TypeScript, y las prueba con Vitest y Playwright.',
 	address: {
-		'@type': 'PostalAddress',
+		'@type': 'PostalAddress' as const,
 		addressRegion: 'Jujuy',
 		addressCountry: 'AR',
 	},
@@ -20,7 +22,7 @@ export const personalSchema = {
 		{
 			program: 'la carrera de Analista Programador Universitario',
 			school: {
-				'@type': 'CollegeOrUniversity',
+				'@type': 'CollegeOrUniversity' as const,
 				name: 'Universidad Nacional de Jujuy',
 				alternateName: 'UNJu',
 				url: 'https://www.unju.edu.ar',
@@ -29,7 +31,7 @@ export const personalSchema = {
 		{
 			program: 'la Tecnicatura en Ciencia de Datos',
 			school: {
-				'@type': 'CollegeOrUniversity',
+				'@type': 'CollegeOrUniversity' as const,
 				name: 'Universidad Nacional de Chilecito',
 				alternateName: 'UNdeC',
 				url: 'https://www.undec.edu.ar',
@@ -38,11 +40,11 @@ export const personalSchema = {
 	],
 	credentials: [
 		{
-			'@type': 'EducationalOccupationalCredential',
+			'@type': 'EducationalOccupationalCredential' as const,
 			name: 'Curso de Creación de Páginas Web con Astro',
 			url: 'https://platzi.com/cursos/astro',
 			recognizedBy: {
-				'@type': 'EducationalOrganization',
+				'@type': 'EducationalOrganization' as const,
 				name: 'Platzi',
 				url: 'https://platzi.com',
 			},
@@ -71,12 +73,12 @@ export const personalSchema = {
 	},
 	xHandle: '@gutierrezgaleed',
 	jobProfile: {
-		'@type': 'Occupation',
+		'@type': 'Occupation' as const,
 		name: 'Desarrollador frontend',
 		description:
 			'Especializado en interfaces frontend modernas usando herramientas del ecosistema JavaScript.',
 		occupationLocation: {
-			'@type': 'Country',
+			'@type': 'Country' as const,
 			name: 'Argentina',
 		},
 		skills: [
