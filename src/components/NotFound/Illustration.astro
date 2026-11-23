@@ -1,8 +1,8 @@
 ---
 /**
  * 404 illustration: a "404" browser window on legs walks up to an
- * "ANOMALOUS LINK" service window cut into a plain wall, where a guard looks
- * on, unimpressed.
+ * "ANOMALOUS LINK" booth, drawn in the same flat window style, where a guard
+ * looks on, unimpressed.
  *
  * No color lives in the markup: every fill and stroke comes from a class in
  * styles.module.css, so both themes and forced colors restyle it. Strokes
@@ -24,112 +24,73 @@ import styles from "./styles.module.css";
 	</title>
 	<desc id="not-found-art-desc">
 		Una ventana de navegador con piernas y zapatillas, que muestra el número
-		404, camina hacia una ventanilla con el cartel «ANOMALOUS LINK».
-		Adentro, un guardia de seguridad con gorra y chaleco la mira sin
-		inmutarse.
+		404, camina hacia una garita con el cartel «ANOMALOUS LINK». Desde la
+		ventanilla, un guardia de seguridad con gorra la mira sin inmutarse.
 	</desc>
 
-	<!-- Wall base: the walker stands in front of it -->
+	<!-- Floor line: the booth stands on it, the walker in front of it -->
 	<path
 		class={styles["not-found__line"]}
 		d="M24 172 H300"
 	/>
 
-	<!-- Sign -->
-	<rect
-		class={styles["not-found__plate"]}
-		height="18"
-		rx="1"
-		width="120"
-		x="164"
-		y="34"
+	<!-- Booth, drawn like the browser window: body, dark header with the sign -->
+	<path
+		class={styles["not-found__surface"]}
+		d="M175 44 H289 C290.7 44 292 45.3 292 47 V172 H172 V47 C172 45.3 173.3 44 175 44 Z"
+	/>
+	<path
+		class={styles["not-found__inverse"]}
+		d="M175 44 H289 C290.7 44 292 45.3 292 47 V62 H172 V47 C172 45.3 173.3 44 175 44 Z"
 	/>
 	<text
 		class={styles["not-found__sign"]}
 		text-anchor="middle"
-		x="224"
-		y="47"
+		x="232"
+		y="57"
 	>
 		ANOMALOUS LINK
 	</text>
 
-	<!-- Window opening: back wall, then the dark left jamb for depth -->
+	<!-- Service window -->
 	<rect
 		class={styles["not-found__recess"]}
-		height="68"
-		width="96"
-		x="176"
-		y="60"
-	/>
-	<path
-		class={styles["not-found__inverse"]}
-		d="M176 60 L187 67 V128 H176 Z"
+		height="56"
+		width="92"
+		x="186"
+		y="76"
 	/>
 
-	<!-- Guard, drawn before the ledge so it covers the torso -->
+	<!-- Guard: shoulders, head, cap; flat eyes and mouth -->
 	<g>
 		<path
 			class={styles["not-found__surface"]}
-			d="M206 128 C206 115 216 108 232 108 C248 108 258 115 258 128 Z"
+			d="M213 132 V127 C213 120 220 116 232 116 C244 116 251 120 251 127 V132 Z"
 		/>
-		<path
-			class={styles["not-found__vest"]}
-			d="M211 128 L214 116 C218 112 223 111 226 111 L228 128 Z M253 128 L250 116 C246 112 241 111 238 111 L236 128 Z"
-		/>
-		<path
-			class={styles["not-found__line"]}
-			d="M225 109 L232 117 L239 109"
-		/>
-		<rect
-			class={styles["not-found__surface"]}
-			height="8"
-			width="9"
-			x="227.5"
-			y="100"
-		/>
-		<path
-			class={styles["not-found__surface"]}
-			d="M221 88 C218 88 218 95 221 95 M243 88 C246 88 246 95 243 95"
-		/>
-		<ellipse
+		<circle
 			class={styles["not-found__surface"]}
 			cx="232"
-			cy="90"
-			rx="11"
-			ry="12"
+			cy="106"
+			r="10"
+		/>
+		<path
+			class={styles["not-found__inverse"]}
+			d="M222 103 L219 94 C219 92.5 220 92 221.5 92 H242.5 C244 92 245 92.5 245 94 L242 103 Z"
 		/>
 		<path
 			class={styles["not-found__line"]}
-			d="M226 92.5 H229.5 M234.5 92.5 H238 M229 98 H235"
-		/>
-		<path
-			class={styles["not-found__inverse"]}
-			d="M220 85 C220 76 226 71 232 71 C238 71 244 76 244 85 Z"
-		/>
-		<path
-			class={styles["not-found__inverse"]}
-			d="M218 84 H246 C248 84 248 87 246 88 C238 91 226 91 218 88 C216 87 216 84 218 84 Z"
+			d="M217 103 H247 M227 109 H230 M234 109 H237 M230 113.5 H234"
 		/>
 	</g>
 
-	<!-- Window frame and the counter ledge in perspective -->
-	<rect
-		class={styles["not-found__line"]}
-		height="68"
-		width="96"
-		x="176"
-		y="60"
-	/>
-	<path
-		class={styles["not-found__surface"]}
-		d="M170 128 H278 L286 135 H162 Z"
-	/>
+	<!-- Counter -->
 	<rect
 		class={styles["not-found__surface"]}
-		height="5"
-		width="124"
-		x="162"
-		y="135"
+		height="6"
+		rx="1"
+		width="104"
+		x="180"
+		y="130"
 	/>
 
 	<!-- Walking 404 window. The card's tilt is a static attribute; the

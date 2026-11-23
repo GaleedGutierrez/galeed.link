@@ -924,9 +924,9 @@ All buttons: labels never wrap mid-word. Allow two-line labels only on mobile vi
 
 - `src/pages/404.astro`: the system bar in a `<header>`, then `NotFound` in `<main>`. `noindex`.
 - Flow, left-aligned: illustration → mono tag (`@mixin micro`, `--text-color-accent`; the visible `ERR_404 // RUTA_NO_RESUELTA` is `aria-hidden`, an `sr-only` twin reads "Error 404: ruta no resuelta") → `h1` → `@mixin body-md` text in `--text-color-secondary` → one `a-button a-button--primary` back to `/`.
-- Illustration (`NotFound/Illustration.astro`): inline SVG line art, `role="img"` named by its Spanish `<title>` and `<desc>`. A "404" browser window on legs walks up to a service window cut into a plain wall, under a sign that reads "ANOMALOUS LINK"; a generic guard looks on from inside. No game names, logos or characters (§6.5).
-  - No color in the markup. Line art is `--text-color-primary` through `currentColor`. Fills are background tokens (`tertiary` surfaces, `primary` window recess, `secondary` sign plate, `inverse` for the window jamb, title bar, cap and one sneaker, `accent-subtle` vest). The single accent is the window's 2px HEV rule in `--border-color-accent`.
-  - SVG text: sign `@mixin micro` (primary on secondary, 15.00 / 13.72:1), "404" `@mixin heading-xl` in `--text-color-accent` on tertiary (8.84 / 7.46:1).
+- Illustration (`NotFound/Illustration.astro`): inline SVG line art, `role="img"` named by its Spanish `<title>` and `<desc>`. A "404" browser window on legs walks up to a booth drawn in the same flat window style: a dark header that carries the "ANOMALOUS LINK" sign, a service window and a counter. A generic guard, built from basic shapes, looks on from inside. No game names, logos or characters (§6.5).
+  - No color in the markup. Line art is `--text-color-primary` through `currentColor`. Fills are background tokens (`tertiary` surfaces, `primary` service window, `inverse` for both title bars, the cap and one sneaker). The single accent is the browser window's 2px HEV rule in `--border-color-accent`.
+  - SVG text: sign `@mixin micro` in `--text-color-inverse` on the inverse header (15.00 / 13.72:1), "404" `@mixin heading-xl` in `--text-color-accent` on tertiary (8.84 / 7.46:1).
   - Forced colors map each fill role to `Canvas` / `CanvasText` and the HEV rule to `Highlight`.
 - Motion: the one-pass walk-in in §8.2.
 

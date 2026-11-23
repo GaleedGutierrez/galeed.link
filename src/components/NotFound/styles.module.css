@@ -35,16 +35,8 @@
 	fill: var(--background-color-primary);
 }
 
-.not-found__plate {
-	fill: var(--background-color-secondary);
-}
-
 .not-found__inverse {
 	fill: var(--background-color-inverse);
-}
-
-.not-found__vest {
-	fill: var(--background-color-accent-subtle);
 }
 
 .not-found__accent {
@@ -57,10 +49,10 @@
 	stroke: none;
 }
 
-/* Sign text: --text-color-primary on --background-color-secondary
-   (15.00 / 13.72:1). */
+/* Sign text: --text-color-inverse on the booth's --background-color-inverse
+   header (15.00 / 13.72:1). */
 .not-found__sign {
-	fill: var(--text-color-primary);
+	fill: var(--text-color-inverse);
 	stroke: none;
 
 	@mixin micro;
@@ -138,14 +130,12 @@
 @media (forced-colors: active) {
 	.not-found__surface,
 	.not-found__recess,
-	.not-found__plate,
-	.not-found__vest,
-	.not-found__dot {
+	.not-found__dot,
+	.not-found__sign {
 		fill: Canvas;
 	}
 
 	.not-found__inverse,
-	.not-found__sign,
 	.not-found__code-art {
 		fill: CanvasText;
 	}
