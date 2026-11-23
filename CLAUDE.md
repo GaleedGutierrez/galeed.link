@@ -168,7 +168,9 @@ docs are English.
 - PurgeCSS only sees static HTML/JS. Attributes set at runtime need a safelist
   entry by **attribute name** (`/^data-theme/`, `'aria-current'`). Patterns like
   `/^\[data-.*\]$/` or `/^@media/` match nothing. `fontFace` is off because it
-  dropped the `Barlow Fallback` face.
+  dropped the `Barlow Fallback` face. `variables` is off because it deleted
+  tokens still in use (the sticky nav's `z-index`, motion tokens, the shell's
+  radius and shadow), so `var()` resolved to nothing.
 - `purgeCss.ts` has a custom `defaultExtractor`. The default one split UnoCSS
   arbitrary values (`grid-cols-[1fr_1px_1fr]`, `aspect-[5/4]`) at the brackets,
   so they were silently purged. After adding an arbitrary class, check it

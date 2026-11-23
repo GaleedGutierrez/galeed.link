@@ -186,7 +186,11 @@ const purgeCssConfig: Omit<UserDefinedOptions, 'css'> = {
 	// false: it dropped the "Barlow Fallback" face even though font-family
 	// uses it, and every other face (Barlow, JetBrains Mono) is in use anyway.
 	fontFace: false,
-	variables: true,
+	// false: it deleted tokens that CSS Modules use inside @media or nested
+	// rules (--z-index-10-sticky-nav, --ease-out, --duration-slow,
+	// --border-radius-2, --box-shadow-shell-light, --spacing-12), so the
+	// sticky nav lost its z-index and the shell its radius and shadow.
+	variables: false,
 	skippedContentGlobs: ['node_modules/**', '.sonda/**'],
 };
 
