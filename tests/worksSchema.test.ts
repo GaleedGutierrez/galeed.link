@@ -1,0 +1,123 @@
+import type { ImageMetadata } from 'astro';
+import { describe, expect, it } from 'vitest';
+
+import { buildWorksSchema } from '@/data/worksSchema';
+
+const PERSON_ID = 'https://galeed.link/#person';
+const SITE_URL = 'https://galeed.link';
+
+const image = {
+	src: '/_astro/shop.abc123.webp',
+	width: 1280,
+	height: 720,
+	format: 'webp',
+} as ImageMetadata;
+
+type Node = Record<string, unknown>;
+
+/**
+ * Builds the nodes and serializes them the way the page does, so
+ * `undefined` fields are dropped exactly as they are in the JSON-LD.
+ * @param input - Overrides for the default empty input.
+ * @returns The nodes as published.
+ */
+const build = (
+	input: Partial<Parameters<typeof buildWorksSchema>[0]>,
+): Node[] =>
+	// eslint-disable-next-line unicorn/prefer-structured-clone -- the point is JSON serialization, not a clone
+	JSON.parse(
+		JSON.stringify(
+			buildWorksSchema({
+				personId: PERSON_ID,
+				siteUrl: SITE_URL,
+				tiles: [],
+				freelance: [],
+				repos: [],
+				...input,
+			}),
+		),
+	) as Node[];
+
+describe('buildWorksSchema', () => {
+	it('marks side projects as created by the Person, with an absolute image', () => {
+		const [work] = build({
+			tiles: [
+				{
+					title: 'Shop.co',
+					href: 'https://shop.example/',
+					alt: 'Captura de Shop.co',
+					image,
+					description: 'E-commerce.',
+					technologies: ['React', 'TypeScript'],
+					year: 2025,
+				},
+			],
+		});
+
+		expect(work).toStrictEqual({
+			'@type': 'CreativeWork',
+			name: 'Shop.co',
+			url: 'https://shop.example/',
+			description: 'E-commerce.',
+			image: 'https://galeed.link/_astro/shop.abc123.webp',
+			keywords: 'React, TypeScript',
+			dateCreated: '2025',
+			creator: { '@id': PERSON_ID },
+		});
+	});
+
+	it('leaves the URL out of private client work', () => {
+		const [work] = build({ freelance: [{ title: 'Cliente privado' }] });
+
+		expect(work).toStrictEqual({
+			'@type': 'CreativeWork',
+			name: 'Cliente privado',
+			contributor: { '@id': PERSON_ID },
+		});
+	});
+
+	it('points pull requests at the repository, not at the PR', () => {
+		const [work] = build({
+			repos: [
+				{
+					repo: 'withastro/docs',
+					href: 'https://github.com/withastro/docs/pull/1',
+					description: 'Fix a typo',
+					chips: ['MDX', 'PR #1'],
+					repositoryUrl: 'https://github.com/withastro/docs',
+					language: 'MDX',
+				},
+			],
+		});
+
+		expect(work).toStrictEqual({
+			'@type': 'SoftwareSourceCode',
+			name: 'withastro/docs',
+			description: 'Fix a typo',
+			codeRepository: 'https://github.com/withastro/docs',
+			programmingLanguage: 'MDX',
+			contributor: { '@id': PERSON_ID },
+		});
+	});
+
+	it('follows the page order: freelance, side projects, open source', () => {
+		const works = build({
+			tiles: [{ title: 'Tile', href: 'https://a.example/', alt: '' }],
+			freelance: [{ title: 'Client' }],
+			repos: [
+				{
+					repo: 'a/b',
+					href: 'https://github.com/a/b',
+					description: '',
+					chips: [],
+				},
+			],
+		});
+
+		expect(works.map(({ name }) => name)).toStrictEqual([
+			'Client',
+			'Tile',
+			'a/b',
+		]);
+	});
+});

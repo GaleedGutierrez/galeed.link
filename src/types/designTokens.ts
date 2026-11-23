@@ -68,6 +68,9 @@ export interface TileItem {
 	meta?: string;
 	description?: string;
 	featured?: boolean;
+	/** The technologies and year shown in `meta`, for the JSON-LD. */
+	technologies?: string[];
+	year?: number;
 }
 
 export interface RepoItem {
@@ -76,4 +79,7 @@ export interface RepoItem {
 	description: string;
 	chips: string[];
 	status?: Status;
+	/** The repository itself (href may point at a pull request), for the JSON-LD. */
+	repositoryUrl?: string;
+	language?: string;
 }

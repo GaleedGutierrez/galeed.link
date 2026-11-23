@@ -68,7 +68,10 @@ docs are English.
   the `LinkCard` module on purpose.
 - `src/layouts/Layout/`: `<head>`, the inline theme script, fonts, the shell.
   SEO tags come from `astro-seo` (canonical, Open Graph, X card) and the JSON-LD
-  (`ProfilePage` → `Person`) from `astro-seo-schema`.
+  from `astro-seo-schema`: one `@graph` with the `ProfilePage` → `Person` and
+  one node per card (`src/data/worksSchema.ts`), each pointing back to the
+  Person by `@id`. Build the nodes from the card models so the markup never
+  claims more than the page shows.
 - `src/data/personalSchema.ts`: identity data (`SITE_URL`, name, job title,
   `sameAs` links) shared by the JSON-LD, the meta tags, `PROFILE` and
   `/llms.txt`. Keep the canonical name spelling "Galeed Gutierrez".

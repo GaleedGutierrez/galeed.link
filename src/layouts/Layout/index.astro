@@ -12,7 +12,8 @@ import barlow800 from "@fontsource/barlow/files/barlow-latin-800-normal.woff2?ur
 import { SEO } from "astro-seo";
 import { Schema } from "astro-seo-schema";
 
-import { personalSchema, SITE_URL } from "@/data/personalSchema";
+import { PERSON_ID, personalSchema, SITE_URL } from "@/data/personalSchema";
+import type { Work } from "@/data/worksSchema";
 
 import styles from "./styles.module.css";
 
@@ -21,12 +22,15 @@ interface Props {
 	description?: string;
 	/** Error pages: noindex, no canonical and no ProfilePage JSON-LD. */
 	noindex?: boolean;
+	/** Cards on the page as JSON-LD nodes (`buildWorksSchema`). */
+	works?: Work[];
 }
 
 const {
 	title = `${personalSchema.name} · ${personalSchema.jobTitle}`,
 	description = "Galeed Gutierrez, desarrollador frontend en Jujuy, Argentina. React, Astro y TypeScript. Trabajo freelance, side projects, open source y contacto.",
 	noindex = false,
+	works = [],
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, SITE_URL).href;
@@ -34,7 +38,7 @@ const canonical = new URL(Astro.url.pathname, SITE_URL).href;
 // to the page's own URL.
 // eslint-disable-next-line unicorn/no-null
 const canonicalTag = noindex ? null : canonical;
-const personId = `${SITE_URL}/#person`;
+const personId = PERSON_ID;
 // public/og.jpg: 1200×630 link-preview card, rendered from the site's own
 // tokens and fonts. Regenerate it when the name, role or portrait change.
 // JPEG, because some networks don't render WebP previews.
@@ -197,40 +201,52 @@ const [firstName, ...lastNames] = personalSchema.name.split(" ");
 			}}
 		/>
 		<!-- ProfilePage + Person: the page is about one person (Google's
-			 profile-page rich result; also what AI answer engines read). -->
+			 profile-page rich result; also what AI answer engines read). The
+			 works on the page join the same @graph and point back to the
+			 Person by @id. -->
 		{!noindex && (
 			<Schema
 				item={{
 					"@context": "https://schema.org",
-					"@type": "ProfilePage",
-					"@id": `${SITE_URL}/#profile`,
-					url: canonical,
-					name: title,
-					description,
-					inLanguage: "es-AR",
-					dateModified: new Date().toISOString(),
-					mainEntity: {
-						"@type": "Person",
-						"@id": personId,
-						name: personalSchema.name,
-						alternateName: personalSchema.alternateName,
-						givenName: firstName,
-						familyName: lastNames.join(" "),
-						url: SITE_URL,
-						image: `${SITE_URL}/profile.webp`,
-						jobTitle: personalSchema.jobTitle,
-						description: personalSchema.description,
-						address: personalSchema.address,
-						nationality: { "@type": "Country", name: "Argentina" },
-						sameAs: Object.values(personalSchema.socialLinks),
-						knowsAbout: personalSchema.skills,
-						knowsLanguage: "es",
-						alumniOf: personalSchema.studies.map(
-							({ school }) => school,
-						),
-						hasCredential: personalSchema.credentials,
-						hasOccupation: personalSchema.jobProfile,
-					},
+					"@graph": [
+						{
+							"@type": "ProfilePage",
+							"@id": `${SITE_URL}/#profile`,
+							url: canonical,
+							name: title,
+							description,
+							inLanguage: "es-AR",
+							dateModified: new Date().toISOString(),
+							mainEntity: {
+								"@type": "Person",
+								"@id": personId,
+								name: personalSchema.name,
+								alternateName: personalSchema.alternateName,
+								givenName: firstName,
+								familyName: lastNames.join(" "),
+								url: SITE_URL,
+								image: `${SITE_URL}/profile.webp`,
+								jobTitle: personalSchema.jobTitle,
+								description: personalSchema.description,
+								address: personalSchema.address,
+								nationality: {
+									"@type": "Country",
+									name: "Argentina",
+								},
+								sameAs: Object.values(
+									personalSchema.socialLinks,
+								),
+								knowsAbout: personalSchema.skills,
+								knowsLanguage: "es",
+								alumniOf: personalSchema.studies.map(
+									({ school }) => school,
+								),
+								hasCredential: personalSchema.credentials,
+								hasOccupation: personalSchema.jobProfile,
+							},
+						},
+						...works,
+					],
 				}}
 			/>
 		)}

@@ -17,8 +17,17 @@ import {
 	PROFILE,
 	repoItems,
 } from "@/data/hub";
+import { PERSON_ID, SITE_URL } from "@/data/personalSchema";
+import { buildWorksSchema } from "@/data/worksSchema";
 
 const projectTiles = await getProjectTiles();
+const works = buildWorksSchema({
+	personId: PERSON_ID,
+	siteUrl: SITE_URL,
+	tiles: projectTiles,
+	freelance: freelanceItems,
+	repos: repoItems,
+});
 
 // A section without content is left out of the page and the nav.
 const sections = [
@@ -53,7 +62,7 @@ const sections = [
 const section = Object.fromEntries(sections.map((item) => [item.id, item]));
 ---
 
-<Layout>
+<Layout works={works}>
 	<!-- One banner landmark: the system bar and the hero (axe "region"). -->
 	<header>
 		<SystemBar />
