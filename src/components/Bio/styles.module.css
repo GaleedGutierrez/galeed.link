@@ -1,3 +1,10 @@
+.bio__lead {
+	max-inline-size: var(--max-w-measure);
+	color: var(--text-color-secondary);
+
+	@mixin body-lg;
+}
+
 .bio__heading {
 	color: var(--text-color-tertiary);
 }

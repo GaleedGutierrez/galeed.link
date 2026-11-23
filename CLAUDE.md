@@ -65,6 +65,15 @@ docs are English.
 - `src/components/<Name>/index.astro` + `styles.module.css`. `RepoCard` reuses
   the `LinkCard` module on purpose.
 - `src/layouts/Layout/`: `<head>`, the inline theme script, fonts, the shell.
+  SEO tags come from `astro-seo` (canonical, Open Graph, X card) and the JSON-LD
+  (`ProfilePage` → `Person`) from `astro-seo-schema`.
+- `src/data/personalSchema.ts`: identity data (`SITE_URL`, name, job title,
+  `sameAs` links) shared by the JSON-LD, the meta tags, `PROFILE` and
+  `/llms.txt`. Keep the canonical name spelling "Galeed Gutierrez".
+- `src/pages/llms.txt.ts`: `/llms.txt` for AI answer engines (GEO), built from
+  the same data as the page.
+- `public/og.jpg`: 1200×630 link-preview card, rendered from the site's own
+  tokens and fonts. Regenerate it when the name, role or portrait change.
 - `src/pages/index.astro`: builds the section list. A section without data is
   left out of the page and the nav, and indices are renumbered.
 - `src/data/hub.ts`: the only place that reads `@galeedgutierrez/shared-assets`.
