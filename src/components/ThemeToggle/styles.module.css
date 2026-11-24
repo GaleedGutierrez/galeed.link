@@ -7,9 +7,11 @@
 	transition: color var(--duration-fast) var(--ease-standard);
 	touch-action: manipulation;
 
+	/* 44px hit area (SC 2.5.5), centered on the 36px box. Insets resolve
+	   against the padding box, inside the border: a flat -4px gave 43px. */
 	&::after {
 		position: absolute;
-		inset: -4px; /* 36 + 8 = 44px hit area */
+		inset: calc((100% - var(--spacing-11)) / 2);
 		content: "";
 	}
 

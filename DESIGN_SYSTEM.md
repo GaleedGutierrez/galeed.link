@@ -755,7 +755,7 @@ Conventions (§9):
   - **No `aria-pressed`.** The name is already an action, and "pressed" plus "Cambiar a tema oscuro" would contradict itself.
   - A native `<button>` gives one tab stop, Enter/Space activation, and focus for free.
   - `hidden` is removed by the module script, so no-JS users never see a dead control.
-  - Box: `size-9` (36px visual). The module adds `border: var(--border-025) solid var(--border-color-strong)`, `border-radius: var(--border-radius-05)`, `background-color: var(--background-color-tertiary)`, and an `::after { inset: -4px }` that extends the hit area to 44px. Icon 16px, `color: var(--text-color-tertiary)`.
+  - Box: `size-9` (36px visual). The module adds `border: var(--border-025) solid var(--border-color-strong)`, `border-radius: var(--border-radius-05)`, `background-color: var(--background-color-tertiary)`, and an `::after { inset: calc((100% - var(--spacing-11)) / 2) }` that extends the hit area to 44px (a flat `-4px` resolved against the padding box, inside the border, and gave 43px). Icon 16px, `color: var(--text-color-tertiary)`.
   - **States:**
     - Hover: icon → `--text-color-primary`.
     - Focus-visible: the global focus ring (§9.4).
@@ -1951,7 +1951,7 @@ The modules for the patterns that need more than tokens:
   &::after {
     content: "";
     position: absolute;
-    inset: -4px; /* 36 + 8 = 44px hit area */
+    inset: calc((100% - var(--spacing-11)) / 2); /* 44px hit area, from the padding box */
   }
 
   &:hover {
