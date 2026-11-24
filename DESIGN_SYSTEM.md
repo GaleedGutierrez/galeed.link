@@ -344,8 +344,8 @@ Named by property, as in the repo: `--background-color-*`, `--text-color-*`, `--
 | `--background-color-tertiary` | `--white` (`#ffffff`) | `--charcoal-800` (`#242424`) | `surface-2` | cards, inset blocks, hover fills |
 | `--background-color-accent` | `--hev-400` (`#ff862c`) | same | `accent` | primary CTA fill |
 | `--background-color-hover-accent` | `--hev-300` (`#ffaa6b`) | same | `accent-hover` | CTA hover fill, wipe |
-| `--background-color-accent-subtle` | `--hev-50` (`#fff1e5`) | `--hev-950` (`#2b1a0d`) | `accent-subtle` | `::selection`, pressed card |
-| `--background-color-indicator` | `--hev-text-l` (`#7f3300`) | `--hev-text-d` (`#ff9b5a`) | `indicator` | active nav underline, card accent bar (state, so ≥ 3:1) |
+| `--background-color-accent-subtle` | `--hev-50` (`#fff1e5`) | `--hev-950` (`#2b1a0d`) | `accent-subtle` | pressed card. Not `::selection`: 1.02–1.12:1 from every surface, so a selection was invisible |
+| `--background-color-indicator` | `--hev-text-l` (`#7f3300`) | `--hev-text-d` (`#ff9b5a`) | `indicator` | active nav underline, card accent bar (state, so ≥ 3:1), `::selection` fill |
 | `--background-color-inverse` | `--charcoal-900` (`#1c1c1c`) | `--bone-100` (`#ede6d8`) | `inverse` | secondary button hover (inversion) |
 | `--text-color-primary` | `--charcoal-900` (`#1c1c1c`) | `--bone-100` (`#ede6d8`) | `text` | primary text |
 | `--text-color-secondary` | `--bone-800` (`#3c332e`) | `--bone-300` (`#cec6bc`) | `text-secondary` | role line, body copy, labels |
@@ -353,7 +353,7 @@ Named by property, as in the repo: `--background-color-*`, `--text-color-*`, `--
 | `--text-color-accent` | `--hev-text-l` (`#7f3300`) | `--hev-text-d` (`#ff9b5a`) | `accent-text` | links, index numerals |
 | `--text-color-hover-accent` | `--hev-text-l-hover` (`#662801`) | `--hev-text-d-hover` (`#ffb581`) | `accent-text-hover` | link hover |
 | `--text-color-on-accent` | `--charcoal-900` (`#1c1c1c`) | `--charcoal-950` (`#141414`) | `accent-ink` | text/icons **on** accent fills |
-| `--text-color-inverse` | `--bone-50` (`#f5f0e6`) | `--charcoal-900` (`#1c1c1c`) | `inverse-text` | text on `background-color-inverse` |
+| `--text-color-inverse` | `--bone-50` (`#f5f0e6`) | `--charcoal-900` (`#1c1c1c`) | `inverse-text` | text on `background-color-inverse`, and selected text (on `indicator`) |
 | `--text-color-success` | `--green-700` (`#175525`) | `--green-300` (`#6fc27d`) | `success` | status text/dot |
 | `--text-color-warning` | `--amber-700` (`#644400`) | `--amber-300` (`#e3b12c`) | `warning` | status text/dot |
 | `--text-color-danger` | `--red-700` (`#990300`) | `--red-300` (`#ff9b91`) | `danger` | status text/dot |
@@ -392,6 +392,8 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 | `border-strong` on bg / surface / surface-2 | **3.81 / 4.16 / 4.73** | UI ≥ 3 ✓ |
 | `focus` on bg / surface / surface-2 | **7.12 / 7.78 / 8.84** | UI ≥ 3 ✓ |
 | `inverse-text` on `inverse` | **15.00** | AAA text ✓ |
+| `inverse-text` on `indicator` (`::selection`) | **7.78** | AAA text ✓ |
+| `indicator` (`::selection`) on bg / surface / surface-2 | **7.12 / 7.78 / 8.84** | UI ≥ 3 ✓ |
 
 **Dark theme**
 
@@ -414,6 +416,8 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 | `border-strong` on bg / surface / surface-2 | **3.78 / 3.50 / 3.19** | UI ≥ 3 ✓ |
 | `focus` on bg / surface / surface-2 | **8.85 / 8.19 / 7.46** | UI ≥ 3 ✓ |
 | `inverse-text` on `inverse` | **13.72** | AAA text ✓ |
+| `inverse-text` on `indicator` (`::selection`) | **8.19** | AAA text ✓ |
+| `indicator` (`::selection`) on bg / surface / surface-2 | **8.85 / 8.19 / 7.46** | UI ≥ 3 ✓ |
 
 **Rejected pairs (why the accent rules exist)**
 
@@ -1636,9 +1640,11 @@ a:not([class]) {
   outline-offset: calc(2 * var(--rem-scale));
 }
 
+/* The indicator fill, not accent-subtle: that one is 1.02–1.12:1 from every
+   surface, so a selection didn't show. Text 7.78 / 8.19:1, §3.4. */
 ::selection {
-  background-color: var(--background-color-accent-subtle);
-  color: var(--text-color-primary);
+  background-color: var(--background-color-indicator);
+  color: var(--text-color-inverse);
 }
 
 [id] {
