@@ -325,7 +325,7 @@ docs are English.
 - CI runs on pull requests and on `main` (not on bare branch pushes): every
   linter, `astro check`, Vitest, axe (Playwright), Lighthouse CI and CodeQL
   (JavaScript and the workflows). The `main` ruleset requires the lint, Super
-  Linter, Vitest and `lighthouseci` checks by job name: renaming one blocks
+  Linter, Vitest, axe and `lighthouseci` checks by job name: renaming one blocks
   every PR until the ruleset is updated.
 - CI also runs commitlint on the commits of a PR and on its title: the title
   sets the PR's `type:` label.
