@@ -38,7 +38,7 @@ export const GET: APIRoute = async () => {
 		'',
 		`> ${personalSchema.description}`,
 		'',
-		`${personalSchema.name} es desarrollador frontend en ${PROFILE.location.replace(', AR', ', Argentina')}.${PROFILE.isAvailable ? ' Está disponible para proyectos freelance.' : ''} Estudia ${toMarkdownText(new Intl.ListFormat('es').format(current))}.`,
+		`${personalSchema.name} es desarrollador frontend en ${PROFILE.location.region}, ${PROFILE.location.country}.${PROFILE.isAvailable ? ' Está disponible para proyectos freelance.' : ''} Estudia ${toMarkdownText(new Intl.ListFormat('es').format(current))}.`,
 		'',
 		`Tecnologías: ${personalSchema.skills.join(', ')}.`,
 		'',

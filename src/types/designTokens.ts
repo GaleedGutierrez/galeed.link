@@ -43,9 +43,22 @@ export interface Status {
 	tone: StatusTone;
 }
 
+/** A chip label that opens with an abbreviation: `PR #1004`. */
+export interface AbbreviatedLabel {
+	abbr: string;
+	/** The expansion, in the `<abbr>` title (SC 3.1.4). */
+	title: string;
+	/** The text after the abbreviation, with its leading space. */
+	text: string;
+}
+
+export type ChipLabel = string | AbbreviatedLabel;
+
 /* Content models for the hub's sections (§7.8–§7.9) */
 export interface SocialLink {
 	label: string;
+	/** Read after the label when the label alone doesn't say where the link goes (SC 2.4.9). */
+	srSuffix?: string;
 	href: string;
 	icon: `simple-icons:${string}` | `lucide:${string}`;
 }
@@ -62,7 +75,7 @@ export interface TileItem {
 	description?: string;
 	featured?: boolean;
 	status?: Status;
-	chips?: string[];
+	chips?: ChipLabel[];
 	/** Sets the title in the mono face (`owner/repo`). */
 	isCode?: boolean;
 	/** The technologies and year shown in `meta`, for the JSON-LD. */
@@ -104,7 +117,7 @@ export interface RepoItem extends TileItem {
 	repo: `${string}/${string}`;
 	href: string;
 	description: string;
-	chips: string[];
+	chips: ChipLabel[];
 	/** The repository itself (href may point at a pull request), for the JSON-LD. */
 	repositoryUrl?: string;
 	language?: string;

@@ -52,17 +52,25 @@ const { sections } = Astro.props;
 		"(prefers-reduced-motion: reduce)",
 	);
 
-	// Scrolls the list only, never the page.
+	// Scrolls the list only, never the page. A link under an edge fade (the
+	// scroll padding) counts as hidden: the browser doesn't scroll a focused
+	// link that is still partly visible, so it stayed half-covered (SC 2.4.12).
 	const revealInList = (link: HTMLAnchorElement): void => {
 		if (!list) {
 			return;
 		}
 
+		const { scrollPaddingInlineEnd, scrollPaddingInlineStart } =
+			getComputedStyle(list);
 		const start = link.offsetLeft - list.offsetLeft;
 		const end = start + link.offsetWidth;
 		const isVisible =
-			start >= list.scrollLeft &&
-			end <= list.scrollLeft + list.clientWidth;
+			start >=
+				list.scrollLeft + Number.parseFloat(scrollPaddingInlineStart) &&
+			end <=
+				list.scrollLeft +
+					list.clientWidth -
+					Number.parseFloat(scrollPaddingInlineEnd);
 
 		if (isVisible) {
 			return;
@@ -108,7 +116,9 @@ const { sections } = Astro.props;
 		next?.setAttribute("aria-current", "true");
 		currentLink = next;
 
-		if (next) {
+		// A focused link keeps its place: scrolling to the current one would
+		// slide the focus out of view.
+		if (next && !list?.contains(document.activeElement)) {
 			revealInList(next);
 		}
 	};
@@ -154,6 +164,9 @@ const { sections } = Astro.props;
 	globalThis.addEventListener("resize", update, { passive: true });
 
 	for (const link of links) {
+		link.addEventListener("focus", () => {
+			revealInList(link);
+		});
 		link.addEventListener("click", () => {
 			pinnedLink = link;
 			setCurrent(link);

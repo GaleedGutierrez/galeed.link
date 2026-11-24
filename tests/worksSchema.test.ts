@@ -111,7 +111,10 @@ describe('buildWorksSchema', () => {
 					repo: 'withastro/docs',
 					href: 'https://github.com/withastro/docs/pull/1',
 					description: 'Fix a typo',
-					chips: ['MDX', 'PR #1'],
+					chips: [
+						'MDX',
+						{ abbr: 'PR', title: 'Pull request', text: ' #1' },
+					],
 					repositoryUrl: 'https://github.com/withastro/docs',
 					language: 'MDX',
 				},

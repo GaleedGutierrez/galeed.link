@@ -737,6 +737,7 @@ Conventions (§9):
 
 - Container: `<div class:list={['flex items-center justify-between min-h-12 px-4', styles.bar]}>`. The module adds `padding-block: var(--spacing-2)` (8px; owner's choice, 2026-11-24, so the 36px toggle doesn't sit 6px from the edges: the bar is 52px tall), `background-color: var(--background-color-secondary)` and `border-block-end: var(--border-05) solid var(--border-color-accent)`.
 - Left: `@mixin micro`, `color: var(--text-color-tertiary)`.
+  - The location is `Jujuy, <abbr title="Argentina">AR</abbr>` (`PROFILE.location`): the country code stays short and the `<abbr>` gives its expansion (SC 3.1.4). The hero says "Jujuy, Argentina" in full.
   - The optional availability dot is `--text-color-success` plus text, never the dot alone.
   - Long strings truncate with `min-inline-size: 0; text-overflow: ellipsis`, and the full text is also in the hero. Keep it short.
 - **Theme toggle (one button, two states):** the decision was two states. A toggle that sits permanently in the site chrome is a quick comfort adjustment ("too bright right now"), not a long-term setting. Two states cover that without giving up the return to System. The behavior is in §2.1 rules 4–5 and §2.3.
@@ -755,7 +756,8 @@ Conventions (§9):
   - **No `aria-pressed`.** The name is already an action, and "pressed" plus "Cambiar a tema oscuro" would contradict itself.
   - A native `<button>` gives one tab stop, Enter/Space activation, and focus for free.
   - `hidden` is removed by the module script, so no-JS users never see a dead control.
-  - Box: `size-9` (36px visual). The module adds `border: var(--border-025) solid var(--border-color-strong)`, `border-radius: var(--border-radius-05)`, `background-color: var(--background-color-tertiary)`, and an `::after { inset: -4px }` that extends the hit area to 44px. Icon 16px, `color: var(--text-color-tertiary)`.
+  - Box: `size-9` (36px visual). The module adds `border: var(--border-025) solid var(--border-color-strong)`, `border-radius: var(--border-radius-05)` and `background-color: var(--background-color-tertiary)`. Icon 16px, `color: var(--text-color-tertiary)`.
+    - Hit area: an `::after { inset: calc((100% - var(--spacing-11)) / 2) }` extends it to 44px. A flat `-4px` resolved against the padding box, inside the border, and gave 43px.
   - **States:**
     - Hover: icon → `--text-color-primary`.
     - Focus-visible: the global focus ring (§9.4).
@@ -801,7 +803,7 @@ Conventions (§9):
   - `ul.navbar__list`: `overflow-x: auto`, `py-1` so the focus ring isn't clipped, inline padding 16px / 32px matched by `scroll-padding-inline`.
   - A `mask-image` fades both edges over that padding only, so the first and last links are never covered at the scroll ends.
   - Scrollbar hidden on touch; `scrollbar-width: thin` under `(hover: hover) and (pointer: fine)`, so mouse users can reach the last links.
-  - The current link is scrolled into view inside the list (never the page) when the observer marks it.
+  - The current link is scrolled into view inside the list (never the page) when the scroll check marks it, unless focus is in the list. A focused link is scrolled into view too: the browser leaves a partly visible one under the edge fade (SC 2.4.12). A link inside the scroll padding counts as hidden.
 - Sticky at every width: `sticky top-0` (owner's choice, 2026-11-23; it used to
   be ≥1024px only, which left phones without it). It is one row of about 52px,
   under 12% of a phone's viewport. The module adds
@@ -867,7 +869,7 @@ chose it over a thumbnail inside the link card, which shrank the screenshot.
 - Missing image: a `--background-color-tertiary` block with the project initial in `@mixin heading-xl` and `--text-color-tertiary`. Never collapse the tile height.
 - Chips (optional): a `flex flex-wrap gap-2` row of §7.7 chips under the
   description, status first (freelance: status + "Privado"; open source:
-  status, language, `PR #n`).
+  status, language, `PR #n`). A chip label can open with an abbreviation (`ChipLabel`): `Chip` renders it as `<abbr title="Pull request">PR</abbr>` (SC 3.1.4).
 - Private work (no `href`): the root is an `<article>` instead of an `<a>`, with
   no new-tab text. The image zoom is scoped to `.tile-card:any-link`, so the
   static tile never reacts to hover.
@@ -900,7 +902,7 @@ All buttons: labels never wrap mid-word. Allow two-line labels only on mobile vi
 ### 7.12 Contacto section
 
 - A `@mixin body-lg` sentence in `--text-color-secondary`, then a button row `class="flex flex-wrap gap-3"`:
-  - **Primary** "Escribime" (`mailto:`);
+  - **Primary** "Escribime" (`mailto:`), with an `sr-only` "por email" after the label (SC 2.4.9);
   - **Secondary** "LinkedIn" or "Agendar llamada".
 - **No form by default.** A static mailto keeps the hub dependency-free. If a form is added later:
   - follow the skill's form rules: visible labels, inline errors with `aria-describedby`, an error summary, 44px inputs, and no LK-style low-contrast fills;
@@ -1689,8 +1691,12 @@ a:not([class]) {
   color: var(--text-color-inverse);
 }
 
-[id] {
-  scroll-margin-top: calc(var(--height-nav) + var(--spacing-4));
+/* Anchor targets and focused controls land clear of the sticky nav, with
+   room for the ring at both edges (SC 2.4.11/2.4.12). The nav's own links
+   stick, so a margin would only jump the page. */
+[id],
+:focus:not(nav *) {
+  scroll-margin-block: calc(var(--height-nav) + var(--spacing-4)) var(--spacing-4);
 }
 ```
 
@@ -1951,7 +1957,7 @@ The modules for the patterns that need more than tokens:
   &::after {
     content: "";
     position: absolute;
-    inset: -4px; /* 36 + 8 = 44px hit area */
+    inset: calc((100% - var(--spacing-11)) / 2); /* 44px hit area, from the padding box */
   }
 
   &:hover {
@@ -2294,6 +2300,8 @@ export const cssVar = <T extends string>(name: T) => `var(--${name})` as const
 /** Content models for the hub's sections */
 export interface SocialLink {
   label: string
+  /** Read after the label when the label alone doesn't say where the link goes (SC 2.4.9) */
+  srSuffix?: string
   href: string
   icon: `simple-icons:${string}` | `lucide:${string}`
 }

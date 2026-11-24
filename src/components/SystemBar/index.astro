@@ -4,6 +4,8 @@ import ThemeToggle from "@components/ThemeToggle/index.astro";
 import { PROFILE } from "@/data/hub";
 
 import styles from "./styles.module.css";
+
+const { region, country, countryCode } = PROFILE.location;
 ---
 
 <div
@@ -13,7 +15,7 @@ import styles from "./styles.module.css";
 	]}
 >
 	<p class={styles["system-bar__meta"]}>
-		{PROFILE.location}
+		{region}, <abbr title={country}>{countryCode}</abbr>
 		{PROFILE.isAvailable && (
 			<>
 				<span aria-hidden="true"> · </span>

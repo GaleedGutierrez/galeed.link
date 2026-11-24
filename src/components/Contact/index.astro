@@ -19,6 +19,9 @@ const linkedin = SOCIAL_LINKS.find((link) => link.label === "LinkedIn");
 		href={`mailto:${PROFILE.email}`}
 	>
 		Escribime
+		{/* The visible label stays first (SC 2.5.3); the suffix says where
+		 the link goes (SC 2.4.9). */}
+		<span class="sr-only">por email</span>
 	</a>
 	<!--/email_off-->
 	{linkedin && (
