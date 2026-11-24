@@ -30,3 +30,6 @@ updates:
     # pulled within days.
     cooldown:
       default-days: 7
+      # Our own package: content updates should land without the wait.
+      exclude:
+        - "@galeedgutierrez/shared-assets"
