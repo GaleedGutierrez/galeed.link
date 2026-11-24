@@ -1,12 +1,14 @@
 ---
 name: 🖼️ Compress Images
 on:
+  # Only the images served as-is: og.jpg and the icons in public/. Astro
+  # re-encodes every image it imports (src/) at build time, so compressing
+  # those sources gains nothing.
   pull_request:
     paths:
-      - "**.jpg"
-      - "**.jpeg"
-      - "**.png"
-      - "**.webp"
+      - "public/**.jpg"
+      - "public/**.jpeg"
+      - "public/**.png"
 
 permissions:
   pull-requests: write
@@ -34,3 +36,8 @@ jobs:
         uses: calibreapp/image-actions@9d037c06280028c110ff61c433ad4dc7d33c3c43 # 1.5.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # A pull request touching public/ may also change images elsewhere,
+          # and the action compresses every changed image it doesn't ignore
+          # (minimatch globs). Only og.jpg and the icons are left: the WebP
+          # portrait in public/ is skipped too.
+          ignorePaths: "node_modules/**,src/**,tests/**,scripts/**,dist/**,public/**/*.webp"
