@@ -1,10 +1,10 @@
 import type { APIRoute } from 'astro';
 
 import {
-	freelanceItems,
+	getFreelanceTiles,
 	getProjectTiles,
+	getRepoTiles,
 	PROFILE,
-	repoItems,
 	SOCIAL_LINKS,
 } from '@/data/hub';
 import { personalSchema, SITE_URL } from '@/data/personalSchema';
@@ -15,7 +15,11 @@ import { markdownLink as link, toMarkdownText } from '@/utils/markdown';
 // shared-assets text is escaped, so it can't add links or headings.
 
 export const GET: APIRoute = async () => {
-	const projects = await getProjectTiles();
+	const [freelance, projects, repos] = await Promise.all([
+		getFreelanceTiles(),
+		getProjectTiles(),
+		getRepoTiles(),
+	]);
 
 	const lines = [
 		`# ${personalSchema.name}`,
@@ -37,15 +41,17 @@ export const GET: APIRoute = async () => {
 		'',
 		'## Trabajo freelance',
 		'',
-		...freelanceItems.map(({ title, href, meta, status }) =>
-			href
+		...freelance.map(({ title, href, meta, status, description }) => {
+			const details = [meta, status?.label].filter(Boolean).join(' · ');
+
+			return href
 				? link(
 						title,
 						href,
-						[meta, status?.label].filter(Boolean).join(' · '),
+						[details, description].filter(Boolean).join('. '),
 					)
-				: `- ${toMarkdownText(`${title}: ${[meta, status?.label, 'proyecto privado'].filter(Boolean).join(' · ')}`)}`,
-		),
+				: `- ${toMarkdownText(`${title}: ${[`${details} · proyecto privado`, description].filter(Boolean).join('. ')}`)}`;
+		}),
 		'',
 		'## Side projects recientes',
 		'',
@@ -55,7 +61,7 @@ export const GET: APIRoute = async () => {
 		'',
 		'## Open source',
 		'',
-		...repoItems.map(({ repo, href, description, status }) =>
+		...repos.map(({ repo, href, description, status }) =>
 			link(
 				repo,
 				href,

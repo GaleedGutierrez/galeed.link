@@ -69,8 +69,8 @@ docs are English.
     `::selection` and `[id]` rules.
   - `atoms/`: global `a-` blocks (BEM): `a-button`, `a-link-action`, `a-chip`.
   - `utilities/`: imported last (`.sr-only`, `.skip-link`, theme switching).
-- `src/components/<Name>/index.astro` + `styles.module.css`. `RepoCard` reuses
-  the `LinkCard` module on purpose.
+- `src/components/<Name>/index.astro` + `styles.module.css`. `TileList` +
+  `TileCard` render every project: freelance, side projects and open source.
 - `src/layouts/Layout/`: `<head>`, the inline theme script, fonts, the shell.
   SEO tags come from `astro-seo` (canonical, Open Graph, X card) and the JSON-LD
   from `astro-seo-schema`: one `@graph` with the `ProfilePage` → `Person` and

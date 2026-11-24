@@ -70,7 +70,9 @@ describe('buildWorksSchema', () => {
 	});
 
 	it('leaves the URL out of private client work', () => {
-		const [work] = build({ freelance: [{ title: 'Cliente privado' }] });
+		const [work] = build({
+			freelance: [{ title: 'Cliente privado', alt: '' }],
+		});
 
 		expect(work).toStrictEqual({
 			'@type': 'CreativeWork',
@@ -80,10 +82,32 @@ describe('buildWorksSchema', () => {
 		});
 	});
 
+	it('describes client work with the text and screenshot on its tile', () => {
+		const [work] = build({
+			freelance: [
+				{
+					title: 'YouTube Downloader',
+					alt: 'Captura de YouTube Downloader',
+					image,
+					imageUrl: '/_astro/yt.abc123_Z1x.webp',
+					description: 'Descarga videos.',
+				},
+			],
+		});
+
+		expect(work).toMatchObject({
+			description: 'Descarga videos.',
+			image: 'https://galeed.link/_astro/yt.abc123_Z1x.webp',
+		});
+		expect(work).not.toHaveProperty('url');
+	});
+
 	it('models a pull request as part of its repository', () => {
 		const [work] = build({
 			repos: [
 				{
+					title: 'withastro/docs',
+					alt: '',
 					repo: 'withastro/docs',
 					href: 'https://github.com/withastro/docs/pull/1',
 					description: 'Fix a typo',
@@ -126,9 +150,11 @@ describe('buildWorksSchema', () => {
 	it('follows the page order: freelance, side projects, open source', () => {
 		const works = build({
 			tiles: [{ title: 'Tile', href: 'https://a.example/', alt: '' }],
-			freelance: [{ title: 'Client' }],
+			freelance: [{ title: 'Client', alt: '' }],
 			repos: [
 				{
+					title: 'a/b',
+					alt: '',
 					repo: 'a/b',
 					href: 'https://github.com/a/b',
 					description: '',

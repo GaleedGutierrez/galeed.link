@@ -43,26 +43,17 @@ export interface Status {
 	tone: StatusTone;
 }
 
-/* Content models for the hub's sections (§7.8–§7.10) */
+/* Content models for the hub's sections (§7.8–§7.9) */
 export interface SocialLink {
 	label: string;
 	href: string;
 	icon: `simple-icons:${string}` | `lucide:${string}`;
 }
 
-export interface LinkItem {
-	title: string;
-	/** Without href the card renders as a static block (private work). */
-	href?: string;
-	meta?: string;
-	status?: Status;
-	chips?: string[];
-	external?: boolean;
-}
-
 export interface TileItem {
 	title: string;
-	href: string;
+	/** Without href the tile renders as a static block (private work). */
+	href?: string;
 	alt: string;
 	image?: ImageMetadata;
 	/** A smaller WebP of `image`, for the JSON-LD (root-relative). */
@@ -70,17 +61,21 @@ export interface TileItem {
 	meta?: string;
 	description?: string;
 	featured?: boolean;
+	status?: Status;
+	chips?: string[];
+	/** Sets the title in the mono face (`owner/repo`). */
+	isCode?: boolean;
 	/** The technologies and year shown in `meta`, for the JSON-LD. */
 	technologies?: string[];
 	year?: number;
 }
 
-export interface RepoItem {
+/** An open source tile: `title` is the `owner/repo`. */
+export interface RepoItem extends TileItem {
 	repo: `${string}/${string}`;
 	href: string;
 	description: string;
 	chips: string[];
-	status?: Status;
 	/** The repository itself (href may point at a pull request), for the JSON-LD. */
 	repositoryUrl?: string;
 	language?: string;

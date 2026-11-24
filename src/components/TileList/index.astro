@@ -1,0 +1,23 @@
+---
+import TileCard from "@components/TileCard/index.astro";
+
+import type { TileItem } from "@/types/designTokens";
+
+interface Props {
+	items: TileItem[];
+}
+
+// The bento grid (§5.3): the featured tile spans both columns.
+const { items } = Astro.props;
+---
+
+<ul
+	class="grid grid-cols-2 gap-3"
+	role="list"
+>
+	{items.map((item) => (
+		<li class:list={[item.featured && "col-span-full"]}>
+			<TileCard item={item} />
+		</li>
+	))}
+</ul>

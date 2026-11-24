@@ -12,7 +12,8 @@
 		@media (hover: hover) and (prefers-reduced-motion: no-preference) {
 			transition: scale var(--duration-slow) var(--ease-out);
 
-			.tile-card:hover & {
+			/* Only links react: a private tile is a static block. */
+			.tile-card:any-link:hover & {
 				scale: 1.03;
 			}
 		}
@@ -27,6 +28,14 @@
 
 .tile-card__title {
 	@mixin body-md var(--fw-bold);
+}
+
+/* `owner/repo` on open source tiles */
+.tile-card__title--code {
+	overflow-wrap: anywhere;
+	font-family: var(--font-mono);
+	font-size: var(--f-body-sm);
+	font-weight: var(--fw-medium);
 }
 
 .tile-card__meta {

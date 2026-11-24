@@ -9,7 +9,6 @@ import {
 import { getImage } from 'astro:assets';
 
 import type {
-	LinkItem,
 	RepoItem,
 	SocialLink,
 	Status,
@@ -70,21 +69,6 @@ const FREELANCE_STATUS: Record<FreelanceProject['status'], Status> = {
 	'on-hold': { label: 'En pausa', tone: 'warning' },
 };
 
-export const freelanceItems: LinkItem[] = freelanceProjects.map(
-	(project): LinkItem => {
-		const href = project.isPrivate ? undefined : toSafeUrl(project.demoUrl);
-
-		return {
-			title: project.title,
-			href,
-			external: Boolean(href),
-			meta: `${yearRange(project.startDate, project.endDate)} · ${project.scope.myRole}`,
-			status: FREELANCE_STATUS[project.status],
-			chips: project.isPrivate ? ['Privado'] : undefined,
-		};
-	},
-);
-
 /**
  * Some shared-assets descriptions embed decorative markup (an aria-hidden emoji
  * span). Drop hidden spans, then any remaining tags, so cards get plain text.
@@ -100,10 +84,51 @@ const toPlainText = (value: string): string =>
 		.replaceAll(/ ([,.;:])/g, '$1')
 		.trim();
 
+type Screenshot = PersonalProject['screenshot'];
+
+/**
+ * Loads a project screenshot for a tile. The screenshot is a 2560px PNG of up
+ * to ~1 MB, so the JSON-LD links a 1280px WebP instead.
+ * @param screenshot - The project's lazy screenshot import.
+ * @param title - The project title, for the alt text.
+ * @returns The image for `<Picture>`, the JSON-LD URL and the alt text.
+ */
+const loadScreenshot = async (
+	screenshot: Screenshot,
+	title: string,
+): Promise<Pick<TileItem, 'alt' | 'image' | 'imageUrl'>> => {
+	const { default: image } = await screenshot;
+	const schemaImage = await getImage({
+		src: image,
+		format: 'webp',
+		width: SCHEMA_IMAGE_WIDTH,
+	});
+
+	return { alt: `Captura de ${title}`, image, imageUrl: schemaImage.src };
+};
+
+export const getFreelanceTiles = async (): Promise<TileItem[]> =>
+	Promise.all(
+		freelanceProjects.map(async (project, index): Promise<TileItem> => ({
+			title: project.title,
+			// Private work has no public URL: the tile is a static block.
+			href: project.isPrivate ? undefined : toSafeUrl(project.demoUrl),
+			...(await loadScreenshot(project.screenshot, project.title)),
+			meta: `${yearRange(project.startDate, project.endDate)} · ${project.scope.myRole}`,
+			description: toPlainText(project.description),
+			status: FREELANCE_STATUS[project.status],
+			chips: project.isPrivate ? ['Privado'] : undefined,
+			featured: index === 0,
+		})),
+	);
+
 const byDateDesc = (a: PersonalProject, b: PersonalProject): number =>
 	b.date.getTime() - a.date.getTime();
 
-export const getProjectTiles = async (): Promise<TileItem[]> => {
+/** A side project tile: always a link (projects without a URL are skipped). */
+type ProjectTile = TileItem & { href: string };
+
+export const getProjectTiles = async (): Promise<ProjectTile[]> => {
 	// A tile is a link: projects without a safe URL are skipped.
 	const latest = personalProjects
 		.flatMap((project) => {
@@ -115,16 +140,7 @@ export const getProjectTiles = async (): Promise<TileItem[]> => {
 		.slice(0, FEATURED_PROJECTS_COUNT);
 
 	return Promise.all(
-		latest.map(async ({ project, href }, index): Promise<TileItem> => {
-			const { default: image } = await project.screenshot;
-			// The screenshot is a 2560px PNG of up to ~1 MB: the JSON-LD links a
-			// WebP the size of the old one instead.
-			const schemaImage = await getImage({
-				src: image,
-				format: 'webp',
-				width: SCHEMA_IMAGE_WIDTH,
-			});
-
+		latest.map(async ({ project, href }, index): Promise<ProjectTile> => {
 			const technologies = project.technologies
 				.slice(0, 3)
 				.map((technology) => technology.name);
@@ -133,9 +149,7 @@ export const getProjectTiles = async (): Promise<TileItem[]> => {
 			return {
 				title: project.title,
 				href,
-				alt: `Captura de ${project.title}`,
-				image,
-				imageUrl: schemaImage.src,
+				...(await loadScreenshot(project.screenshot, project.title)),
 				meta: `${technologies.join(' · ')} · ${year}`,
 				description: toPlainText(project.description),
 				featured: index === 0,
@@ -155,32 +169,50 @@ const PR_STATUS: Record<
 	closed: { label: 'Cerrado', tone: 'danger' },
 };
 
-export const repoItems: RepoItem[] = openSourceProjects.flatMap(
-	(project): RepoItem[] => {
+export const getRepoTiles = async (): Promise<RepoItem[]> => {
+	const repos = openSourceProjects.flatMap((project) => {
 		const contribution = project.contributions.at(0);
-		const { owner, name, url, language } = project.repository;
-		const href = toSafeUrl(contribution?.url) ?? toSafeUrl(url);
+		const href =
+			toSafeUrl(contribution?.url) ?? toSafeUrl(project.repository.url);
 
-		// A repo card is a link: skip entries without a safe URL.
-		if (!href) {
-			return [];
-		}
+		// A repo tile is a link: skip entries without a safe URL.
+		return href ? { project, contribution, href } : [];
+	});
 
-		return [
-			{
-				repo: `${owner}/${name}`,
-				href,
-				description: contribution?.title ?? project.description,
-				chips: [
+	return Promise.all(
+		repos.map(
+			async (
+				{ project, contribution, href },
+				index,
+			): Promise<RepoItem> => {
+				const { owner, name, url, language } = project.repository;
+				const repo = `${owner}/${name}` as const;
+
+				return {
+					title: repo,
+					isCode: true,
+					repo,
+					href,
+					...(await loadScreenshot(
+						project.screenshot,
+						project.title,
+					)),
+					// The pull request title; a repo without one has its own description.
+					description: toPlainText(
+						contribution?.title ?? project.description,
+					),
+					chips: [
+						language,
+						...(contribution ? [`PR #${contribution.number}`] : []),
+					],
+					status: contribution
+						? PR_STATUS[contribution.status]
+						: undefined,
+					featured: index === 0,
+					repositoryUrl: toSafeUrl(url),
 					language,
-					...(contribution ? [`PR #${contribution.number}`] : []),
-				],
-				status: contribution
-					? PR_STATUS[contribution.status]
-					: undefined,
-				repositoryUrl: toSafeUrl(url),
-				language,
+				};
 			},
-		];
-	},
-);
+		),
+	);
+};

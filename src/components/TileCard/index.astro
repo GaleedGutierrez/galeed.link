@@ -1,4 +1,5 @@
 ---
+import Chip from "@components/Chip/index.astro";
 import { Picture } from "astro:assets";
 
 import type { TileItem } from "@/types/designTokens";
@@ -16,13 +17,17 @@ const { item } = Astro.props;
 const sizes = item.featured
 	? "(min-width: 40em) 448px, min(calc(100vw - 32px), 448px)"
 	: "(min-width: 40em) 218px, min(calc(50vw - 22px), 218px)";
+// Private work has no URL: the tile is a static <article>, with no hover.
+const Tag = item.href ? "a" : "article";
+const linkProps = item.href
+	? { href: item.href, rel: "noopener", target: "_blank" }
+	: {};
+const hasChips = Boolean(item.status ?? item.chips?.length);
 ---
 
-<a
+<Tag
 	class:list={["flex flex-col gap-2", styles["tile-card"]]}
-	href={item.href}
-	rel="noopener"
-	target="_blank"
+	{...linkProps}
 >
 	<figure
 		class:list={[
@@ -57,12 +62,32 @@ const sizes = item.featured
 			</span>
 		)}
 	</figure>
-	<span class={styles["tile-card__title"]}>{item.title}</span>
+	<span
+		class:list={[
+			styles["tile-card__title"],
+			item.isCode && styles["tile-card__title--code"],
+		]}
+	>
+		{item.title}
+	</span>
 	{item.meta && <span class={styles["tile-card__meta"]}>{item.meta}</span>}
 	{item.description && (
 		<span class:list={["line-clamp-3", styles["tile-card__description"]]}>
 			{item.description}
 		</span>
 	)}
-	<span class="sr-only">(se abre en una pestaña nueva)</span>
-</a>
+	{hasChips && (
+		<span class="flex flex-wrap gap-2">
+			{item.status && (
+				<Chip
+					label={item.status.label}
+					tone={item.status.tone}
+				/>
+			)}
+			{item.chips?.map((chip) => (
+				<Chip label={chip} />
+			))}
+		</span>
+	)}
+	{item.href && <span class="sr-only">(se abre en una pestaña nueva)</span>}
+</Tag>
