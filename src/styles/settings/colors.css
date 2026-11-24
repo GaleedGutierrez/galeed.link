@@ -53,8 +53,14 @@
 		var(--charcoal-900)
 	);
 	--background-color-tertiary: light-dark(var(--white), var(--charcoal-800));
-	--background-color-accent: var(--hev-400);
-	--background-color-hover-accent: var(--hev-300);
+
+	/* The CTA fill follows the theme: burnt HEV with bone ink in light, HL2
+	   orange with charcoal ink in dark (§3.1). */
+	--background-color-accent: light-dark(var(--hev-text-l), var(--hev-400));
+	--background-color-hover-accent: light-dark(
+		var(--hev-text-l-hover),
+		var(--hev-300)
+	);
 	--background-color-accent-subtle: light-dark(var(--hev-50), var(--hev-950));
 	--background-color-indicator: light-dark(
 		var(--hev-text-l),
@@ -74,10 +80,7 @@
 		var(--hev-text-l-hover),
 		var(--hev-text-d-hover)
 	);
-	--text-color-on-accent: light-dark(
-		var(--charcoal-900),
-		var(--charcoal-950)
-	);
+	--text-color-on-accent: light-dark(var(--bone-50), var(--charcoal-950));
 	--text-color-inverse: light-dark(var(--bone-50), var(--charcoal-900));
 	--text-color-success: light-dark(var(--green-700), var(--green-300));
 	--text-color-warning: light-dark(var(--amber-700), var(--amber-300));
