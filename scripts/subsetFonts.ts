@@ -8,6 +8,10 @@
  * files: each subset font gets a content hash, and so does every CSS file
  * that points at a font, so a cached stylesheet can never reference a font
  * that a later deploy removed.
+ *
+ * Before subsetting, it drops the `@font-face` rules (and their files) whose
+ * `unicode-range` covers no character of the pages, and the WOFF fallbacks
+ * (`fontFaces.ts`). It also pins the variable fonts in `PINNED_AXES`.
  */
 import console from 'node:console';
 import { createHash } from 'node:crypto';
@@ -16,6 +20,8 @@ import path from 'node:path';
 
 import subsetFont from 'subset-font';
 
+import { pruneFontFaces } from './fontFaces.ts';
+
 const distributionPath = path.join(import.meta.dirname, '..', 'dist');
 const assetsPath = path.join(distributionPath, '_astro');
 
@@ -23,6 +29,14 @@ const assetsPath = path.join(distributionPath, '_astro');
 // punctuation. A small margin for text a future build might add.
 const SAFETY_CHARACTERS =
 	' \u{A0}0123456789.,:;!?¿¡()[]-–—·…\'"“”‘’/#@&%+*=<>©áéíóúüñÁÉÍÓÚÜÑ';
+
+// Variable fonts used at a single instance, by file-name prefix. JetBrains
+// Mono only renders at --fw-medium (the `micro` mixin and the `owner/repo`
+// tile title), so its weight axis is pinned to 500: about half the bytes.
+// Using it at another weight needs that weight here (or a range).
+const PINNED_AXES: Record<string, Record<string, number>> = {
+	'jetbrains-mono-': { wght: 500 },
+};
 
 const NAMED_ENTITIES: Record<string, string> = {
 	amp: '&',
@@ -123,6 +137,47 @@ const rewriteReferences = (
 	}
 };
 
+/**
+ * Drops the dead `@font-face` rules and WOFF fallbacks from the style sheets,
+ * then deletes the font files nothing references any more.
+ * @param htmlFiles - Built pages (they preload fonts).
+ * @param cssFiles - Built style sheets.
+ * @param characters - Every character the pages use.
+ * @returns How many font files were deleted.
+ */
+const removeUnusedFontFaces = (
+	htmlFiles: string[],
+	cssFiles: string[],
+	characters: string,
+): number => {
+	let references = '';
+
+	for (const file of cssFiles) {
+		const before = fs.readFileSync(file, 'utf8');
+		const after = pruneFontFaces(before, characters);
+
+		if (after !== before) {
+			fs.writeFileSync(file, after);
+		}
+
+		references += after;
+	}
+
+	for (const file of htmlFiles) {
+		references += fs.readFileSync(file, 'utf8');
+	}
+
+	const unused = globSync('*.{woff,woff2}', { cwd: assetsPath }).filter(
+		(file) => !references.includes(`/_astro/${file}`),
+	);
+
+	for (const file of unused) {
+		fs.rmSync(path.join(assetsPath, file));
+	}
+
+	return unused.length;
+};
+
 const run = async (): Promise<void> => {
 	console.info('🔤 Subsetting fonts...');
 
@@ -133,6 +188,20 @@ const run = async (): Promise<void> => {
 		globSync('*.css', { cwd: assetsPath }).map((file) =>
 			path.join(assetsPath, file),
 		);
+	const characters = collectCharacters(htmlFiles, cssFiles());
+
+	console.info(`   ${[...characters].length} distinct characters kept`);
+
+	const removedFonts = removeUnusedFontFaces(
+		htmlFiles,
+		cssFiles(),
+		characters,
+	);
+
+	if (removedFonts > 0) {
+		console.info(`   ${removedFonts} unused font files removed`);
+	}
+
 	const fontFiles = globSync('*.woff2', { cwd: assetsPath });
 
 	if (fontFiles.length === 0) {
@@ -141,17 +210,17 @@ const run = async (): Promise<void> => {
 		return;
 	}
 
-	const characters = collectCharacters(htmlFiles, cssFiles());
-
-	console.info(`   ${[...characters].length} distinct characters kept`);
-
 	const results = await Promise.all(
 		fontFiles.map(async (fontFile) => {
 			const fontPath = path.join(assetsPath, fontFile);
 			const original = fs.readFileSync(fontPath);
-			// Variable fonts keep their axes (subset-font's default).
+			// Other variable fonts keep their axes (subset-font's default).
+			const variationAxes = Object.entries(PINNED_AXES).find(([prefix]) =>
+				fontFile.startsWith(prefix),
+			)?.[1];
 			const subset = await subsetFont(original, characters, {
 				targetFormat: 'woff2',
+				...(variationAxes && { variationAxes }),
 			});
 			const newName = `${stemOf(fontFile)}.${hashOf(subset)}.woff2`;
 
