@@ -311,3 +311,5 @@ docs are English.
   each.
 - CI runs lint, stylelint, lint-md, prettier and check-for-dupes. A PR must pass
   all of them.
+- CI also runs commitlint on the commits of a PR and on its title: the title
+  sets the PR's `type:` label.
