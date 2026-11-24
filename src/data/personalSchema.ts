@@ -34,7 +34,7 @@ export const personalSchema = {
 			},
 		},
 		{
-			program: 'la Tecnicatura en Ciencia de Datos',
+			program: 'la Tecnicatura Universitaria en Ciencia de Datos',
 			school: {
 				'@type': 'CollegeOrUniversity' as const,
 				name: 'Universidad Nacional de Chilecito',
