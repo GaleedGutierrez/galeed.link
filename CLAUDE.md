@@ -5,9 +5,11 @@ code in this repository.
 
 ## galeed.link
 
-Personal link hub. Astro 7 + TypeScript (strict) + global ITCSS styles + CSS
-Modules + UnoCSS (layout only). Node 22.23.5 (`.nvmrc`; Astro 7 needs ≥
-22.23.4), npm, ESM.
+Personal link hub, linktree-style: compressed information only. The detail about
+Galeed and the projects lives on galeedgutierrez.com (the portfolio), so longer
+copy belongs there, not here. Astro 7 + TypeScript (strict) + global ITCSS
+styles + CSS Modules + UnoCSS (layout only). Node 22.23.5 (`.nvmrc`; Astro 7
+needs ≥ 22.23.4), npm, ESM.
 
 UI copy is Spanish (`<html lang="es">`). Code, comments, commit messages and
 docs are English.

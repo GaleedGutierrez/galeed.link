@@ -147,7 +147,7 @@ Issues verified during inspection:
 | Shell | single centered column, grayscale portrait with fade, full-bleed on mobile | width 448 → **480px** to fit a 2-col bento. Radius 16 → **8px** ("machined"). Shell gets a hairline border, so the edge stays visible in dark mode (fixes issue 4) |
 | Hero | name, role, social row with **visible labels** (better than Linkd's icon-only row) | role becomes `<p>`. New slim **system bar** above the photo with mono metadata, theme toggle, and HL2's 2px orange underline rule |
 | Nav | same five destinations | IDs fixed to match labels, uppercase DIN-style labels, **one scrolling line with faded edges** (owner's choice, 2026-11-23), BM accent underline indicator, sticky at every width (owner's choice, 2026-11-23) |
-| Bio | two-column "Sobre mí / Stack tech" with **1px vertical rule** (HL2 uses the same footer-column rule) | emoji → SVG icons and mono tech chips. Optional lead paragraph |
+| Bio | two-column "Sobre mí / Stack tech" with **1px vertical rule** (HL2 uses the same footer-column rule) | emoji → SVG icons and mono tech chips. No lead paragraph: the long-form about lives on galeedgutierrez.com (§7.14) |
 | New sections | — | Freelance, Side projects and Open source (tiles with screenshots, §7.9), Contacto (one primary CTA), all built from Linkd's 56px card / 16px gap / 32px section rhythm |
 | Color | light + dark | slate/blue-black → bone `#ede6d8` / charcoal `#1c1c1c` + HEV orange, authored in `oklch()`, **WCAG AAA** text contrast. Manual toggle with System default |
 | Type | — | Manrope → **Barlow** (Black Mesa's own served face, DIN-like) + **JetBrains Mono** for metadata |
@@ -476,7 +476,7 @@ All roles are defined as tokens (`--f-*`, `--fw-*`, `--lh-*`, `--ls-*`, §9.2) a
 | `heading-xl` | Barlow | `utopia.clamp(32, 40)` → 32–40px | 800 | 1.1 | −0.005em | as written | h1 name (GL/LK/HL2 all use 40px desktop. LK mobile uses 32) |
 | `heading-lg` | Barlow | `utopia.clamp(22, 24)` → 22–24px | 800 | 1.2 | 0 | sentence | section h2 (LK h2 24px) |
 | `heading-md` | Barlow | 1.125rem (18px) | 500 | 1.4 | 0 | sentence | role line under name |
-| `body-lg` | Barlow | `utopia.clamp(17, 18)` → 17–18px | 400 | 1.6 | 0 | sentence | bio intro paragraph |
+| `body-lg` | Barlow | `utopia.clamp(17, 18)` → 17–18px | 400 | 1.6 | 0 | sentence | contact lead |
 | `body-md` | Barlow | 1rem (16px) | 400 | 1.6 | 0 | sentence | default copy. Card titles add `--fw-bold` (700, a shipped weight) |
 | `label` | Barlow | 0.875rem (14px) | 700 | 1.3 | 0.06em | UPPERCASE | nav, buttons, column headings (≈ BM `.type-label-sm`: 0.875rem/900/1px) |
 | `body-sm` | Barlow | 0.875rem | 400 | 1.5 | 0 | sentence | descriptions in cards |
@@ -590,7 +590,6 @@ Applications: `--spacing-gutter: var(--spacing-4)`, `--spacing-stack: var(--spac
  │        │   BIO   FREELANCE   PROYECTOS   OPEN SOURCE   CONTACTO  ← nav (scrolls; sticky)        │   │
  │        │ ─────────────────────────────────────────────── hairline                                │   │
  │        │ 01  Bio                                                                                │   │
- │        │     lead paragraph (optional)                                                          │   │
  │        │     SOBRE MÍ            │ STACK TECH                                                   │   │
  │        │     ◇ Argentina         │ [REACT] [ASTRO] [TYPESCRIPT]                                 │   │
  │        │     ◇ Tecnología …      │ [TAILWIND CSS] [NODE.JS]                                     │   │
@@ -917,7 +916,7 @@ All buttons: labels never wrap mid-word. Allow two-line labels only on mobile vi
 
 ### 7.14 Bio block
 
-- Optional lead: `<p class={styles.lead}>`: `@mixin body-lg`, `--text-color-secondary`, `max-inline-size: var(--max-w-measure)`.
+- No lead paragraph (owner's choice, 2026-11-24). galeed.link is a compressed, linktree-style hub: the two columns are the whole bio. Who Galeed is, the studies and the project detail live on galeedgutierrez.com, the Web link in the social row.
 - Spec sheet: `<div class="grid grid-cols-[1fr_1px_1fr] gap-4">` (§5.3) with two `<section>` columns. Each column has an `<h3>` "SOBRE MÍ" / "STACK TECH". The `h3` element default is `@mixin label`, and the module sets `--text-color-tertiary`.
   - The columns are separated by `<div class={styles.rule} aria-hidden="true">`, a 1px track in `--border-color-primary`.
 - *Sobre mí:* `<ul class="flex flex-col gap-2" role="list">`, items `class="inline-flex gap-2 items-start"` in `@mixin body-md`, each with an 18px Lucide icon in `--text-color-tertiary`, `aria-hidden`. Suggested mapping:
