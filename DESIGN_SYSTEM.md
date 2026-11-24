@@ -813,9 +813,10 @@ Conventions (§9):
 ```
 
 - `<header class:list={['flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 pt-6', styles.head]}>`. The module adds `border-block-start: var(--border-025) solid var(--border-color-primary)`.
-- Title: `<h2><span class={styles.index} aria-hidden="true">02</span>Trabajo freelance</h2>`.
+- Title: `<h2 class="flex items-baseline"><span class="self-center" class={styles.index} aria-hidden="true">02</span>Trabajo freelance</h2>`.
   - `h2` uses its element default, `@mixin heading-lg`.
   - `.index` is `@mixin micro`, `color: var(--text-color-accent)`, `margin-inline-end: var(--spacing-2)`.
+  - The index is vertically centered on the title line (`self-center`; owner's choice, 2026-11-24). The `h2` keeps `items-baseline`, so its baseline stays the title's: with `items-center` it became the index's, and the header's baseline alignment raised the action link to it.
 - Optional action: `a-link-action` (§9.5). It is `@mixin label` with `--text-color-accent` and a trailing `lucide:arrow-right` 16px that nudges 2px on hover, per BM **[V]**. Its accessible name must be specific, e.g. `<span class="sr-only">Ver todos los </span>proyectos`.
 - The heading never truncates. It wraps, balanced. If the action plus the title don't fit, the action drops below (`flex-wrap`).
 
