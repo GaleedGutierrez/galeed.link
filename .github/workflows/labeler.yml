@@ -1,9 +1,11 @@
 ---
 name: "🏷️ Pull Request Labeler"
 on:
-  # pull_request_target runs with the base branch's workflow and config, and
-  # neither job checks out or runs code from the pull request.
-  pull_request_target:
+  # Not pull_request_target (zizmor: dangerous-triggers). Branches of this
+  # repository and Dependabot get the write token below, and a pull request
+  # that edits labeler.yml is labeled by its own version. Pull requests from
+  # forks get a read-only token, so they stay unlabeled.
+  pull_request:
     types: [opened, edited, synchronize, reopened]
 
 permissions: {}
