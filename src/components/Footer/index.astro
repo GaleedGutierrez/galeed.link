@@ -17,7 +17,12 @@ const year = new Date().getFullYear();
 	<p class={styles["footer__line"]}>
 		© {year}
 		{PROFILE.name}
-		<span aria-hidden="true"> λ </span>
+		<span
+			aria-hidden="true"
+			class={styles["footer__lambda"]}
+		>
+			λ
+		</span>
 		Hecho con Astro
 	</p>
 	<a
