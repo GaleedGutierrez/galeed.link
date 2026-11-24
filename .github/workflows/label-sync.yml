@@ -1,0 +1,34 @@
+---
+name: "🎨 Label Sync"
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/labels.yml
+      - .github/workflows/label-sync.yml
+  # A pull request that edits the labels shows the changes without applying
+  # them (dry run).
+  pull_request:
+    paths:
+      - .github/labels.yml
+      - .github/workflows/label-sync.yml
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  sync:
+    permissions:
+      contents: read
+      issues: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: crazy-max/ghaction-github-labeler@548a7c3603594ec17c819e1239f281a3b801ab4d # v6.0.0
+        with:
+          yaml-file: .github/labels.yml
+          # Labels missing from labels.yml (release, javascript…) stay.
+          skip-delete: true
+          dry-run: ${{ github.event_name == 'pull_request' }}
