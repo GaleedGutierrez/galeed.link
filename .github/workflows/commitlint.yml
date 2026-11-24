@@ -1,9 +1,16 @@
 ---
 name: 📝 Commitlint
-on: [push, pull_request]
+on:
+  # Branch pushes are linted locally by the pre-push hook, and in CI by their
+  # pull request: main only needs its merge commits checked.
+  push:
+    branches: [main]
+  pull_request:
+    # edited: the title is linted too, and the type label comes from it.
+    types: [opened, edited, synchronize, reopened]
 
 permissions:
-  pull-requests: read
+  contents: read
 
 jobs:
   commitlint:
@@ -19,7 +26,7 @@ jobs:
           node-version-file: .nvmrc
 
       # The lockfile's commitlint and config, the same ones the commit-msg
-      # hook runs.
+      # hook runs (not a bundled copy, as the Docker-based actions ship).
       - name: 📥 Install Dependencies
         run: npm ci
 
@@ -27,7 +34,17 @@ jobs:
         if: github.event_name == 'push'
         run: npx commitlint --last --verbose
 
+      # base..head: the commits on the branch, even after merging main into
+      # it (head~N counted main's commits as the branch's).
       - name: ✅👥 Validate PR commits with commitlint
         if: github.event_name == 'pull_request'
-        run: |
-          npx commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: npx commitlint --from "$BASE_SHA" --to "$HEAD_SHA" --verbose
+
+      - name: ✅🏷️ Validate PR title with commitlint
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: printf '%s\n' "$PR_TITLE" | npx commitlint --verbose

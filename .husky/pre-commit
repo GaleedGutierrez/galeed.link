@@ -1,2 +1,5 @@
+# Fix and check the staged files, then run every linter on the whole tree, as
+# CI does. The full run reads the working tree, unstaged and untracked files
+# included.
 npx lint-staged
-npm run check-for-dupes
+npm run lint:all
