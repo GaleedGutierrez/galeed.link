@@ -801,7 +801,7 @@ Conventions (§9):
   - `ul.navbar__list`: `overflow-x: auto`, `py-1` so the focus ring isn't clipped, inline padding 16px / 32px matched by `scroll-padding-inline`.
   - A `mask-image` fades both edges over that padding only, so the first and last links are never covered at the scroll ends.
   - Scrollbar hidden on touch; `scrollbar-width: thin` under `(hover: hover) and (pointer: fine)`, so mouse users can reach the last links.
-  - The current link is scrolled into view inside the list (never the page) when the observer marks it.
+  - The current link is scrolled into view inside the list (never the page) when the scroll check marks it, unless focus is in the list. A focused link is scrolled into view too: the browser leaves a partly visible one under the edge fade (SC 2.4.12). A link inside the scroll padding counts as hidden.
 - Sticky at every width: `sticky top-0` (owner's choice, 2026-11-23; it used to
   be ≥1024px only, which left phones without it). It is one row of about 52px,
   under 12% of a phone's viewport. The module adds
@@ -1689,8 +1689,12 @@ a:not([class]) {
   color: var(--text-color-inverse);
 }
 
-[id] {
-  scroll-margin-top: calc(var(--height-nav) + var(--spacing-4));
+/* Anchor targets and focused controls land clear of the sticky nav, with
+   room for the ring at both edges (SC 2.4.11/2.4.12). The nav's own links
+   stick, so a margin would only jump the page. */
+[id],
+:focus:not(nav *) {
+  scroll-margin-block: calc(var(--height-nav) + var(--spacing-4)) var(--spacing-4);
 }
 ```
 

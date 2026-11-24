@@ -11,6 +11,12 @@
 	color: var(--text-color-inverse);
 }
 
-[id] {
-	scroll-margin-top: calc(var(--height-nav) + var(--spacing-4));
+/* Anchor targets and focused controls land clear of the sticky nav, with
+   room for the focus ring at both edges (SC 2.4.11/2.4.12). Without it,
+   Shift+Tab scrolled cards to the top, under the nav. The nav's own links
+   are left out: they stick, so a margin would only jump the page. */
+[id],
+:focus:not(nav *) {
+	scroll-margin-block: calc(var(--height-nav) + var(--spacing-4))
+		var(--spacing-4);
 }
