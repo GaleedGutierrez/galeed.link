@@ -32,20 +32,23 @@ docs are English.
 
 ## Commands
 
-| Task                 | Command                                       |
-| -------------------- | --------------------------------------------- |
-| Dev server           | `npm run dev`                                 |
-| Dev server on LAN    | `npm run dev -- --host` (only when needed)    |
-| Build                | `npm run build`                               |
-| Preview build        | `npm run preview`                             |
-| Lint TS/Astro/JSON   | `npm run lint` · `npm run lint:fix`           |
-| Lint CSS             | `npm run stylelint` · `npm run stylelint:fix` |
-| Format               | `npm run prettier` · `npm run prettier:fix`   |
-| Lint Markdown        | `npm run lint-md` · `npm run lint-md:fix`     |
-| Duplicate code       | `npm run check-for-dupes`                     |
-| Type check           | `npx astro check`                             |
-| Unit tests (Vitest)  | `npm run test`                                |
-| Lighthouse (preview) | `npm run test:performance`                    |
+| Task                  | Command                                       |
+| --------------------- | --------------------------------------------- |
+| Dev server            | `npm run dev`                                 |
+| Dev server on LAN     | `npm run dev -- --host` (only when needed)    |
+| Build                 | `npm run build`                               |
+| Preview build         | `npm run preview`                             |
+| Lint TS/Astro/JSON    | `npm run lint` · `npm run lint:fix`           |
+| Lint CSS              | `npm run stylelint` · `npm run stylelint:fix` |
+| Format                | `npm run prettier` · `npm run prettier:fix`   |
+| Lint Markdown         | `npm run lint-md` · `npm run lint-md:fix`     |
+| Duplicate code        | `npm run check-for-dupes`                     |
+| Type check            | `npm run typecheck` (`astro check`)           |
+| Unit tests (Vitest)   | `npm run test`                                |
+| Every linter          | `npm run lint:all` (what CI runs)             |
+| Linters, types, tests | `npm run verify` (the pre-push hook)          |
+| Guided commit         | `npm run commit` (commitlint prompt)          |
+| Lighthouse (preview)  | `npm run test:performance`                    |
 
 - After editing CSS, run `npm run stylelint:fix`. It reorders properties
   (`order/properties-order`) and normalizes notation. That is expected.
@@ -290,9 +293,12 @@ docs are English.
   with "No hay ningún agente en ejecución", start Kleopatra / `gpg-agent`. Never
   bypass signing or hooks.
 - Husky hooks:
-  - pre-commit: `lint-staged` + `check-for-dupes`.
-  - pre-push: the same. Tests are commented out there, so run `npm run test`
-    yourself before a PR.
+  - commit-msg: commitlint (`@commitlint/config-conventional`).
+  - pre-commit: `lint-staged` (fixes the staged files), then `lint:all` on the
+    whole tree. The full run reads unstaged and untracked files too, so a stray
+    file that fails a linter blocks the commit.
+  - pre-push: commitlint over every commit the push sends (what is not on
+    `origin/main` yet, for a new branch), then `npm run verify`.
 - `check-for-dupes` ignores `.agents/` and `.claude/`: the installed skill is
   symlinked into both, which doubled every file.
 - Work on a branch, never directly on `main`.
