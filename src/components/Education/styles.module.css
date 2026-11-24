@@ -30,26 +30,46 @@
 	color: var(--text-color-primary);
 	text-decoration: none;
 
+	/* Light mode's hover accent is as dark as the title (#662801 vs #1c1c1c),
+	   so the hover also underlines the title and moves the arrow: color is not
+	   the only signal. */
 	@media (hover: hover) {
 		&:hover .education__course-title {
-			color: var(--text-color-hover-accent);
+			color: var(--text-color-accent);
+			text-decoration-line: underline;
+			text-decoration-thickness: var(--border-05);
+			text-underline-offset: 0.2em;
 		}
-	}
 
-	@media (prefers-reduced-motion: no-preference) {
-		& .education__course-title {
-			transition: color var(--duration-fast) var(--ease-out);
+		&:hover .education__course-icon {
+			color: var(--text-color-accent);
 		}
 	}
 }
 
 .education__course-title {
 	@mixin body-md;
+
+	@media (prefers-reduced-motion: no-preference) {
+		transition: color var(--duration-fast) var(--ease-out);
+	}
 }
 
 .education__course-icon {
 	flex-shrink: 0;
 	color: var(--text-color-tertiary);
+
+	@media (prefers-reduced-motion: no-preference) {
+		transition:
+			color var(--duration-fast) var(--ease-out),
+			translate var(--duration-base) var(--ease-out);
+	}
+
+	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+		.education__course:hover & {
+			translate: 2px -2px;
+		}
+	}
 }
 
 .education__summary {

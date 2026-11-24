@@ -960,9 +960,14 @@ columns stacked, each with an `<h3>` (`@mixin label`, `--text-color-tertiary`).
   - A row with a diploma page is an `<a target="_blank">` of at least 44px:
     title (`@mixin body-md`), meta (platform · year, micro tertiary) and a
     trailing 16px `lucide:arrow-up-right` in `--text-color-tertiary`. Hover
-    (`hover: hover`) turns the title `--text-color-hover-accent`; the color
-    transition opts in under `no-preference`. The `sr-only` text says it opens
-    the diploma in a new tab. A row without a URL is static.
+    (`hover: hover`) turns the title and the arrow `--text-color-accent`,
+    underlines the title (2px, `0.2em` offset, as the prose link hover) and
+    moves the arrow `2px -2px`. The underline is the main signal: in light mode
+    `--text-color-hover-accent` (#662801) was nearly as dark as the title
+    (#1c1c1c), so a color change alone didn't show (owner's report,
+    2026-11-24). Transitions and the arrow move opt in under `no-preference`.
+    The `sr-only` text says it opens the diploma in a new tab. A row without a
+    URL is static.
   - Then a `@mixin body-sm` line in `--text-color-secondary` with the total
     ("137 certificados en Platzi, Codely, Código Facilito y Alura.") and an
     `a-link-action` "Perfil de Platzi" (new tab). It links to Platzi, not the
