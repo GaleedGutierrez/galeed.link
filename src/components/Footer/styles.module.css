@@ -8,3 +8,8 @@
 
 	@mixin micro;
 }
+
+/* The line is uppercase (micro), which turned the lambda into Λ. */
+.footer__lambda {
+	text-transform: none;
+}
