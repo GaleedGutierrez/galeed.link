@@ -1,4 +1,8 @@
+# Content signals (https://contentsignals.org): show the site in search
+# results and let AI answer engines use it as a source (ai-input), but not
+# train models on it.
 User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no
 Allow: /
 Disallow: /*.js.map
 

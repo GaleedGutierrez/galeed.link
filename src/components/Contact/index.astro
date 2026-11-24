@@ -10,12 +10,17 @@ const linkedin = SOCIAL_LINKS.find((link) => link.label === "LinkedIn");
 	¿Tenés un proyecto en mente o una propuesta? Escribime y lo charlamos.
 </p>
 <div class="flex flex-wrap gap-3">
+	<!-- Cloudflare's email obfuscation hid this link from crawlers that don't
+	 run JS. The address is already public in /llms.txt, so hiding it here
+	 kept no spam away. -->
+	<!--email_off-->
 	<a
 		class="a-button a-button--primary a-button--wipe"
 		href={`mailto:${PROFILE.email}`}
 	>
 		Escribime
 	</a>
+	<!--/email_off-->
 	{linkedin && (
 		<a
 			class="a-button a-button--secondary"
