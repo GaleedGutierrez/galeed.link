@@ -730,11 +730,11 @@ Conventions (§9):
 
 ```text
 ┌───────────────────────────────────────────────────────────────┐
-│ AR · DISPONIBLE ●                                     [☼]     │  h 48px, px --spacing-gutter
+│ AR · DISPONIBLE ●                                     [☼]     │  h 52px, px --spacing-gutter, py --spacing-2
 └━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┘  2px --border-color-accent (decorative)
 ```
 
-- Container: `<div class:list={['flex items-center justify-between min-h-12 px-4', styles.bar]}>`. The module adds `background-color: var(--background-color-secondary)` and `border-block-end: var(--border-05) solid var(--border-color-accent)`.
+- Container: `<div class:list={['flex items-center justify-between min-h-12 px-4', styles.bar]}>`. The module adds `padding-block: var(--spacing-2)` (8px; owner's choice, 2026-11-24, so the 36px toggle doesn't sit 6px from the edges: the bar is 52px tall), `background-color: var(--background-color-secondary)` and `border-block-end: var(--border-05) solid var(--border-color-accent)`.
 - Left: `@mixin micro`, `color: var(--text-color-tertiary)`.
   - The optional availability dot is `--text-color-success` plus text, never the dot alone.
   - Long strings truncate with `min-inline-size: 0; text-overflow: ellipsis`, and the full text is also in the hero. Keep it short.

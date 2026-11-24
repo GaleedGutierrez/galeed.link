@@ -1,4 +1,5 @@
 .system-bar {
+	padding-block: var(--spacing-2);
 	border-block-end: var(--border-05) solid var(--border-color-accent);
 	background-color: var(--background-color-secondary);
 }
