@@ -1,17 +1,24 @@
 {
-  "version": 1,
+  "version": 2,
   "skills": {
+    "accessibility": {
+      "source": "addyosmani/web-quality-skills",
+      "commit": "afa8da942115f2961fdbfa80807ea0b232ff6c00",
+      "sourceType": "github",
+      "skillPath": "skills/accessibility/SKILL.md",
+      "computedHash": "c668809f5df57feb87cc06f1bc37fb340d1d92e26bacb6edbeab9258d22e76a5"
+    },
     "modern-web-guidance": {
       "source": "GoogleChrome/modern-web-guidance",
       "sourceType": "github",
       "skillPath": "skills/modern-web-guidance/SKILL.md",
-      "computedHash": "b8fca1e3fd5cae1a8fb3bf04b6c0a8149aa74aa8350b9956786dcd7cdf855b2c"
+      "computedHash": ""
     },
     "security-audit": {
       "source": "cloudflare/security-audit-skill",
       "sourceType": "github",
       "skillPath": "skills/security-audit/SKILL.md",
-      "computedHash": "e6b2e317de75da97e9de18d842982994803f3a67a4a6d8154a82323dc3de8528"
+      "computedHash": ""
     }
   }
 }
