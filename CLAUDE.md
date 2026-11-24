@@ -93,8 +93,9 @@ docs are English.
 - `src/types/designTokens.ts`: token lists and card models.
   `src/scripts/theme.ts`: theme logic. `tests/`: Vitest (token invariants from
   §9.9).
-- `scripts/`: post-build `purgeCss.ts`, `lightningcss.ts`, `subsetFonts.ts` and
-  `cspHeaders.ts` (policy and hash helpers in `csp.ts`).
+- `scripts/`: pre-build `gitHistory.ts`; post-build `purgeCss.ts`,
+  `lightningcss.ts`, `subsetFonts.ts` and `cspHeaders.ts` (policy and hash
+  helpers in `csp.ts`).
 - Path aliases in use: `@/*`, `@components/*`, `@layouts/*`, `@styles/*`,
   `@images/*`.
 
@@ -175,14 +176,15 @@ docs are English.
 
 ## Build pipeline gotchas
 
-- Build order is
-  `astro build && purge-css && lightningcss && subset-fonts && csp-headers`.
-  lightningcss must come after purge-css: `purgeCss.ts` re-runs
-  `postcss-custom-properties`, which would inline the `light-dark()` polyfill
-  switches and pin every color to light. `subset-fonts` must come after both: it
-  renames fonts and style sheets by content hash, so any later step that
-  rewrites the CSS would leave a stale hash. `csp-headers` stays last: it hashes
-  the final HTML.
+- Build order is `git-history`, `astro build`, `purge-css`, `lightningcss`,
+  `subset-fonts`, `csp-headers`. `git-history` fetches the full history when the
+  clone is shallow (Cloudflare Pages clones one commit), so `getLastModified()`
+  sees the real last content commit instead of the latest one. lightningcss must
+  come after purge-css: `purgeCss.ts` re-runs `postcss-custom-properties`, which
+  would inline the `light-dark()` polyfill switches and pin every color to
+  light. `subset-fonts` must come after both: it renames fonts and style sheets
+  by content hash, so any later step that rewrites the CSS would leave a stale
+  hash. `csp-headers` stays last: it hashes the final HTML.
 - The Content-Security-Policy is generated, not written in `public/_headers`.
   `cspHeaders.ts` hashes every inline script and `<style>` in `dist/*.html` (the
   site is static, so no nonces) and adds the header to the `/*` rule of
