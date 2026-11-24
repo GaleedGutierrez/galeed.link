@@ -255,7 +255,9 @@ The favicon sits in the browser's tab strip, so it follows the browser's color s
 | Dark (default) | `--charcoal-950` | `--hev-400` | 7.63:1 (AAA) |
 | Light | `--bone-50` | `--hev-text-l` | 7.78:1 (AAA) |
 
-Both versions clear 7:1, the AAA text threshold, though a graphic only needs 3:1. The ring's outer edge (r 28) stays inside the disc (r 32), so the mark always sits on its own disc and the tab strip color never changes the ratio. `--hev-400` on `--bone-50` is only 2.13:1, so the light icon uses the darker text orange. The `.ico`, `apple-touch-icon.png` and manifest PNGs only have one version, rendered from the dark one. The SVG keeps hex literals because it is a standalone file outside the CSS pipeline; keep them in sync with `settings/colors.css`.
+Both versions clear 7:1, the AAA text threshold, though a graphic only needs 3:1.
+The ring's outer edge (r 28) stays inside the disc (r 32), so the mark always sits on its own disc and the tab strip color never changes the ratio.
+`--hev-400` on `--bone-50` is only 2.13:1, so the light icon uses the darker text orange. The `.ico`, `apple-touch-icon.png` and manifest PNGs only have one version, rendered from the dark one. The SVG keeps hex literals because it is a standalone file outside the CSS pipeline; keep them in sync with `settings/colors.css`.
 
 ---
 
@@ -935,7 +937,8 @@ All buttons: labels never wrap mid-word. Allow two-line labels only on mobile vi
 
 - `src/pages/404.astro`: the system bar in a `<header>`, then `NotFound` in `<main>`. `noindex`.
 - Flow, left-aligned: illustration → mono tag (`@mixin micro`, `--text-color-accent`; the visible `ERR_404 // RUTA_NO_RESUELTA` is `aria-hidden`, an `sr-only` twin reads "Error 404: ruta no resuelta") → `h1` → `@mixin body-md` text in `--text-color-secondary` → one `a-button a-button--primary` back to `/`.
-- Illustration (`NotFound/Illustration.astro`): inline SVG line art, `role="img"` named by its Spanish `<title>` and `<desc>`. A "404" browser window on legs walks up to a booth drawn in the same flat window style: a dark header that carries the "ANOMALOUS LINK" sign, a service window and a counter. A generic guard, built from basic shapes, looks on from inside. No game names, logos or characters (§6.5).
+- Illustration (`NotFound/Illustration.astro`): inline SVG line art, `role="img"` named by its Spanish `<title>` and `<desc>`.
+  A "404" browser window on legs walks up to a booth drawn in the same flat window style: a dark header that carries the "ANOMALOUS LINK" sign, a service window and a counter. A generic guard, built from basic shapes, looks on from inside. No game names, logos or characters (§6.5).
   - No color in the markup. Line art is `--text-color-primary` through `currentColor`. Fills are background tokens (`tertiary` surfaces, `primary` service window, `inverse` for both title bars, the cap and one sneaker). The single accent is the browser window's 2px HEV rule in `--border-color-accent`.
   - SVG text: sign `@mixin micro` in `--text-color-inverse` on the inverse header (15.00 / 13.72:1), "404" `@mixin heading-xl` in `--text-color-accent` on tertiary (8.84 / 7.46:1).
   - Forced colors map each fill role to `Canvas` / `CanvasText` and the HEV rule to `Highlight`.
