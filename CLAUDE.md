@@ -47,6 +47,7 @@ docs are English.
 | Duplicate code        | `npm run check-for-dupes`                     |
 | Type check            | `npm run typecheck` (`astro check`)           |
 | Unit tests (Vitest)   | `npm run test`                                |
+| Accessibility (axe)   | `npm run test:e2e` (after `npm run build`)    |
 | Every linter          | `npm run lint:all` (what CI runs)             |
 | Linters, types, tests | `npm run verify` (the pre-push hook)          |
 | Guided commit         | `npm run commit` (commitlint prompt)          |
@@ -56,8 +57,14 @@ docs are English.
 - After editing CSS, run `npm run stylelint:fix`. It reorders properties
   (`order/properties-order`) and normalizes notation. That is expected.
 - One test file: `npx vitest run tests/tokens.test.ts`.
-- `npm run test:e2e` is defined, but Playwright is not installed and there are
-  no end-to-end tests yet.
+- `npm run test:e2e` runs Playwright (`tests/e2e/`) against `npm run preview`,
+  so build first. `a11y.spec.ts` runs axe (`@axe-core/playwright`) with the WCAG
+  2.2 AAA and best-practice tags on each page, in both themes (the OS color
+  scheme) and at desktop and mobile widths, with reduced motion so contrast is
+  measured on the final colors. It blocks Kaspersky and the analytics. A new
+  page needs an entry in `PAGES`. First run: `npx playwright install chromium`.
+  axe can't measure every element (the `h1` with the portrait, nav links under
+  the sticky bar): contrast there is still a manual check.
 - `npm run test:performance` audits `http://localhost:4173/`: build, start
   `npm run preview` (pinned to 4173 so it never collides with the dev server on
   4321), then run it. The script blocks Kaspersky's injected script
@@ -316,9 +323,9 @@ docs are English.
   the issue forms (`.github/issue-label.yml`). A new area needs an entry in
   each.
 - CI runs on pull requests and on `main` (not on bare branch pushes): every
-  linter, `astro check`, Vitest, Lighthouse CI and CodeQL (JavaScript and the
-  workflows). The `main` ruleset requires the lint, Super Linter, Vitest and
-  `lighthouseci` checks by job name: renaming one blocks every PR until the
-  ruleset is updated.
+  linter, `astro check`, Vitest, axe (Playwright), Lighthouse CI and CodeQL
+  (JavaScript and the workflows). The `main` ruleset requires the lint, Super
+  Linter, Vitest and `lighthouseci` checks by job name: renaming one blocks
+  every PR until the ruleset is updated.
 - CI also runs commitlint on the commits of a PR and on its title: the title
   sets the PR's `type:` label.

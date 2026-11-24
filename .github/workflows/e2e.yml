@@ -1,0 +1,54 @@
+---
+name: 🎭 Playwright
+on: # yamllint disable-line rule:truthy
+  # Branch pushes run once, through their pull request.
+  push:
+    branches: [main]
+  pull_request: null
+
+permissions: {}
+
+# A new push to a pull request cancels the run it makes stale.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  axe:
+    name: ♿ Axe accessibility
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: 👍 Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # git-history reads the last content commit for the page's date.
+          fetch-depth: 0
+
+      - name: 🐢 Setup Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      - name: 🌐 Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: 🏗️ Build App
+        run: npm run build
+
+      # Serves dist/ (npm run preview) and runs tests/e2e.
+      - name: ♿ Run axe
+        run: npm run test:e2e
+
+      - name: 📝 Upload the report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
