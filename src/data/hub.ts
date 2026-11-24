@@ -6,6 +6,7 @@ import {
 	type PersonalProject,
 	personalProjects,
 } from '@galeedgutierrez/shared-assets';
+import { getImage } from 'astro:assets';
 
 import type {
 	LinkItem,
@@ -48,6 +49,8 @@ export const SOCIAL_LINKS: SocialLink[] = [
 ];
 
 const FEATURED_PROJECTS_COUNT = 5;
+// Width of the screenshot each project's JSON-LD node links to.
+const SCHEMA_IMAGE_WIDTH = 1280;
 
 const yearRange = (start: Date, end?: Date): string => {
 	const years = [start, end ?? start].map((date) => date.getFullYear());
@@ -113,7 +116,14 @@ export const getProjectTiles = async (): Promise<TileItem[]> => {
 
 	return Promise.all(
 		latest.map(async ({ project, href }, index): Promise<TileItem> => {
-			const { default: image } = await project.screenshots.webp.large;
+			const { default: image } = await project.screenshot;
+			// The screenshot is a 2560px PNG of up to ~1 MB: the JSON-LD links a
+			// WebP the size of the old one instead.
+			const schemaImage = await getImage({
+				src: image,
+				format: 'webp',
+				width: SCHEMA_IMAGE_WIDTH,
+			});
 
 			const technologies = project.technologies
 				.slice(0, 3)
@@ -125,6 +135,7 @@ export const getProjectTiles = async (): Promise<TileItem[]> => {
 				href,
 				alt: `Captura de ${project.title}`,
 				image,
+				imageUrl: schemaImage.src,
 				meta: `${technologies.join(' · ')} · ${year}`,
 				description: toPlainText(project.description),
 				featured: index === 0,

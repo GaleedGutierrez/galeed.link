@@ -7,10 +7,10 @@ const PERSON_ID = 'https://galeed.link/#person';
 const SITE_URL = 'https://galeed.link';
 
 const image = {
-	src: '/_astro/shop.abc123.webp',
-	width: 1280,
-	height: 720,
-	format: 'webp',
+	src: '/_astro/shop.abc123.png',
+	width: 2560,
+	height: 1600,
+	format: 'png',
 } as ImageMetadata;
 
 type Node = Record<string, unknown>;
@@ -47,6 +47,7 @@ describe('buildWorksSchema', () => {
 					href: 'https://shop.example/',
 					alt: 'Captura de Shop.co',
 					image,
+					imageUrl: '/_astro/shop.abc123_Z1x.webp',
 					description: 'E-commerce.',
 					technologies: ['React', 'TypeScript'],
 					year: 2025,
@@ -60,7 +61,8 @@ describe('buildWorksSchema', () => {
 			name: 'Shop.co',
 			url: 'https://shop.example/',
 			description: 'E-commerce.',
-			image: 'https://galeed.link/_astro/shop.abc123.webp',
+			// The smaller WebP, never the full-size screenshot.
+			image: 'https://galeed.link/_astro/shop.abc123_Z1x.webp',
 			keywords: 'React, TypeScript',
 			dateCreated: '2025',
 			creator: { '@id': PERSON_ID },

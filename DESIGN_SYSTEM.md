@@ -868,10 +868,12 @@ Conventions (§9):
 - Grid: §5.3. The card is an `<a class:list={['flex flex-col gap-2', styles.tile]}>`, with `--border-radius-1` and `--text-color-primary`. There is no border around the whole tile, following LK's open style **[V]**.
 - Media: `<Picture>` in a
   `<figure class:list={['relative overflow-hidden aspect-video', styles.media]}>`
-  on every tile, featured or not: the project screenshots are 16:9, and a square
-  crop cut them to a third of their width and upscaled them. The `<picture>`
-  wrapper gets `pictureAttributes={{ class: 'block h-full' }}`, so
-  `object-fit: cover` fills the frame even if a screenshot isn't exactly 16:9.
+  on every tile, featured or not. The project screenshots are 16:10 (2560×1600
+  PNGs since shared-assets 0.4.0), so `object-top` crops only their bottom
+  strip; a square crop cut them to a third of their width and upscaled them. The
+  `<picture>` wrapper gets `pictureAttributes={{ class: 'block h-full' }}`, so
+  `object-fit: cover` fills the frame. The fallback `<img>` is capped at
+  `width={960}`; without it, it is the full-size PNG.
   The module adds `--border-radius-1`, a `--border-025` border in
   `--border-color-primary`, and `--background-color-tertiary`. Images use
   `loading="lazy"` and explicit dimensions (CLS < 0.1).

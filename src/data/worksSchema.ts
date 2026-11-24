@@ -52,7 +52,7 @@ export const buildWorksSchema = ({
 		name: tile.title,
 		url: tile.href,
 		description: tile.description,
-		image: tile.image ? new URL(tile.image.src, siteUrl).href : undefined,
+		image: tile.imageUrl ? new URL(tile.imageUrl, siteUrl).href : undefined,
 		keywords: tile.technologies?.join(', '),
 		dateCreated: tile.year ? String(tile.year) : undefined,
 		creator: person,
