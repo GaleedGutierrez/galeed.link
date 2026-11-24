@@ -1,17 +1,72 @@
 ---
 name: "🏷️ Pull Request Labeler"
 on:
-  - pull_request_target
+  # pull_request_target runs with the base branch's workflow and config, and
+  # neither job checks out or runs code from the pull request.
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened]
 
-permissions:
-  contents: read
-  pull-requests: write
+permissions: {}
 
 jobs:
-  labeler:
+  areas:
+    # A title or description edit changes no files.
+    if: github.event.action != 'edited'
     permissions:
       contents: read
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/labeler@bf12e9b00b37c5c0ca2b87b79b2daf7891dbda13 # v7.0.0
+        with:
+          # Drops an area label once the pull request no longer touches it.
+          sync-labels: true
+
+  type:
+    # After areas: labeler writes the whole label set, so running both at once
+    # could drop the type label.
+    needs: areas
+    if: ${{ !cancelled() }}
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const TYPES = ['feat', 'fix', 'perf', 'refactor', 'style', 'test', 'docs', 'build', 'ci', 'chore', 'revert'];
+            const ALIASES = { feature: 'feat', bug: 'fix', bugfix: 'fix', hotfix: 'fix', doc: 'docs', tests: 'test' };
+            const BREAKING = 'breaking change';
+            const label = (type) => `type: ${type}`;
+            const normalize = (type) => {
+              const key = type?.toLowerCase();
+              return ALIASES[key] ?? key;
+            };
+
+            const pr = context.payload.pull_request;
+            // `feat(bio)!: …` in the title, else the `feat/` or `feat-` branch prefix.
+            const header = /^(?<type>\w+)(?:\([^)]*\))?(?<bang>!)?:\s/.exec(pr.title.trim());
+            const prefix = /^(?<type>[a-z]+)[/-]/i.exec(pr.head.ref);
+            const type = [header?.groups.type, prefix?.groups.type].map(normalize).find((t) => TYPES.includes(t));
+            const isBreaking = Boolean(header?.groups.bang) || /^BREAKING[ -]CHANGE:/m.test(pr.body ?? '');
+
+            // Without a type in the title or branch, a type label added by hand stays.
+            const managed = new Set([BREAKING, ...(type ? TYPES.map(label) : [])]);
+            const wanted = new Set([type && label(type), isBreaking && BREAKING].filter(Boolean));
+            const issue = { ...context.repo, issue_number: pr.number };
+            const { data } = await github.rest.issues.listLabelsOnIssue(issue);
+            const current = data.map((l) => l.name);
+
+            for (const name of current.filter((n) => managed.has(n) && !wanted.has(n))) {
+              await github.rest.issues.removeLabel({ ...issue, name });
+            }
+            const toAdd = [...wanted].filter((n) => !current.includes(n));
+            if (toAdd.length > 0) {
+              await github.rest.issues.addLabels({ ...issue, labels: toAdd });
+            }
+
+            if (type) {
+              core.info(`#${pr.number}: ${[...wanted].join(', ')}`);
+            } else {
+              core.notice(`#${pr.number} has no Conventional Commit type in its title or branch.`);
+            }

@@ -1,135 +1,31 @@
 ---
-feature:
-  - "(feature|feat)"
+# Area and concern labels from the "Area" dropdown of the issue forms
+# (github/issue-labeler). A form renders the answer under its heading, the
+# picks joined by ", ":
+#
+#   ### Area
+#
+#   Content, Styles and theme
+#
+# Each pattern finds its option on the line after that heading, so prose that
+# mentions "content" elsewhere adds nothing. The type label (bug, enhancement,
+# question) comes from the form itself. Keep the option names in step with
+# ISSUE_TEMPLATE/*.yml.
 
-critical:
-  - "(critical|urgent)"
+"area: content":
+  - '/### Area\s+[^\n]*\bContent\b/'
 
-bug:
-  - "bug"
+"area: components":
+  - '/### Area\s+[^\n]*\bComponents\b/'
 
-documentation:
-  - "(documentation|docs)"
+"area: styles":
+  - '/### Area\s+[^\n]*\bStyles and theme\b/'
 
-continuous integration:
-  - "ci"
+"area: seo":
+  - '/### Area\s+[^\n]*\bSEO and link previews\b/'
 
-build:
-  - "build"
+"a11y":
+  - '/### Area\s+[^\n]*\bAccessibility\b/'
 
-chore:
-  - "chore"
-
-fix:
-  - "fix"
-
-refactor:
-  - "refactor"
-
-revert:
-  - "revert"
-
-style:
-  - "style"
-
-test:
-  - "test"
-
-enhancement:
-  - "enhancement"
-
-question:
-  - "question"
-
-"priority: critical":
-  - "priority: critical"
-
-"priority: high":
-  - "priority: high"
-
-"priority: medium":
-  - "priority: medium"
-
-"priority: low":
-  - "priority: low"
-
-"in progress":
-  - "in progress"
-
-"needs review":
-  - "needs review"
-
-blocked:
-  - "blocked"
-
-closed:
-  - "closed"
-
-frontend:
-  - "frontend"
-
-backend:
-  - "backend"
-
-api:
-  - "api"
-
-ui/ux:
-  - "ui/ux"
-
-"good first issue":
-  - "good first issue"
-
-easy:
-  - "easy"
-
-medium:
-  - "medium"
-
-hard:
-  - "hard"
-
-major:
-  - "major"
-
-minor:
-  - "minor"
-
-fixed:
-  - "fixed"
-
-wontfix:
-  - "wontfix"
-
-duplicate:
-  - "duplicate"
-
-invalid:
-  - "invalid"
-
-help wanted:
-  - "help wanted"
-
-performance improvements:
-  - "performance improvements"
-
-release:
-  - "release"
-
-"status: can't reproduce":
-  - "status: can't reproduce"
-
-"status: confirmed":
-  - "status: confirmed"
-
-"status: needs information":
-  - "status: needs information"
-
-"status: wont do/fix":
-  - "(status: status: wont do|status: status: wont fix)"
-
-"type: discussion":
-  - "type: discussion"
-
-"type: epic":
-  - "type: epic"
+"performance":
+  - '/### Area\s+[^\n]*\bPerformance\b/'

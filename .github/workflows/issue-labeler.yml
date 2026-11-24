@@ -4,18 +4,23 @@ on:
   issues:
     types: [opened, edited]
 
-permissions:
-  issues: write
-  contents: read
+permissions: {}
 
 jobs:
   triage:
+    permissions:
+      issues: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: github/issue-labeler@ccca1e16fcb66762200e616fc29b57b940c1cb67 # v3.5
         with:
           configuration-path: .github/issue-label.yml
-          not-before: 2020-01-15T02:54:32Z
           enable-versioned-regex: 0
-          include-title: 1
+          # The area answer is in the body; a title that says "content" adds
+          # nothing.
+          include-title: 0
+          # Editing the answer swaps the label. Removes only the labels in
+          # issue-label.yml, never bug, enhancement or a triage label.
+          sync-labels: 1
           repo-token: ${{ github.token }}
