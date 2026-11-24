@@ -301,6 +301,13 @@ const dateModified = getLastModified().toISOString();
 			is:inline
 			type="text/partytown"
 		>
+			// Hits come only from the live site. localhost, the dev server,
+			// preview deploys and CI set Google's opt-out flag instead:
+			// Lighthouse can't block this worker's requests, so its runs
+			// counted as visits.
+			if (location.hostname !== "galeed.link") {
+				window["ga-disable-G-XEPRCKCX47"] = true;
+			}
 			window.dataLayer = window.dataLayer || [];
 			// On window, not a function declaration: Partytown wraps each
 			// inline script in a function, so a declared gtag stayed local and

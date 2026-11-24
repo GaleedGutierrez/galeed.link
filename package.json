@@ -54,7 +54,7 @@
 		"commit": "commit",
 		"test": "vitest run",
 		"test:e2e": "playwright test",
-		"test:performance": "lighthouse http://localhost:4173/ --view --output html --output-path ./lighthouse-report/lighthouse-report.html --blocked-url-patterns=\"*kaspersky-labs.com*\"",
+		"test:performance": "lighthouse http://localhost:4173/ --view --output html --output-path ./lighthouse-report/lighthouse-report.html --blocked-url-patterns=\"*kaspersky-labs.com*\" --blocked-url-patterns=\"*googletagmanager.com*\" --blocked-url-patterns=\"*google-analytics.com*\"",
 		"prepare": "husky"
 	},
 	"dependencies": {

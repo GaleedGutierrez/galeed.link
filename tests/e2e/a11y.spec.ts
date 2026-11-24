@@ -24,7 +24,7 @@ const AXE_TAGS = [
 
 /**
  * Kaspersky injects its script into every page (it would be audited with the
- * site), and the analytics need no audit and must not count test runs.
+ * site), and the analytics need no audit (off galeed.link they send no hits).
  */
 const BLOCKED_HOSTS =
 	/kaspersky-labs\.com|googletagmanager\.com|google-analytics\.com/;
