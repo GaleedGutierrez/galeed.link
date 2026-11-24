@@ -8,8 +8,10 @@ import browserslist from 'browserslist';
 import { browserslistToTargets, transform } from 'lightningcss';
 
 const distributionPath = path.join(import.meta.dirname, '..', 'dist');
+// The `browserslist` field of package.json (Baseline Widely available, plus
+// the browsers built on the same engines). cssnano's autoprefixer reads it too.
 const targets = browserslistToTargets(
-	browserslist(['>= 0.25%', 'not dead', 'supports css-nesting']),
+	browserslist(undefined, { path: import.meta.dirname }),
 );
 
 /**
