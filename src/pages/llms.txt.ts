@@ -1,9 +1,11 @@
 import type { APIRoute } from 'astro';
 
 import {
+	getCourses,
 	getFreelanceTiles,
 	getProjectTiles,
 	getRepoTiles,
+	getStudies,
 	PROFILE,
 	SOCIAL_LINKS,
 } from '@/data/hub';
@@ -20,13 +22,23 @@ export const GET: APIRoute = async () => {
 		getProjectTiles(),
 		getRepoTiles(),
 	]);
+	const studies = getStudies();
+	const courses = getCourses();
+	const current = studies
+		.filter(({ isInProgress }) => isInProgress)
+		.toSorted((a, b) => a.startDate.getTime() - b.startDate.getTime())
+		.map(({ program, institution }) =>
+			institution.alternateName
+				? `${program} en la ${institution.name} (${institution.alternateName})`
+				: `${program} en la ${institution.name}`,
+		);
 
 	const lines = [
 		`# ${personalSchema.name}`,
 		'',
 		`> ${personalSchema.description}`,
 		'',
-		`${personalSchema.name} es desarrollador frontend en ${PROFILE.location.replace(', AR', ', Argentina')}.${PROFILE.isAvailable ? ' Está disponible para proyectos freelance.' : ''} Estudia ${new Intl.ListFormat('es').format(personalSchema.studies.map(({ program, school }) => `${program} en la ${school.name} (${school.alternateName})`))}.`,
+		`${personalSchema.name} es desarrollador frontend en ${PROFILE.location.replace(', AR', ', Argentina')}.${PROFILE.isAvailable ? ' Está disponible para proyectos freelance.' : ''} Estudia ${toMarkdownText(new Intl.ListFormat('es').format(current))}.`,
 		'',
 		`Tecnologías: ${personalSchema.skills.join(', ')}.`,
 		'',
@@ -69,11 +81,36 @@ export const GET: APIRoute = async () => {
 			),
 		),
 		'',
+		'## Formación',
+		'',
+		...studies.map(({ title, institution, years, status }) =>
+			institution.url
+				? link(
+						title,
+						institution.url,
+						`${institution.name} · ${years} · ${status.label}`,
+					)
+				: `- ${toMarkdownText(`${title}: ${institution.name} · ${years} · ${status.label}`)}`,
+		),
+		'',
+		toMarkdownText(
+			`Cursos recientes (${courses.total} certificados en ${new Intl.ListFormat('es').format(courses.platforms)}):`,
+		),
+		'',
+		...courses.recent.map(({ title, href, platform, date }) => {
+			const details = `${platform.name} · ${date.getFullYear()}`;
+
+			return href
+				? link(title, href, details)
+				: `- ${toMarkdownText(`${title}: ${details}`)}`;
+		}),
+		'',
 		// llmstxt.org: links under "Optional" can be skipped for a shorter
 		// context.
 		'## Optional',
 		'',
 		link('Todos los proyectos', PROFILE.portfolioUrl),
+		link('Certificados de Platzi', PROFILE.platziUrl),
 		'',
 	];
 

@@ -1,6 +1,7 @@
 ---
 import Bio from "@components/Bio/index.astro";
 import Contact from "@components/Contact/index.astro";
+import Education from "@components/Education/index.astro";
 import Footer from "@components/Footer/index.astro";
 import Hero from "@components/Hero/index.astro";
 import Navbar from "@components/Navbar/index.astro";
@@ -9,10 +10,13 @@ import SystemBar from "@components/SystemBar/index.astro";
 import TileList from "@components/TileList/index.astro";
 import Layout from "@layouts/Layout/index.astro";
 
+import { buildEducationSchema } from "@/data/educationSchema";
 import {
+	getCourses,
 	getFreelanceTiles,
 	getProjectTiles,
 	getRepoTiles,
+	getStudies,
 	PROFILE,
 } from "@/data/hub";
 import { PERSON_ID, SITE_URL } from "@/data/personalSchema";
@@ -23,6 +27,9 @@ const [freelanceTiles, projectTiles, repoTiles] = await Promise.all([
 	getProjectTiles(),
 	getRepoTiles(),
 ]);
+const studies = getStudies();
+const courses = getCourses();
+const education = buildEducationSchema({ studies, courses: courses.recent });
 const works = buildWorksSchema({
 	personId: PERSON_ID,
 	siteUrl: SITE_URL,
@@ -52,6 +59,12 @@ const sections = [
 		title: "Open source",
 		isVisible: repoTiles.length > 0,
 	},
+	{
+		id: "formacion",
+		label: "Formación",
+		title: "Formación",
+		isVisible: studies.length > 0 || courses.recent.length > 0,
+	},
 	{ id: "contacto", label: "Contacto", title: "Contacto", isVisible: true },
 ]
 	.filter((section) => section.isVisible)
@@ -64,7 +77,10 @@ const sections = [
 const section = Object.fromEntries(sections.map((item) => [item.id, item]));
 ---
 
-<Layout works={works}>
+<Layout
+	education={education}
+	works={works}
+>
 	<!-- One banner landmark: the system bar and the hero (axe "region"). -->
 	<header>
 		<SystemBar />
@@ -116,6 +132,18 @@ const section = Object.fromEntries(sections.map((item) => [item.id, item]));
 			>
 				<SectionHeader {...section["open-source"]} />
 				<TileList items={repoTiles} />
+			</section>
+		)}
+		{section.formacion && (
+			<section
+				aria-labelledby="formacion"
+				class="flex flex-col gap-4 px-4"
+			>
+				<SectionHeader {...section.formacion} />
+				<Education
+					courses={courses}
+					studies={studies}
+				/>
 			</section>
 		)}
 		{section.contacto && (

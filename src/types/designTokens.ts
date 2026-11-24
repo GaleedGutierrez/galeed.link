@@ -70,6 +70,35 @@ export interface TileItem {
 	year?: number;
 }
 
+/** A degree or school in the Formación section. */
+export interface StudyItem {
+	title: string;
+	institution: {
+		name: string;
+		/** The acronym the institution goes by (UNJu), for the JSON-LD. */
+		alternateName?: string;
+		url?: string;
+	};
+	isUniversity: boolean;
+	isInProgress: boolean;
+	/** `2021—hoy` or `2015—2019`. */
+	years: string;
+	status: Status;
+	/** The degree with its article, for prose ("la carrera de …"). */
+	program: string;
+	startDate: Date;
+}
+
+/** A course certificate in the Formación section. */
+export interface CourseItem {
+	title: string;
+	/** The public diploma page; without one the row is static. */
+	href?: string;
+	platform: { name: string; url: string };
+	date: Date;
+	credentialId?: string;
+}
+
 /** An open source tile: `title` is the `owner/repo`. */
 export interface RepoItem extends TileItem {
 	repo: `${string}/${string}`;

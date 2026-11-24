@@ -1,0 +1,79 @@
+.education__heading {
+	color: var(--text-color-tertiary);
+}
+
+/* Hairlines between rows, as in a spec sheet. */
+.education__row + .education__row {
+	border-block-start: var(--border-025) solid var(--border-color-primary);
+}
+
+.education__title {
+	color: var(--text-color-primary);
+
+	@mixin body-md var(--fw-bold);
+}
+
+.education__meta {
+	color: var(--text-color-tertiary);
+
+	@mixin micro;
+}
+
+/* A year range never breaks at its dash. */
+.education__years {
+	white-space: nowrap;
+}
+
+/* The row is the link: 44px touch target (WCAG 2.5.5). */
+.education__course {
+	min-block-size: calc(44 * var(--rem-scale));
+	color: var(--text-color-primary);
+	text-decoration: none;
+
+	/* Light mode's hover accent is as dark as the title (#662801 vs #1c1c1c),
+	   so the hover also underlines the title and moves the arrow: color is not
+	   the only signal. */
+	@media (hover: hover) {
+		&:hover .education__course-title {
+			color: var(--text-color-accent);
+			text-decoration-line: underline;
+			text-decoration-thickness: var(--border-05);
+			text-underline-offset: 0.2em;
+		}
+
+		&:hover .education__course-icon {
+			color: var(--text-color-accent);
+		}
+	}
+}
+
+.education__course-title {
+	@mixin body-md;
+
+	@media (prefers-reduced-motion: no-preference) {
+		transition: color var(--duration-fast) var(--ease-out);
+	}
+}
+
+.education__course-icon {
+	flex-shrink: 0;
+	color: var(--text-color-tertiary);
+
+	@media (prefers-reduced-motion: no-preference) {
+		transition:
+			color var(--duration-fast) var(--ease-out),
+			translate var(--duration-base) var(--ease-out);
+	}
+
+	@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+		.education__course:hover & {
+			translate: 2px -2px;
+		}
+	}
+}
+
+.education__summary {
+	color: var(--text-color-secondary);
+
+	@mixin body-sm;
+}
