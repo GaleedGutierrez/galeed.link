@@ -6,7 +6,6 @@ import {
 	type PersonalProject,
 	personalProjects,
 } from '@galeedgutierrez/shared-assets';
-import type { ImageMetadata } from 'astro';
 
 import type {
 	LinkItem,
@@ -94,6 +93,8 @@ const toPlainText = (value: string): string =>
 		.replaceAll(/<span[^>]*aria-hidden="true"[^>]*>.*?<\/span>/g, '')
 		.replaceAll(/<[^>]+>/g, '')
 		.replaceAll(/\s+/g, ' ')
+		// Removing an emoji between a word and its comma left "Apeperia , una".
+		.replaceAll(/ ([,.;:])/g, '$1')
 		.trim();
 
 const byDateDesc = (a: PersonalProject, b: PersonalProject): number =>
@@ -112,19 +113,18 @@ export const getProjectTiles = async (): Promise<TileItem[]> => {
 
 	return Promise.all(
 		latest.map(async ({ project, href }, index): Promise<TileItem> => {
-			const screenshot = (await project.screenshots.webp
-				.large) as unknown as {
-				default: ImageMetadata;
-			};
+			const { default: image } = await project.screenshots.webp.large;
 
-			const technologies = project.technologies.slice(0, 3);
+			const technologies = project.technologies
+				.slice(0, 3)
+				.map((technology) => technology.name);
 			const year = project.date.getFullYear();
 
 			return {
 				title: project.title,
 				href,
 				alt: `Captura de ${project.title}`,
-				image: screenshot.default,
+				image,
 				meta: `${technologies.join(' · ')} · ${year}`,
 				description: toPlainText(project.description),
 				featured: index === 0,
