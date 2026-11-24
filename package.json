@@ -58,7 +58,7 @@
 		"@astrojs/sitemap": "^3.7.6",
 		"@fontsource-variable/jetbrains-mono": "^5.3.0",
 		"@fontsource/barlow": "^5.3.0",
-		"@galeedgutierrez/shared-assets": "^0.6.0",
+		"@galeedgutierrez/shared-assets": "^0.6.1",
 		"astro": "^7.4.13",
 		"astro-icon": "^1.2.0",
 		"astro-seo": "^1.2.0",
