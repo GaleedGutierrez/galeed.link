@@ -1113,7 +1113,14 @@ safelist: {
 - **`postcss-custom-properties({ preserve: false })`:** replaces every `var(--background-color-primary)` of a variable defined in `:root` with its value, here `light-dark(var(--bone-100), var(--charcoal-950))` with the primitives resolved too. That is harmless, because `light-dark()` resolves against the element's `color-scheme` at runtime wherever it ends up.
   - It only reads `:root`/`html` (README, v15.0.5). So a token **redefined under another selector would be inlined to its `:root` value**. Themed values are never overridden per selector: they live in `light-dark()`, or the final property is set directly (shadows, §9.6).
   - In CSS Modules the `var()` isn't inlined, because the variable is defined in another file. It resolves at runtime from `:root`, so it still works.
-- **lightningcss targets: the `browserslist` field of `package.json`, `baseline widely available with downstream`** (owner's choice, 2026-11-24). In November 2026 that is Chrome/Edge 125+, Firefox 126+, Safari/iOS 17.5+, Samsung Internet 27+ and Opera 111+. Every one supports `light-dark()`, `oklch()` and nesting, so lightningcss passes them through: no `--lightningcss-light/dark` polyfill, no hex fallbacks, nesting kept (about 6 KB less CSS before compression). cssnano's autoprefixer reads the same field.
+- **lightningcss targets: the `browserslist` field of `package.json`,
+  `baseline widely available with downstream`** (owner's choice, 2026-11-24).
+  In November 2026 that is Chrome/Edge 125+, Firefox 126+, Safari/iOS 17.5+,
+  Samsung Internet 27+ and Opera 111+. Every one supports `light-dark()`,
+  `oklch()` and nesting, so lightningcss passes them through: no
+  `--lightningcss-light/dark` polyfill, no hex fallbacks, nesting kept (about
+  6 KB less CSS before compression). cssnano's autoprefixer reads the same
+  field.
   - The polyfill only returns if the targets include a browser without `light-dark()` (Safari/iOS 16.5–17.4 was the reason under the old `>= 0.25%, not dead, supports css-nesting` query). It then keys its switches off the `color-scheme` declarations in the style sheet, not inline `style.colorScheme`, which is one reason the `:root[data-theme]` rules stay in CSS (§9.2).
 - **Why lightningcss must run last:** `purgeCss.ts` re-runs every PostCSS plugin
   on `dist/`. When that happens *after* lightningcss,
