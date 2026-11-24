@@ -71,12 +71,15 @@ docs are English.
   - `utilities/`: imported last (`.sr-only`, `.skip-link`, theme switching).
 - `src/components/<Name>/index.astro` + `styles.module.css`. `TileList` +
   `TileCard` render every project: freelance, side projects and open source.
+  `Education` renders the Formación section (studies and recent courses).
 - `src/layouts/Layout/`: `<head>`, the inline theme script, fonts, the shell.
   SEO tags come from `astro-seo` (canonical, Open Graph, X card) and the JSON-LD
   from `astro-seo-schema`: one `@graph` with the `ProfilePage` → `Person` and
   one node per card (`src/data/worksSchema.ts`), each pointing back to the
-  Person by `@id`. Build the nodes from the card models so the markup never
-  claims more than the page shows.
+  Person by `@id`. The Person's `affiliation`, `alumniOf` and `hasCredential`
+  come from the Formación section (`src/data/educationSchema.ts`). Build the
+  nodes from the card models so the markup never claims more than the page
+  shows.
 - `src/data/personalSchema.ts`: identity data (`SITE_URL`, name, job title,
   `sameAs` links) shared by the JSON-LD, the meta tags, `PROFILE` and
   `/llms.txt`. Keep the canonical name spelling "Galeed Gutierrez".
@@ -87,8 +90,11 @@ docs are English.
 - `src/pages/index.astro`: builds the section list. A section without data is
   left out of the page and the nav, and indices are renumbered.
 - `src/data/hub.ts`: the only place that reads `@galeedgutierrez/shared-assets`.
-  It maps projects to card models and holds `PROFILE` (location, availability,
-  email) and `SOCIAL_LINKS`. Project content changes belong in shared-assets
+  It maps projects to card models, studies and certificates to the Formación
+  models (`getStudies`, `getCourses`), and holds `PROFILE` (location,
+  availability, email) and `SOCIAL_LINKS`. `STUDY_DETAILS` adds what
+  shared-assets lacks: each degree's article in prose and the acronym (UNJu).
+  Project content changes belong in shared-assets
   (`D:\Yo\proyectos-personales\shared-assets`), not here.
 - `src/types/designTokens.ts`: token lists and card models.
   `src/scripts/theme.ts`: theme logic. `tests/`: Vitest (token invariants from

@@ -599,13 +599,14 @@ Applications: `--spacing-gutter: var(--spacing-4)`, `--spacing-stack: var(--spac
  │        │     [captura] título · meta · descripción · chips   ← tile (§7.9), full width           │   │
  │        │ 03  Side projects   → 2-col bento (featured tile spans 2)                              │   │
  │        │ 04  Open source     → tiles (§7.9), owner/repo in mono                                 │   │
- │        │ 05  Contacto        → lead + ONE primary CTA + secondary                               │   │
+ │        │ 05  Formación       → studies + recent courses (§7.16)                                 │   │
+ │        │ 06  Contacto        → lead + ONE primary CTA + secondary                               │   │
  │        │ ─────────────────────────────────────────────── footer (mono micro, centered)           │   │
  │        └────────────────────────────────────────────────────────────────────────────────────────┘   │
  └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Section IDs (fixes issue 1): `#bio`, `#freelance`, `#proyectos`, `#open-source`, `#contacto`. Nav labels match the section h2 text. Suggested short nav labels: *Bio · Freelance · Proyectos · Open source · Contacto*.
+Section IDs (fixes issue 1): `#bio`, `#freelance`, `#proyectos`, `#open-source`, `#formacion`, `#contacto`. Nav labels match the section h2 text. Suggested short nav labels: *Bio · Freelance · Proyectos · Open source · Formación · Contacto*.
 
 > Freelance, Side projects, Open source, and Contacto had **no content on the live site** at inspection time. This document specifies their containers and components. The actual entries are content work.
 
@@ -937,6 +938,38 @@ All buttons: labels never wrap mid-word. Allow two-line labels only on mobile vi
   - SVG text: sign `@mixin micro` in `--text-color-inverse` on the inverse header (15.00 / 13.72:1), "404" `@mixin heading-xl` in `--text-color-accent` on tertiary (8.84 / 7.46:1).
   - Forced colors map each fill role to `Canvas` / `CanvasText` and the HEV rule to `Highlight`.
 - Motion: the one-pass walk-in in §8.2.
+
+### 7.16 Formación section
+
+Added 2026-11-24 (owner's choice), from shared-assets 0.6.0 (`education`,
+`certificates`). Built like the Bio spec sheet (§7.14): two `<section>`
+columns stacked, each with an `<h3>` (`@mixin label`, `--text-color-tertiary`).
+
+- **Estudios:** `<ul class="flex flex-col" role="list">`, one row per degree in
+  progress or school graduated from, newest first. A school left unfinished
+  isn't listed.
+  - Row: `flex flex-col gap-1 py-3`, a `--border-025` hairline in
+    `--border-color-primary` between rows.
+  - Title: `@mixin body-md var(--fw-bold)`, `--text-color-primary`.
+  - Then a `flex flex-wrap items-center justify-between` line: the meta
+    (`@mixin micro`, `--text-color-tertiary`: institution · years; the year
+    range is `white-space: nowrap`) and a status chip (§7.7): `EN CURSO`
+    (info) or `EGRESADO` (success).
+- **Cursos recientes:** the 5 latest course certificates (learning paths and
+  programs are only counted), same hairline rows.
+  - A row with a diploma page is an `<a target="_blank">` of at least 44px:
+    title (`@mixin body-md`), meta (platform · year, micro tertiary) and a
+    trailing 16px `lucide:arrow-up-right` in `--text-color-tertiary`. Hover
+    (`hover: hover`) turns the title `--text-color-hover-accent`; the color
+    transition opts in under `no-preference`. The `sr-only` text says it opens
+    the diploma in a new tab. A row without a URL is static.
+  - Then a `@mixin body-sm` line in `--text-color-secondary` with the total
+    ("137 certificados en Platzi, Codely, Código Facilito y Alura.") and an
+    `a-link-action` "Perfil de Platzi" (new tab). It links to Platzi, not the
+    portfolio, until galeedgutierrez.com has a certificates page.
+- The JSON-LD lists the same data (`src/data/educationSchema.ts`): studies in
+  progress as `affiliation`, schools graduated from as `alumniOf` (`HighSchool`)
+  plus a `diploma` credential, and only the listed courses as `hasCredential`.
 
 ---
 
