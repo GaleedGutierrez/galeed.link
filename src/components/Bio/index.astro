@@ -2,9 +2,6 @@
 import Chip from "@components/Chip/index.astro";
 import { Icon } from "astro-icon/components";
 
-import { getStudies, PROFILE } from "@/data/hub";
-import { personalSchema } from "@/data/personalSchema";
-
 import styles from "./styles.module.css";
 
 const ABOUT = [
@@ -18,16 +15,6 @@ const ABOUT = [
 ];
 
 // The studies in progress, the ones the JSON-LD lists as `affiliation`,
-// oldest first.
-const studies = new Intl.ListFormat("es").format(
-	getStudies()
-		.filter(({ isInProgress }) => isInProgress)
-		.toSorted((a, b) => a.startDate.getTime() - b.startDate.getTime())
-		.map(
-			({ program, institution }) =>
-				`${program} en la ${institution.name}`,
-		),
-);
 
 const STACK = [
 	{ icon: "simple-icons:react", label: "React" },
@@ -38,14 +25,7 @@ const STACK = [
 ];
 ---
 
-<p class={styles["bio__lead"]}>
-	Soy {personalSchema.name}, desarrollador frontend en Jujuy, Argentina.
-	Construyo interfaces accesibles y rápidas con React, Astro y TypeScript, y
-	las pruebo con Vitest y Playwright. Estudio {studies}, y hago cursos de
-	Platzi.
-	{PROFILE.isAvailable && " Estoy disponible para proyectos freelance."}
-</p>
-<div class="mt-6 grid grid-cols-[1fr_1px_1fr] gap-4">
+<div class="grid grid-cols-[1fr_1px_1fr] gap-4">
 	<section class="flex flex-col gap-3">
 		<h3 class={styles["bio__heading"]}>Sobre mí</h3>
 		<ul
