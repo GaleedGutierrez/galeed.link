@@ -6,9 +6,6 @@ import { PROFILE } from "@/data/hub";
 import styles from "./styles.module.css";
 
 const year = new Date().getFullYear();
-// Google's page on what it collects from the sites that use Analytics.
-const ANALYTICS_POLICY =
-	"https://policies.google.com/technologies/partner-sites?hl=es";
 ---
 
 <footer
@@ -22,9 +19,6 @@ const ANALYTICS_POLICY =
 		{PROFILE.name}
 		<span aria-hidden="true"> λ </span>
 		Hecho con Astro
-	</p>
-	<p class={styles["footer__line"]}>
-		Mido las visitas con <a href={ANALYTICS_POLICY}>Google Analytics</a>
 	</p>
 	<a
 		class="a-link-action"
