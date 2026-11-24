@@ -12,6 +12,7 @@ import barlow800 from "@fontsource/barlow/files/barlow-latin-800-normal.woff2?ur
 import { SEO } from "astro-seo";
 import { Schema } from "astro-seo-schema";
 
+import type { EducationSchema } from "@/data/educationSchema";
 import {
 	PERSON_ID,
 	personalSchema,
@@ -31,6 +32,8 @@ interface Props {
 	noindex?: boolean;
 	/** Cards on the page as JSON-LD nodes (`buildWorksSchema`). */
 	works?: Work[];
+	/** The Formación section as Person properties (`buildEducationSchema`). */
+	education?: EducationSchema;
 }
 
 const {
@@ -38,6 +41,7 @@ const {
 	description = "Galeed Gutierrez, desarrollador frontend en Jujuy, Argentina. React, Astro y TypeScript. Trabajo freelance, side projects, open source y contacto.",
 	noindex = false,
 	works = [],
+	education,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, SITE_URL).href;
@@ -263,11 +267,7 @@ const dateModified = getLastModified().toISOString();
 								),
 								knowsAbout: personalSchema.skills,
 								knowsLanguage: "es",
-								// Still studying: alumniOf means "graduated from".
-								affiliation: personalSchema.studies.map(
-									({ school }) => school,
-								),
-								hasCredential: personalSchema.credentials,
+								...education,
 								hasOccupation: personalSchema.jobProfile,
 							},
 						},

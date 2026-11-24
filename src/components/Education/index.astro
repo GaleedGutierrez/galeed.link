@@ -1,0 +1,141 @@
+---
+import Chip from "@components/Chip/index.astro";
+import { Icon } from "astro-icon/components";
+
+import { PROFILE } from "@/data/hub";
+import type { CourseItem, StudyItem } from "@/types/designTokens";
+
+import styles from "./styles.module.css";
+
+interface Props {
+	studies: StudyItem[];
+	courses: {
+		recent: CourseItem[];
+		total: number;
+		platforms: string[];
+	};
+}
+
+const { studies, courses } = Astro.props;
+const platforms = new Intl.ListFormat("es").format(courses.platforms);
+---
+
+<div class="flex flex-col gap-6">
+	{studies.length > 0 && (
+		<section class="flex flex-col gap-1">
+			<h3 class={styles["education__heading"]}>Estudios</h3>
+			<ul
+				class="flex flex-col"
+				role="list"
+			>
+				{studies.map((study) => (
+					<li
+						class:list={[
+							"flex flex-col gap-1 py-3",
+							styles["education__row"],
+						]}
+					>
+						<span class={styles["education__title"]}>
+							{study.title}
+						</span>
+						<span class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+							<span class={styles["education__meta"]}>
+								{study.institution.name} ·{" "}
+								<span class={styles["education__years"]}>
+									{study.years}
+								</span>
+							</span>
+							<Chip
+								label={study.status.label}
+								tone={study.status.tone}
+							/>
+						</span>
+					</li>
+				))}
+			</ul>
+		</section>
+	)}
+	{courses.recent.length > 0 && (
+		<section class="flex flex-col gap-1">
+			<h3 class={styles["education__heading"]}>Cursos recientes</h3>
+			<ul
+				class="flex flex-col"
+				role="list"
+			>
+				{courses.recent.map((course) => {
+					const meta = `${course.platform.name} · ${course.date.getFullYear()}`;
+
+					return (
+						<li class={styles["education__row"]}>
+							{course.href ? (
+								<a
+									class:list={[
+										"flex items-center justify-between gap-3 py-2",
+										styles["education__course"],
+									]}
+									href={course.href}
+									rel="noopener"
+									target="_blank"
+								>
+									<span class="flex flex-col gap-1">
+										<span
+											class={
+												styles[
+													"education__course-title"
+												]
+											}
+										>
+											{course.title}
+										</span>
+										<span class={styles["education__meta"]}>
+											{meta}
+										</span>
+									</span>
+									<Icon
+										aria-hidden="true"
+										class={styles["education__course-icon"]}
+										name="lucide:arrow-up-right"
+										size={16}
+									/>
+									<span class="sr-only">
+										(diploma, se abre en una pestaña nueva)
+									</span>
+								</a>
+							) : (
+								<span class="flex flex-col gap-1 py-2">
+									<span
+										class={
+											styles["education__course-title"]
+										}
+									>
+										{course.title}
+									</span>
+									<span class={styles["education__meta"]}>
+										{meta}
+									</span>
+								</span>
+							)}
+						</li>
+					);
+				})}
+			</ul>
+			<p class:list={["pt-3", styles["education__summary"]]}>
+				{courses.total} certificados en {platforms}.
+			</p>
+			<a
+				class="a-link-action self-start"
+				href={PROFILE.platziUrl}
+				rel="noopener"
+				target="_blank"
+			>
+				Perfil de Platzi
+				<Icon
+					aria-hidden="true"
+					class="a-link-action__icon"
+					name="lucide:arrow-up-right"
+				/>
+				<span class="sr-only">(se abre en una pestaña nueva)</span>
+			</a>
+		</section>
+	)}
+</div>

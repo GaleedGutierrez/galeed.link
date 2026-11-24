@@ -1,4 +1,8 @@
 import {
+	type Certificate,
+	certificates,
+	type Education,
+	education,
 	type FreelanceProject,
 	freelanceProjects,
 	type OpenSourceProject,
@@ -9,9 +13,11 @@ import {
 import { getImage } from 'astro:assets';
 
 import type {
+	CourseItem,
 	RepoItem,
 	SocialLink,
 	Status,
+	StudyItem,
 	TileItem,
 } from '@/types/designTokens';
 import { toSafeUrl } from '@/utils/safeUrl';
@@ -26,6 +32,7 @@ export const PROFILE = {
 	isAvailable: true as boolean, // toggles the system bar and llms.txt
 	email: 'galeedeveloper@gmail.com',
 	portfolioUrl: personalSchema.socialLinks.personalWebsite,
+	platziUrl: personalSchema.socialLinks.platzi,
 } as const;
 
 export const SOCIAL_LINKS: SocialLink[] = [
@@ -215,4 +222,101 @@ export const getRepoTiles = async (): Promise<RepoItem[]> => {
 			},
 		),
 	);
+};
+
+type ListedStatus = Exclude<Education['status'], 'unfinished'>;
+
+const STUDY_STATUS: Record<ListedStatus, Status> = {
+	'in-progress': { label: 'En curso', tone: 'info' },
+	graduated: { label: 'Egresado', tone: 'success' },
+};
+
+/**
+ * What shared-assets doesn't carry: the article each degree takes in prose and
+ * the acronym its institution goes by. A study without an entry reads as its
+ * bare title, with no acronym.
+ */
+const STUDY_DETAILS = new Map([
+	[
+		'unju-analista-programador-universitario',
+		{ article: 'la carrera de', alternateName: 'UNJu' },
+	],
+	['undec-ciencia-de-datos', { article: 'la', alternateName: 'UNdeC' }],
+]);
+
+const isListed = (
+	study: Education,
+): study is Education & { status: ListedStatus } =>
+	study.status !== 'unfinished';
+
+/**
+ * The degrees in progress and the schools graduated from, newest first. A
+ * school left after its first year isn't listed: it gave no degree.
+ * @returns The Formación section's studies.
+ */
+export const getStudies = (): StudyItem[] =>
+	education.filter(isListed).map((study): StudyItem => {
+		const details = STUDY_DETAILS.get(study.id);
+
+		return {
+			title: study.title,
+			institution: {
+				name: study.institution.name,
+				alternateName: details?.alternateName,
+				url: toSafeUrl(study.institution.url),
+			},
+			isUniversity: study.level === 'university',
+			isInProgress: study.status === 'in-progress',
+			years: yearRange(study.startDate, study.endDate),
+			status: STUDY_STATUS[study.status],
+			program: details
+				? `${details.article} ${study.title}`
+				: study.title,
+			startDate: study.startDate,
+		};
+	});
+
+const RECENT_COURSES_COUNT = 5;
+
+const toCourse = (certificate: Certificate): CourseItem => ({
+	title: certificate.title,
+	href: toSafeUrl(certificate.url),
+	platform: {
+		name: certificate.platform.name,
+		url: certificate.platform.url,
+	},
+	date: certificate.date,
+	credentialId: certificate.credentialId,
+});
+
+/**
+ * The latest course certificates and a tally of all of them. Learning paths
+ * and programs count in the tally but aren't listed as courses.
+ * @returns The recent courses, the certificate count and the platforms that
+ * issued them, the one with most certificates first.
+ */
+export const getCourses = (): {
+	recent: CourseItem[];
+	total: number;
+	platforms: string[];
+} => {
+	const counts = new Map<string, number>();
+
+	for (const { platform } of certificates) {
+		counts.set(platform.name, (counts.get(platform.name) ?? 0) + 1);
+	}
+
+	return {
+		recent: certificates
+			.filter(({ kind }) => kind === 'course')
+			.toSorted((a, b) => b.date.getTime() - a.date.getTime())
+			.slice(0, RECENT_COURSES_COUNT)
+			.map((certificate) => toCourse(certificate)),
+		total: certificates.length,
+		platforms: counts
+			.entries()
+			.toArray()
+			.toSorted(([, a], [, b]) => b - a)
+			.map(([name]) => name),
+	};
 };

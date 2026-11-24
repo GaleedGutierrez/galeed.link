@@ -2,7 +2,7 @@
 import Chip from "@components/Chip/index.astro";
 import { Icon } from "astro-icon/components";
 
-import { PROFILE } from "@/data/hub";
+import { getStudies, PROFILE } from "@/data/hub";
 import { personalSchema } from "@/data/personalSchema";
 
 import styles from "./styles.module.css";
@@ -17,12 +17,16 @@ const ABOUT = [
 	{ icon: "lucide:coffee", label: "Café" },
 ];
 
-// The same studies the JSON-LD lists as `affiliation`, so the markup never
-// claims more than the page shows.
+// The studies in progress, the ones the JSON-LD lists as `affiliation`,
+// oldest first.
 const studies = new Intl.ListFormat("es").format(
-	personalSchema.studies.map(
-		({ program, school }) => `${program} en la ${school.name}`,
-	),
+	getStudies()
+		.filter(({ isInProgress }) => isInProgress)
+		.toSorted((a, b) => a.startDate.getTime() - b.startDate.getTime())
+		.map(
+			({ program, institution }) =>
+				`${program} en la ${institution.name}`,
+		),
 );
 
 const STACK = [

@@ -1,4 +1,5 @@
-// Identity data shared by the JSON-LD, the meta tags and /llms.txt.
+// Identity data shared by the JSON-LD, the meta tags and /llms.txt. Studies
+// and certificates come from shared-assets (`getStudies`, `getCourses` in hub.ts).
 // Keep one canonical spelling of the name everywhere: search engines and
 // AI answer engines match an entity by name, @id and sameAs.
 export const SITE_URL = 'https://galeed.link';
@@ -20,41 +21,6 @@ export const personalSchema = {
 		addressRegion: 'Jujuy',
 		addressCountry: 'AR',
 	},
-	// Current studies. The JSON-LD lists the schools as `affiliation`
-	// (`alumniOf` means graduated from); /llms.txt also names the programs
-	// (as prose, with their article).
-	studies: [
-		{
-			program: 'la carrera de Analista Programador Universitario',
-			school: {
-				'@type': 'CollegeOrUniversity' as const,
-				name: 'Universidad Nacional de Jujuy',
-				alternateName: 'UNJu',
-				url: 'https://www.unju.edu.ar',
-			},
-		},
-		{
-			program: 'la Tecnicatura Universitaria en Ciencia de Datos',
-			school: {
-				'@type': 'CollegeOrUniversity' as const,
-				name: 'Universidad Nacional de Chilecito',
-				alternateName: 'UNdeC',
-				url: 'https://www.undec.edu.ar',
-			},
-		},
-	],
-	credentials: [
-		{
-			'@type': 'EducationalOccupationalCredential' as const,
-			name: 'Curso de Creación de Páginas Web con Astro',
-			url: 'https://platzi.com/cursos/astro',
-			recognizedBy: {
-				'@type': 'EducationalOrganization' as const,
-				name: 'Platzi',
-				url: 'https://platzi.com',
-			},
-		},
-	],
 	skills: [
 		'HTML',
 		'CSS',
@@ -75,6 +41,8 @@ export const personalSchema = {
 		linkedin: 'https://www.linkedin.com/in/galeedgutierrez',
 		x: 'https://x.com/gutierrezgaleed',
 		personalWebsite: 'https://galeedgutierrez.com',
+		// Lists the Platzi certificates; the Formación section links to it.
+		platzi: 'https://platzi.com/p/galeedgutierrez/',
 	},
 	xHandle: '@gutierrezgaleed',
 	jobProfile: {

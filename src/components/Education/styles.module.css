@@ -1,0 +1,59 @@
+.education__heading {
+	color: var(--text-color-tertiary);
+}
+
+/* Hairlines between rows, as in a spec sheet. */
+.education__row + .education__row {
+	border-block-start: var(--border-025) solid var(--border-color-primary);
+}
+
+.education__title {
+	color: var(--text-color-primary);
+
+	@mixin body-md var(--fw-bold);
+}
+
+.education__meta {
+	color: var(--text-color-tertiary);
+
+	@mixin micro;
+}
+
+/* A year range never breaks at its dash. */
+.education__years {
+	white-space: nowrap;
+}
+
+/* The row is the link: 44px touch target (WCAG 2.5.5). */
+.education__course {
+	min-block-size: calc(44 * var(--rem-scale));
+	color: var(--text-color-primary);
+	text-decoration: none;
+
+	@media (hover: hover) {
+		&:hover .education__course-title {
+			color: var(--text-color-hover-accent);
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		& .education__course-title {
+			transition: color var(--duration-fast) var(--ease-out);
+		}
+	}
+}
+
+.education__course-title {
+	@mixin body-md;
+}
+
+.education__course-icon {
+	flex-shrink: 0;
+	color: var(--text-color-tertiary);
+}
+
+.education__summary {
+	color: var(--text-color-secondary);
+
+	@mixin body-sm;
+}
