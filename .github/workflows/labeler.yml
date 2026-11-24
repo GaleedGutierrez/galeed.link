@@ -4,7 +4,8 @@ on:
   # Not pull_request_target (zizmor: dangerous-triggers). Branches of this
   # repository and Dependabot get the write token below, and a pull request
   # that edits labeler.yml is labeled by its own version. Pull requests from
-  # forks get a read-only token, so they stay unlabeled.
+  # forks get a read-only token, so both jobs skip them: labeling would fail
+  # with a 403.
   pull_request:
     types: [opened, edited, synchronize, reopened]
 
@@ -13,7 +14,9 @@ permissions: {}
 jobs:
   areas:
     # A title or description edit changes no files.
-    if: github.event.action != 'edited'
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.action != 'edited'
     permissions:
       contents: read
       pull-requests: write
@@ -28,7 +31,9 @@ jobs:
     # After areas: labeler writes the whole label set, so running both at once
     # could drop the type label.
     needs: areas
-    if: ${{ !cancelled() }}
+    if: >-
+      !cancelled() &&
+      github.event.pull_request.head.repo.full_name == github.repository
     permissions:
       pull-requests: write
     runs-on: ubuntu-latest
