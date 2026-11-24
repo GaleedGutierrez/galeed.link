@@ -21,6 +21,10 @@ updates:
       separator: "-"
     commit-message:
       prefix: "chore: :arrow_up:"
+    # One pull request a week for every action bump.
+    groups:
+      actions:
+        patterns: ["*"]
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
     # Replaces the default pair (dependencies, javascript).
@@ -36,3 +40,10 @@ updates:
       # Our own package: content updates should land without the wait.
       exclude:
         - "@galeedgutierrez/shared-assets"
+    # Minor and patch bumps of the tooling share one pull request. Runtime
+    # dependencies (shared-assets among them, which auto-merges on its own)
+    # and major bumps keep one each.
+    groups:
+      dev-dependencies:
+        dependency-type: development
+        update-types: [minor, patch]
