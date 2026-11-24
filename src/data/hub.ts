@@ -93,6 +93,8 @@ const toPlainText = (value: string): string =>
 		.replaceAll(/<span[^>]*aria-hidden="true"[^>]*>.*?<\/span>/g, '')
 		.replaceAll(/<[^>]+>/g, '')
 		.replaceAll(/\s+/g, ' ')
+		// Removing an emoji between a word and its comma left "Apeperia , una".
+		.replaceAll(/ ([,.;:])/g, '$1')
 		.trim();
 
 const byDateDesc = (a: PersonalProject, b: PersonalProject): number =>
