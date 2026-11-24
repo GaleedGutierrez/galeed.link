@@ -17,6 +17,9 @@ interface Props {
 }
 
 const { id, index, title, isFirst = false, action } = Astro.props;
+// The index is centered on the title line (self-center). The h2 stays
+// baseline-aligned so its baseline is the title's, not the index's: the
+// header aligns the action link to it.
 ---
 
 <header
@@ -25,10 +28,13 @@ const { id, index, title, isFirst = false, action } = Astro.props;
 		!isFirst && ["pt-6", styles["section-header"]],
 	]}
 >
-	<h2 id={id}>
+	<h2
+		class="flex items-baseline"
+		id={id}
+	>
 		<span
 			aria-hidden="true"
-			class={styles["section-header__index"]}
+			class:list={["self-center", styles["section-header__index"]]}
 		>
 			{index}
 		</span>

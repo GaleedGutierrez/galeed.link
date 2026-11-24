@@ -344,8 +344,8 @@ Named by property, as in the repo: `--background-color-*`, `--text-color-*`, `--
 | `--background-color-tertiary` | `--white` (`#ffffff`) | `--charcoal-800` (`#242424`) | `surface-2` | cards, inset blocks, hover fills |
 | `--background-color-accent` | `--hev-400` (`#ff862c`) | same | `accent` | primary CTA fill |
 | `--background-color-hover-accent` | `--hev-300` (`#ffaa6b`) | same | `accent-hover` | CTA hover fill, wipe |
-| `--background-color-accent-subtle` | `--hev-50` (`#fff1e5`) | `--hev-950` (`#2b1a0d`) | `accent-subtle` | `::selection`, pressed card |
-| `--background-color-indicator` | `--hev-text-l` (`#7f3300`) | `--hev-text-d` (`#ff9b5a`) | `indicator` | active nav underline, card accent bar (state, so ≥ 3:1) |
+| `--background-color-accent-subtle` | `--hev-50` (`#fff1e5`) | `--hev-950` (`#2b1a0d`) | `accent-subtle` | pressed card. Not `::selection`: 1.02–1.12:1 from every surface, so a selection was invisible |
+| `--background-color-indicator` | `--hev-text-l` (`#7f3300`) | `--hev-text-d` (`#ff9b5a`) | `indicator` | active nav underline, card accent bar (state, so ≥ 3:1), `::selection` fill |
 | `--background-color-inverse` | `--charcoal-900` (`#1c1c1c`) | `--bone-100` (`#ede6d8`) | `inverse` | secondary button hover (inversion) |
 | `--text-color-primary` | `--charcoal-900` (`#1c1c1c`) | `--bone-100` (`#ede6d8`) | `text` | primary text |
 | `--text-color-secondary` | `--bone-800` (`#3c332e`) | `--bone-300` (`#cec6bc`) | `text-secondary` | role line, body copy, labels |
@@ -353,7 +353,7 @@ Named by property, as in the repo: `--background-color-*`, `--text-color-*`, `--
 | `--text-color-accent` | `--hev-text-l` (`#7f3300`) | `--hev-text-d` (`#ff9b5a`) | `accent-text` | links, index numerals |
 | `--text-color-hover-accent` | `--hev-text-l-hover` (`#662801`) | `--hev-text-d-hover` (`#ffb581`) | `accent-text-hover` | link hover |
 | `--text-color-on-accent` | `--charcoal-900` (`#1c1c1c`) | `--charcoal-950` (`#141414`) | `accent-ink` | text/icons **on** accent fills |
-| `--text-color-inverse` | `--bone-50` (`#f5f0e6`) | `--charcoal-900` (`#1c1c1c`) | `inverse-text` | text on `background-color-inverse` |
+| `--text-color-inverse` | `--bone-50` (`#f5f0e6`) | `--charcoal-900` (`#1c1c1c`) | `inverse-text` | text on `background-color-inverse`, and selected text (on `indicator`) |
 | `--text-color-success` | `--green-700` (`#175525`) | `--green-300` (`#6fc27d`) | `success` | status text/dot |
 | `--text-color-warning` | `--amber-700` (`#644400`) | `--amber-300` (`#e3b12c`) | `warning` | status text/dot |
 | `--text-color-danger` | `--red-700` (`#990300`) | `--red-300` (`#ff9b91`) | `danger` | status text/dot |
@@ -392,6 +392,8 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 | `border-strong` on bg / surface / surface-2 | **3.81 / 4.16 / 4.73** | UI ≥ 3 ✓ |
 | `focus` on bg / surface / surface-2 | **7.12 / 7.78 / 8.84** | UI ≥ 3 ✓ |
 | `inverse-text` on `inverse` | **15.00** | AAA text ✓ |
+| `inverse-text` on `indicator` (`::selection`) | **7.78** | AAA text ✓ |
+| `indicator` (`::selection`) on bg / surface / surface-2 | **7.12 / 7.78 / 8.84** | UI ≥ 3 ✓ |
 
 **Dark theme**
 
@@ -414,6 +416,8 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 | `border-strong` on bg / surface / surface-2 | **3.78 / 3.50 / 3.19** | UI ≥ 3 ✓ |
 | `focus` on bg / surface / surface-2 | **8.85 / 8.19 / 7.46** | UI ≥ 3 ✓ |
 | `inverse-text` on `inverse` | **13.72** | AAA text ✓ |
+| `inverse-text` on `indicator` (`::selection`) | **8.19** | AAA text ✓ |
+| `indicator` (`::selection`) on bg / surface / surface-2 | **8.85 / 8.19 / 7.46** | UI ≥ 3 ✓ |
 
 **Rejected pairs (why the accent rules exist)**
 
@@ -726,11 +730,11 @@ Conventions (§9):
 
 ```text
 ┌───────────────────────────────────────────────────────────────┐
-│ AR · DISPONIBLE ●                                     [☼]     │  h 48px, px --spacing-gutter
+│ AR · DISPONIBLE ●                                     [☼]     │  h 52px, px --spacing-gutter, py --spacing-2
 └━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┘  2px --border-color-accent (decorative)
 ```
 
-- Container: `<div class:list={['flex items-center justify-between min-h-12 px-4', styles.bar]}>`. The module adds `background-color: var(--background-color-secondary)` and `border-block-end: var(--border-05) solid var(--border-color-accent)`.
+- Container: `<div class:list={['flex items-center justify-between min-h-12 px-4', styles.bar]}>`. The module adds `padding-block: var(--spacing-2)` (8px; owner's choice, 2026-11-24, so the 36px toggle doesn't sit 6px from the edges: the bar is 52px tall), `background-color: var(--background-color-secondary)` and `border-block-end: var(--border-05) solid var(--border-color-accent)`.
 - Left: `@mixin micro`, `color: var(--text-color-tertiary)`.
   - The optional availability dot is `--text-color-success` plus text, never the dot alone.
   - Long strings truncate with `min-inline-size: 0; text-overflow: ellipsis`, and the full text is also in the hero. Keep it short.
@@ -813,9 +817,10 @@ Conventions (§9):
 ```
 
 - `<header class:list={['flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 pt-6', styles.head]}>`. The module adds `border-block-start: var(--border-025) solid var(--border-color-primary)`.
-- Title: `<h2><span class={styles.index} aria-hidden="true">02</span>Trabajo freelance</h2>`.
+- Title: `<h2 class="flex items-baseline"><span class:list={["self-center", styles.index]} aria-hidden="true">02</span>Trabajo freelance</h2>`.
   - `h2` uses its element default, `@mixin heading-lg`.
   - `.index` is `@mixin micro`, `color: var(--text-color-accent)`, `margin-inline-end: var(--spacing-2)`.
+  - The index is vertically centered on the title line (`self-center`; owner's choice, 2026-11-24). The `h2` keeps `items-baseline`, so its baseline stays the title's: with `items-center` it became the index's, and the header's baseline alignment raised the action link to it.
 - Optional action: `a-link-action` (§9.5). It is `@mixin label` with `--text-color-accent` and a trailing `lucide:arrow-right` 16px that nudges 2px on hover, per BM **[V]**. Its accessible name must be specific, e.g. `<span class="sr-only">Ver todos los </span>proyectos`.
 - The heading never truncates. It wraps, balanced. If the action plus the title don't fit, the action drops below (`flex-wrap`).
 
@@ -1632,9 +1637,11 @@ a:not([class]) {
   outline-offset: calc(2 * var(--rem-scale));
 }
 
+/* The indicator fill, not accent-subtle: that one is 1.02–1.12:1 from every
+   surface, so a selection didn't show. Text 7.78 / 8.19:1, §3.4. */
 ::selection {
-  background-color: var(--background-color-accent-subtle);
-  color: var(--text-color-primary);
+  background-color: var(--background-color-indicator);
+  color: var(--text-color-inverse);
 }
 
 [id] {
