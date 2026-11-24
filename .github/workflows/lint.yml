@@ -84,3 +84,5 @@ jobs:
           # ESLint and Prettier already lint and format the code (job above).
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_BIOME_LINT: false
+          # Agent skills are third-party files, installed as-is.
+          FILTER_REGEX_EXCLUDE: (^|/)\.(agents|claude)/
