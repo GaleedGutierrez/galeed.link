@@ -15,6 +15,7 @@ concurrency:
 
 jobs:
   axe:
+    # Required by the main ruleset: keep the name.
     name: ♿ Axe accessibility
     runs-on: ubuntu-latest
     timeout-minutes: 15
