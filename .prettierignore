@@ -6,6 +6,8 @@
 /**/index.bundle.*.js
 /test-results/*
 /playwright-report/*
+/lighthouse-report/*
+/.lighthouseci/*
 **/fonts/*
 **/font/*
 DESIGN_SYSTEM.md

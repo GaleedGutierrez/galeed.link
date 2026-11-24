@@ -38,6 +38,7 @@ export default defineConfig(
 			'**/playwright-report/**',
 			'**/test-results/**',
 			'**/lighthouse-report/**',
+			'**/.lighthouseci/**',
 			'.markdownlint-cli2.jsonc',
 			'**/.astro/**',
 			// Installed agent skills: third-party files, ignored by every other linter too.

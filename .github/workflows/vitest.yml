@@ -1,23 +1,38 @@
 ---
 name: ⚡🧪 Vitest Test
 on: # yamllint disable-line rule:truthy
-  push: null
+  # Branch pushes run once, through their pull request.
+  push:
+    branches: [main]
   pull_request: null
 
 permissions: {}
 
+# A new push to a pull request cancels the run it makes stale.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   test:
+    # Required by the main ruleset: keep the name.
     name: ⚡🧪 Vitest Test
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: 👍 Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      # - name: 📥 Install Dependencies
-      #   run: npm ci
+      - name: 🐢 Setup Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
 
-      # - name: ⚡ Vitest
-      #   run: npm test
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      - name: ⚡ Vitest
+        run: npm test

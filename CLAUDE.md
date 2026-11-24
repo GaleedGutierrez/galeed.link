@@ -51,6 +51,7 @@ docs are English.
 | Linters, types, tests | `npm run verify` (the pre-push hook)          |
 | Guided commit         | `npm run commit` (commitlint prompt)          |
 | Lighthouse (preview)  | `npm run test:performance`                    |
+| Lighthouse CI         | `npx lhci autorun` (after `npm run build`)    |
 
 - After editing CSS, run `npm run stylelint:fix`. It reorders properties
   (`order/properties-order`) and normalizes notation. That is expected.
@@ -62,6 +63,11 @@ docs are English.
   4321), then run it. The script blocks Kaspersky's injected script
   (`--blocked-url-patterns`), which skews the scores; add a pattern for any
   other antivirus web shield that injects one.
+- `npx lhci autorun` is the CI check: it serves `dist/` and fails below the
+  scores in `lighthouserc.json` (performance 0.9, the rest 1; the 404 skips SEO,
+  it is `noindex`). It blocks the analytics, so runs never reach Google
+  Analytics, and Kaspersky. Locally, Kaspersky's blocked script still fails
+  `is-on-https` (best practices): only the CI run is conclusive.
 
 ## Structure
 
@@ -309,7 +315,10 @@ docs are English.
   `area:` labels from its files (`.github/labeler.yml`). Issues get theirs from
   the issue forms (`.github/issue-label.yml`). A new area needs an entry in
   each.
-- CI runs lint, stylelint, lint-md, prettier and check-for-dupes. A PR must pass
-  all of them.
+- CI runs on pull requests and on `main` (not on bare branch pushes): every
+  linter, `astro check`, Vitest, Lighthouse CI and CodeQL (JavaScript and the
+  workflows). The `main` ruleset requires the lint, Super Linter, Vitest and
+  `lighthouseci` checks by job name: renaming one blocks every PR until the
+  ruleset is updated.
 - CI also runs commitlint on the commits of a PR and on its title: the title
   sets the PR's `type:` label.
