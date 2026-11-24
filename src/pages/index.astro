@@ -3,30 +3,32 @@ import Bio from "@components/Bio/index.astro";
 import Contact from "@components/Contact/index.astro";
 import Footer from "@components/Footer/index.astro";
 import Hero from "@components/Hero/index.astro";
-import LinkCard from "@components/LinkCard/index.astro";
 import Navbar from "@components/Navbar/index.astro";
-import RepoCard from "@components/RepoCard/index.astro";
 import SectionHeader from "@components/SectionHeader/index.astro";
 import SystemBar from "@components/SystemBar/index.astro";
-import TileCard from "@components/TileCard/index.astro";
+import TileList from "@components/TileList/index.astro";
 import Layout from "@layouts/Layout/index.astro";
 
 import {
-	freelanceItems,
+	getFreelanceTiles,
 	getProjectTiles,
+	getRepoTiles,
 	PROFILE,
-	repoItems,
 } from "@/data/hub";
 import { PERSON_ID, SITE_URL } from "@/data/personalSchema";
 import { buildWorksSchema } from "@/data/worksSchema";
 
-const projectTiles = await getProjectTiles();
+const [freelanceTiles, projectTiles, repoTiles] = await Promise.all([
+	getFreelanceTiles(),
+	getProjectTiles(),
+	getRepoTiles(),
+]);
 const works = buildWorksSchema({
 	personId: PERSON_ID,
 	siteUrl: SITE_URL,
 	tiles: projectTiles,
-	freelance: freelanceItems,
-	repos: repoItems,
+	freelance: freelanceTiles,
+	repos: repoTiles,
 });
 
 // A section without content is left out of the page and the nav.
@@ -36,7 +38,7 @@ const sections = [
 		id: "freelance",
 		label: "Freelance",
 		title: "Trabajo freelance",
-		isVisible: freelanceItems.length > 0,
+		isVisible: freelanceTiles.length > 0,
 	},
 	{
 		id: "proyectos",
@@ -48,7 +50,7 @@ const sections = [
 		id: "open-source",
 		label: "Open source",
 		title: "Open source",
-		isVisible: repoItems.length > 0,
+		isVisible: repoTiles.length > 0,
 	},
 	{ id: "contacto", label: "Contacto", title: "Contacto", isVisible: true },
 ]
@@ -88,19 +90,7 @@ const section = Object.fromEntries(sections.map((item) => [item.id, item]));
 				class="flex flex-col gap-4 px-4"
 			>
 				<SectionHeader {...section.freelance} />
-				<ul
-					class="flex flex-col gap-4"
-					role="list"
-				>
-					{freelanceItems.map((item, position) => (
-						<li>
-							<LinkCard
-								index={String(position + 1).padStart(2, "0")}
-								item={item}
-							/>
-						</li>
-					))}
-				</ul>
+				<TileList items={freelanceTiles} />
 			</section>
 		)}
 		{section.proyectos && (
@@ -116,16 +106,7 @@ const section = Object.fromEntries(sections.map((item) => [item.id, item]));
 						srContext: "Proyectos: ",
 					}}
 				/>
-				<ul
-					class="grid grid-cols-2 gap-3"
-					role="list"
-				>
-					{projectTiles.map((item) => (
-						<li class:list={[item.featured && "col-span-full"]}>
-							<TileCard item={item} />
-						</li>
-					))}
-				</ul>
+				<TileList items={projectTiles} />
 			</section>
 		)}
 		{section["open-source"] && (
@@ -134,16 +115,7 @@ const section = Object.fromEntries(sections.map((item) => [item.id, item]));
 				class="flex flex-col gap-4 px-4"
 			>
 				<SectionHeader {...section["open-source"]} />
-				<ul
-					class="flex flex-col gap-4"
-					role="list"
-				>
-					{repoItems.map((item) => (
-						<li>
-							<RepoCard item={item} />
-						</li>
-					))}
-				</ul>
+				<TileList items={repoTiles} />
 			</section>
 		)}
 		{section.contacto && (

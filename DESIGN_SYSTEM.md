@@ -148,7 +148,7 @@ Issues verified during inspection:
 | Hero | name, role, social row with **visible labels** (better than Linkd's icon-only row) | role becomes `<p>`. New slim **system bar** above the photo with mono metadata, theme toggle, and HL2's 2px orange underline rule |
 | Nav | same five destinations | IDs fixed to match labels, uppercase DIN-style labels, **one scrolling line with faded edges** (owner's choice, 2026-11-23), BM accent underline indicator, sticky at every width (owner's choice, 2026-11-23) |
 | Bio | two-column "Sobre mí / Stack tech" with **1px vertical rule** (HL2 uses the same footer-column rule) | emoji → SVG icons and mono tech chips. Optional lead paragraph |
-| New sections | — | Freelance (link cards), Side projects (bento), Open source (repo cards), Contacto (one primary CTA), all built from Linkd's 56px card / 16px gap / 32px section rhythm |
+| New sections | — | Freelance, Side projects and Open source (tiles with screenshots, §7.9), Contacto (one primary CTA), all built from Linkd's 56px card / 16px gap / 32px section rhythm |
 | Color | light + dark | slate/blue-black → bone `#ede6d8` / charcoal `#1c1c1c` + HEV orange, authored in `oklch()`, **WCAG AAA** text contrast. Manual toggle with System default |
 | Type | — | Manrope → **Barlow** (Black Mesa's own served face, DIN-like) + **JetBrains Mono** for metadata |
 
@@ -565,7 +565,7 @@ Repo convention: `--spacing-N` = N × 4px, written as `calc(<px> * var(--rem-sca
 | `--spacing-9` | 36 | `p-9` | theme toggle box |
 | `--spacing-11` | 44 | `min-h-11` | min touch target: buttons, nav links, text actions |
 | `--spacing-12` | 48 | `p-12` | page block margin ≥768 (GL `md:py-12` **[V]**, LK 48 **[V]**) |
-| `--spacing-14` | 56 | `p-14` | link card and social link min height |
+| `--spacing-14` | 56 | `p-14` | social link min height |
 | `--spacing-16` | 64 | `p-16` | footer top spacing on large screens |
 
 Applications: `--spacing-gutter: var(--spacing-4)`, `--spacing-stack: var(--spacing-4)`, `--spacing-section: var(--spacing-8)`.
@@ -592,9 +592,9 @@ Applications: `--spacing-gutter: var(--spacing-4)`, `--spacing-stack: var(--spac
  │        │     ◇ Tecnología …      │ [TAILWIND CSS] [NODE.JS]                                     │   │
  │        │                       ↕ 32px                                                            │   │
  │        │ 02  Trabajo freelance                                        VER TODO →                │   │
- │        │     [▌ 01  Cliente / proyecto            2024—2025   ↗ ]  ← link cards, 16px gap       │   │
+ │        │     [captura] título · meta · descripción · chips   ← tile (§7.9), full width           │   │
  │        │ 03  Side projects   → 2-col bento (featured tile spans 2)                              │   │
- │        │ 04  Open source     → repo cards                                                       │   │
+ │        │ 04  Open source     → tiles (§7.9), owner/repo in mono                                 │   │
  │        │ 05  Contacto        → lead + ONE primary CTA + secondary                               │   │
  │        │ ─────────────────────────────────────────────── footer (mono micro, centered)           │   │
  │        └────────────────────────────────────────────────────────────────────────────────────────┘   │
@@ -613,9 +613,8 @@ Section IDs (fixes issue 1): `#bio`, `#freelance`, `#proyectos`, `#open-source`,
 | Inner gutter | `--spacing-gutter` 16px left/right for all content below the portrait |
 | Section | `display: flex; flex-direction: column; gap: var(--spacing-stack)` + `scroll-margin-top: calc(var(--height-nav) + var(--spacing-4))` |
 | Between sections | `var(--spacing-section)` (32px), with a hairline `border-top` on each section header except the first |
-| Bento grid | `grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--spacing-3)`. `.is-featured` → `grid-column: 1 / -1` with a 16:9 media ratio. Below 360px container width → 1 column |
+| Bento grid | `grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--spacing-3)`. Freelance, Side projects and Open source all use it. `.is-featured` → `grid-column: 1 / -1` with a 16:9 media ratio. Below 360px container width → 1 column |
 | Bio spec sheet | `grid-template-columns: 1fr 1px 1fr; gap: var(--spacing-4)`. The middle track is the 1px rule. Below 360px → single column, with a horizontal hairline replacing the vertical rule |
-| Link list | flex column, gap 16px (LK **[V]**) |
 
 ### 5.4 Breakpoints
 
@@ -647,7 +646,7 @@ Both Half-Life references use **0 radius** **[V]**. GL/LK use 16px shells and 8p
 | --- | --- | --- |
 | `--border-radius-0` | 0 | rules, system bar, portrait on mobile |
 | `--border-radius-05` | 2px | buttons, chips, the theme toggle, inputs |
-| `--border-radius-1` | 4px | link cards, bento media, repo cards |
+| `--border-radius-1` | 4px | tiles and their media |
 | `--border-radius-2` | 8px | floating shell (≥640) |
 | `--border-radius-circle` | 50% | status dots and avatar thumbnails only |
 
@@ -833,37 +832,15 @@ Conventions (§9):
 
 <!-- markdownlint-enable MD013 -->
 
-### 7.8 Link card (Freelance list, generic links)
+### 7.8 Link card (retired)
 
-**Anatomy** (LK geometry **[V]**: 56px min height, 12px padding, 16px gap)
+Freelance used a 56px link card (LK geometry **[V]**: index, title, meta row,
+trailing arrow, accent bar). Since 2026-11-24 freelance and open source use the
+tile (§7.9), so every project shows its screenshot and description. The owner
+chose it over a thumbnail inside the link card, which shrank the screenshot.
+`LinkCard` and `RepoCard` were removed with it.
 
-```text
-┌───────────────────────────────────────────────────────────┐
-▌ 01   Nombre del cliente · rol                       ↗    │
-│      2024—2025  ·  [EN CURSO ●]                           │
-└───────────────────────────────────────────────────────────┘
-```
-
-- Element: the whole card is one `<a>` with a single tab stop and no nested interactive elements.
-- Layout: `class="relative grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 min-h-14 px-4 py-3"`.
-- Module `.card`:
-  - shape: `--border-radius-1`, a `--border-025` border in `--border-color-primary`;
-  - color: `--background-color-tertiary`, `--text-color-primary`;
-  - motion: border and background color transitions on `--duration-base` / `--ease-standard`.
-- Columns:
-  - index: `@mixin micro`, `--text-color-tertiary`;
-  - body: title `@mixin body-md var(--fw-bold)`, meta row `@mixin micro` in `--text-color-tertiary`;
-  - trailing icon: 18px (`lucide:arrow-up-right` for external, `lucide:arrow-right` for internal), `--text-color-tertiary`.
-- **Accent bar:** a `::before` 2px wide on the inline-start edge, `background-color: var(--background-color-indicator)`, `scale: 1 0`, origin bottom. It grows over `--duration-slow` under `no-preference` (§9.6).
-- States:
-  - Hover: `border-color: var(--border-color-hover-accent)`, bar `scale: 1`, icon → `--text-color-accent` + 2px nudge (BM **[V]**).
-  - Focus-visible: global ring + bar shown.
-  - Active: `--background-color-accent-subtle`.
-  - Visited: no change (it's a hub).
-- Resilience: the body column is `min-w-0`. Titles wrap to multiple lines and never truncate. The meta row is `flex-wrap`. Long URLs inside use `overflow-wrap: anywhere`.
-- Weight note: the earlier spec said 600, but only 400/500/700/800 ship (§4.2). With `font-synthesis: none`, the browser would render 700 anyway, so the token says so.
-
-### 7.9 Project / bento card (Side projects)
+### 7.9 Project / bento card (Freelance, Side projects, Open source)
 
 - Grid: §5.3. The card is an `<a class:list={['flex flex-col gap-2', styles.tile]}>`, with `--border-radius-1` and `--text-color-primary`. There is no border around the whole tile, following LK's open style **[V]**.
 - Media: `<Picture>` in a
@@ -882,13 +859,23 @@ Conventions (§9):
 - Description (optional): `@mixin body-sm`, `--text-color-secondary`, `line-clamp-3`. The full text lives on the project page, so the clamp is acceptable.
 - Focus-visible: ring on the `<a>` (wraps the media). `outline-offset: 2px` keeps it visible around the image.
 - Missing image: a `--background-color-tertiary` block with the project initial in `@mixin heading-xl` and `--text-color-tertiary`. Never collapse the tile height.
+- Chips (optional): a `flex flex-wrap gap-2` row of §7.7 chips under the
+  description, status first (freelance: status + "Privado"; open source:
+  status, language, `PR #n`).
+- Private work (no `href`): the root is an `<article>` instead of an `<a>`, with
+  no new-tab text. The image zoom is scoped to `.tile-card:any-link`, so the
+  static tile never reacts to hover.
+- Each section's first tile is featured (`col-span-full`). With one project per
+  section, freelance and open source show a single full-width tile.
 
-### 7.10 Repo card (Open source)
+### 7.10 Open source tile
 
-- Same module as the link card (`styles.card`) with a stacked layout: `class="flex flex-col gap-2 p-4"`.
-- Header row: `owner/repo` in `font-family: var(--font-mono)`, `font-size: var(--f-body-sm)`, `font-weight: var(--fw-medium)`, `--text-color-primary`, with `overflow-wrap: anywhere`. A trailing `lucide:arrow-up-right` sits beside it.
-- Description: `@mixin body-sm`, `--text-color-secondary`.
-- Footer: chip collection (language, license, status). **Stars/forks only if fetched at build time** (e.g. GitHub API during `astro build`, with a graceful fallback that omits them). Never hard-code numbers that go stale.
+- The §7.9 tile. Title: `owner/repo` with `.tile-card__title--code`
+  (`font-family: var(--font-mono)`, `font-size: var(--f-body-sm)`,
+  `font-weight: var(--fw-medium)`, `overflow-wrap: anywhere`).
+- Description: the pull request title, or the project description when there
+  is no PR. The tile links to the PR, or to the repo.
+- **Stars/forks only if fetched at build time** (e.g. GitHub API during `astro build`, with a graceful fallback that omits them). Never hard-code numbers that go stale.
 
 ### 7.11 Buttons & CTAs
 
@@ -1859,7 +1846,7 @@ Each component keeps its own `styles.module.css` (repo pattern). **Class names
 follow BEM with the component as the block**, as the repo does
 (`styles.navbar__link`). The short names below (`.link`, `.card`, `.title`)
 stand for `<block>__<element>`: `.link` in the Navbar module is `.navbar__link`,
-`.title` in LinkCard is `.link-card__title`, and so on. In Astro, combine layout
+`.title` in TileCard is `.tile-card__title`, and so on. In Astro, combine layout
 utilities and the module class with `class:list={['flex …', styles.name]}`.
 Motion follows §8.3: static by default, with the transition nested under
 `no-preference`. Forced Colors Mode fixes live next to the rule they fix (§6.6).
@@ -1995,87 +1982,7 @@ The modules for the patterns that need more than tokens:
 }
 ```
 
-`components/LinkCard/styles.module.css` (the repo card reuses it with a stacked layout):
-
-```css
-.card {
-  border: var(--border-025) solid var(--border-color-primary);
-  border-radius: var(--border-radius-1);
-  background-color: var(--background-color-tertiary);
-  color: var(--text-color-primary);
-  transition:
-    border-color var(--duration-base) var(--ease-standard),
-    background-color var(--duration-base) var(--ease-standard);
-
-  /* Accent bar: reaches its final state instantly under `reduce` */
-  &::before {
-    content: "";
-    position: absolute;
-    inset-block: -1px;
-    inset-inline-start: -1px;
-    inline-size: var(--border-05);
-    background-color: var(--background-color-indicator);
-    scale: 1 0;
-    transform-origin: bottom;
-
-    @media (prefers-reduced-motion: no-preference) {
-      transition: scale var(--duration-slow) var(--ease-out);
-    }
-  }
-
-  &:hover {
-    border-color: var(--border-color-hover-accent);
-  }
-
-  &:is(:hover, :focus-visible)::before {
-    scale: 1;
-  }
-
-  &:active {
-    background-color: var(--background-color-accent-subtle);
-  }
-
-  @media (forced-colors: active) {
-    &::before {
-      background: none;
-      border-inline-start: var(--border-05) solid Highlight;
-    }
-  }
-}
-
-.title {
-  @mixin body-md var(--fw-bold);
-}
-
-.meta,
-.index {
-  color: var(--text-color-tertiary);
-
-  @mixin micro;
-}
-
-/* Icon: color feedback always; the spatial nudge only with hover + motion */
-.icon {
-  color: var(--text-color-tertiary);
-  transition: color var(--duration-fast) var(--ease-standard);
-
-  .card:is(:hover, :focus-visible) & {
-    color: var(--text-color-accent);
-  }
-
-  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    transition:
-      color var(--duration-fast) var(--ease-standard),
-      translate var(--duration-base) var(--ease-out);
-
-    .card:hover & {
-      translate: 2px 0;
-    }
-  }
-}
-```
-
-`components/TileCard/styles.module.css` (its own module: CSS Modules hash class names per file, so `.tile` can't be referenced from the link card's module):
+`components/TileCard/styles.module.css` (freelance, side projects and open source):
 
 ```css
 .tile {

@@ -379,7 +379,7 @@ export default defineConfig(
 			],
 
 			// Renamed from prevent-abbreviations in unicorn 80. "repo" stays,
-			// matching RepoCard and RepoItem.
+			// matching RepoItem and getRepoTiles.
 			'unicorn/name-replacements': [
 				'error',
 				{

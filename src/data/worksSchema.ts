@@ -1,6 +1,6 @@
 import type { CreativeWork } from 'schema-dts';
 
-import type { LinkItem, RepoItem, TileItem } from '@/types/designTokens';
+import type { RepoItem, TileItem } from '@/types/designTokens';
 
 interface WorksInput {
 	/** The `@id` of the page's Person node. */
@@ -8,7 +8,7 @@ interface WorksInput {
 	/** Absolute origin used to resolve the screenshots' root-relative URLs. */
 	siteUrl: string;
 	tiles: TileItem[];
-	freelance: LinkItem[];
+	freelance: TileItem[];
 	repos: RepoItem[];
 }
 
@@ -26,6 +26,15 @@ const slug = (value: string): string =>
 		.toLowerCase()
 		.replaceAll(/[^a-z\d]+/g, '-')
 		.replaceAll(/^-|-$/g, '');
+
+/**
+ * Resolves a tile's JSON-LD image against the site origin.
+ * @param tile - A card model.
+ * @param siteUrl - Absolute site origin.
+ * @returns The absolute URL, or undefined when the tile has no image.
+ */
+const absoluteImage = (tile: TileItem, siteUrl: string): string | undefined =>
+	tile.imageUrl ? new URL(tile.imageUrl, siteUrl).href : undefined;
 
 /**
  * Turns the cards on the page into JSON-LD nodes for the ProfilePage graph.
@@ -52,7 +61,7 @@ export const buildWorksSchema = ({
 		name: tile.title,
 		url: tile.href,
 		description: tile.description,
-		image: tile.imageUrl ? new URL(tile.imageUrl, siteUrl).href : undefined,
+		image: absoluteImage(tile, siteUrl),
 		keywords: tile.technologies?.join(', '),
 		dateCreated: tile.year ? String(tile.year) : undefined,
 		creator: person,
@@ -64,6 +73,8 @@ export const buildWorksSchema = ({
 		name: item.title,
 		// Private work has no public URL.
 		url: item.href,
+		description: item.description,
+		image: absoluteImage(item, siteUrl),
 		contributor: person,
 	}));
 
@@ -75,6 +86,7 @@ export const buildWorksSchema = ({
 		// The PR title; a repo without a PR has its own description.
 		name: repo.description || repo.repo,
 		url: repo.href,
+		image: absoluteImage(repo, siteUrl),
 		author: person,
 		isPartOf: {
 			'@type': 'SoftwareSourceCode',
