@@ -71,10 +71,15 @@ docs are English.
   (`--blocked-url-patterns`), which skews the scores; add a pattern for any
   other antivirus web shield that injects one.
 - `npx lhci autorun` is the CI check: it serves `dist/` and fails below the
-  scores in `lighthouserc.json` (performance 0.9, the rest 1; the 404 skips SEO,
-  it is `noindex`). It blocks the analytics, so runs never reach Google
-  Analytics, and Kaspersky. Locally, Kaspersky's blocked script still fails
-  `is-on-https` (best practices): only the CI run is conclusive.
+  limits in `lighthouserc.json`: performance 0.9, the other categories 1 (the
+  404 skips SEO, it is `noindex`), LCP 2.5 s, CLS 0.1, TBT 200 ms and 500 KB in
+  all. Each limit takes the median of the 3 runs: the default, the best run,
+  passed a run at 0.79. The `lighthouse:no-pwa` preset also asserts every audit
+  on its own, not only the category scores (only the home asserts
+  `is-crawlable`). It blocks Kaspersky and the analytics, but not Partytown's
+  worker, which still loads `gtag` (the opt-out flag keeps CI out of Google
+  Analytics). Locally, Kaspersky's blocked script still fails `is-on-https`
+  (best practices): only the CI run is conclusive.
 
 ## Structure
 
@@ -283,7 +288,11 @@ docs are English.
 - Analytics: `gtag` runs in Partytown and must be assigned to `window.gtag`
   (Partytown wraps inline scripts in a function, so a declared `gtag` stays
   local). Web Vitals run on the main thread from the `web-vitals` package: in a
-  worker, `PerformanceObserver` has no LCP, layout-shift or event entries.
+  worker, `PerformanceObserver` has no LCP, layout-shift or event entries. Off
+  `galeed.link` (localhost, the dev server, Cloudflare preview deploys, CI) the
+  gtag script sets Google's `ga-disable-<ID>` flag: `gtag` still loads but sends
+  no hits. Request blocking can't replace it: Lighthouse's `blockedUrlPatterns`
+  doesn't reach Partytown's worker.
 
 ## Skills and tools
 
