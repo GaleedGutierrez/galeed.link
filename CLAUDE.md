@@ -210,6 +210,12 @@ docs are English.
 - `subsetFonts.ts` keeps only the characters in the built HTML (plus CSS
   `content`, both cases and a small margin). Text a client script inserts at
   runtime isn't in the HTML: add its characters to `SAFETY_CHARACTERS`.
+  - It also deletes each `@font-face` rule (and its file) whose `unicode-range`
+    covers none of those characters, and the WOFF fallbacks (`fontFaces.ts`). A
+    character from a new script brings its subset back.
+  - `PINNED_AXES` pins JetBrains Mono to weight 500, the only one the site uses
+    (half the bytes). Using the mono at another weight needs that weight there,
+    or it renders at 500.
 - `postcss-custom-properties({ preserve: false })` inlines `:root` variables.
   Per-selector token overrides silently disappear.
 - PurgeCSS only sees static HTML/JS. Attributes set at runtime need a safelist
