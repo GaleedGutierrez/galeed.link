@@ -46,6 +46,8 @@ export interface Status {
 /* Content models for the hub's sections (§7.8–§7.9) */
 export interface SocialLink {
 	label: string;
+	/** Read after the label when the label alone doesn't say where the link goes (SC 2.4.9). */
+	srSuffix?: string;
 	href: string;
 	icon: `simple-icons:${string}` | `lucide:${string}`;
 }

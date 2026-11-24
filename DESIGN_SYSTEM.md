@@ -900,7 +900,7 @@ All buttons: labels never wrap mid-word. Allow two-line labels only on mobile vi
 ### 7.12 Contacto section
 
 - A `@mixin body-lg` sentence in `--text-color-secondary`, then a button row `class="flex flex-wrap gap-3"`:
-  - **Primary** "Escribime" (`mailto:`);
+  - **Primary** "Escribime" (`mailto:`), with an `sr-only` "por email" after the label (SC 2.4.9);
   - **Secondary** "LinkedIn" or "Agendar llamada".
 - **No form by default.** A static mailto keeps the hub dependency-free. If a form is added later:
   - follow the skill's form rules: visible labels, inline errors with `aria-describedby`, an error summary, 44px inputs, and no LK-style low-contrast fills;
@@ -2298,6 +2298,8 @@ export const cssVar = <T extends string>(name: T) => `var(--${name})` as const
 /** Content models for the hub's sections */
 export interface SocialLink {
   label: string
+  /** Read after the label when the label alone doesn't say where the link goes (SC 2.4.9) */
+  srSuffix?: string
   href: string
   icon: `simple-icons:${string}` | `lucide:${string}`
 }

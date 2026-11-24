@@ -32,7 +32,12 @@ const { class: className } = Astro.props;
 					name={link.icon}
 					size={20}
 				/>
-				<span>{link.label}</span>
+				<span>
+					{link.label}
+					{link.srSuffix && (
+						<span class="sr-only">{link.srSuffix}</span>
+					)}
+				</span>
 				<span class="sr-only">(se abre en una pestaña nueva)</span>
 			</a>
 		</li>

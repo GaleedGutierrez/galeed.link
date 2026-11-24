@@ -51,6 +51,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
 		href: personalSchema.socialLinks.personalWebsite,
 		icon: 'lucide:globe',
 		label: 'Web',
+		srSuffix: 'personal',
 	},
 ];
 
