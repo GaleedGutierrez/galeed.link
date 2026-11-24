@@ -4,9 +4,11 @@
 	outline-offset: calc(2 * var(--rem-scale));
 }
 
+/* The indicator fill: accent-subtle was 1.02–1.12:1 from every surface, so
+   a selection didn't show. Text ≥ 7.78:1 in both themes (§3.4). */
 ::selection {
-	background-color: var(--background-color-accent-subtle);
-	color: var(--text-color-primary);
+	background-color: var(--background-color-indicator);
+	color: var(--text-color-inverse);
 }
 
 [id] {
