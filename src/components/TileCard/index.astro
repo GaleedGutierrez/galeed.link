@@ -26,8 +26,8 @@ const sizes = item.featured
 >
 	<figure
 		class:list={[
-			// 16:9 for every tile: the shared-assets screenshots are 16:9,
-			// and a square crop zoomed them in.
+			// 16:9 for every tile: the shared-assets screenshots are 16:10, so
+			// object-top crops only their bottom strip. A square crop zoomed them in.
 			"relative aspect-video overflow-hidden",
 			styles["tile-card__media"],
 		]}
@@ -41,6 +41,8 @@ const sizes = item.featured
 				pictureAttributes={{ class: "block h-full" }}
 				sizes={sizes}
 				src={item.image}
+				// The fallback <img> would otherwise be the full 2560px screenshot.
+				width={960}
 				widths={[240, 480, 720, 960]}
 			/>
 		) : (

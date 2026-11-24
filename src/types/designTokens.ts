@@ -65,6 +65,8 @@ export interface TileItem {
 	href: string;
 	alt: string;
 	image?: ImageMetadata;
+	/** A smaller WebP of `image`, for the JSON-LD (root-relative). */
+	imageUrl?: string;
 	meta?: string;
 	description?: string;
 	featured?: boolean;
