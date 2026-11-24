@@ -274,7 +274,7 @@ and every ratio in §3.4 was computed from those rendered values.
 
 - **Light ("bone paper"):** **bone `#ede6d8`** page and **charcoal `#1c1c1c`** text, the pair chosen for this site. HL2's grey `#e9e8e9` **[V]** is replaced by bone, which keeps the editorial "paper" feel but is warmer. Surfaces step *up* in lightness: bone → light bone `#f5f0e6` → white.
 - **Dark ("Black Mesa"):** the same pair, inverted. **Charcoal `#1c1c1c`** is the main surface, **bone `#ede6d8`** the main text. The page canvas is `#141414`, Black Mesa's real `ink-deep` **[V]**.
-- **Accent:** HL2's **`#ff862c`** **[V]** is the brand fill in both themes, and HL2's **`#ffaa6b`** **[V]** is its hover in both themes. Both always carry **charcoal ink, never white** (white on `#ff862c` is only 2.41:1).
+- **Accent:** HL2's **`#ff862c`** **[V]** is the dark theme's CTA fill, and HL2's **`#ffaa6b`** **[V]** its hover. Both carry **charcoal ink, never white** (white on `#ff862c` is only 2.41:1). In light mode the fill is the burnt HEV **`#7f3300`** (hover `#662801`) with bone ink, so the CTA changes with the theme like every other surface.
 - **Orange as text** must be much darker in light mode (`#7f3300`, a burnt HEV tone) and a little lighter in dark mode (`#ff9b5a`) to reach 7:1.
 - **Three text tiers are kept, but they are close.** At AAA, even the "muted"
   tier must reach 7:1, so the gap between tiers is small. **Hierarchy comes
@@ -295,12 +295,12 @@ Primitives are **private**: only the applications in §3.3 reference them, never
 | --- | --- | --- | --- | --- |
 | `hev-50` | `oklch(96.6% 0.021 63.2)` | `#fff1e5` | [P] | light accent tint |
 | `hev-200` | `oklch(82.3% 0.089 60.5)` | `#f0b88a` | [P] | light accent border |
-| `hev-300` | `oklch(80.9% 0.127 56.3)` | `#ffaa6b` | **[V] HL2** | hover fill (both themes) |
-| `hev-400` | `oklch(74.3% 0.174 51.8)` | `#ff862c` | **[V] HL2** | brand fill (both themes) |
+| `hev-300` | `oklch(80.9% 0.127 56.3)` | `#ffaa6b` | **[V] HL2** | dark CTA hover fill |
+| `hev-400` | `oklch(74.3% 0.174 51.8)` | `#ff862c` | **[V] HL2** | dark CTA fill, decorative HEV rule |
 | `hev-text-d` | `oklch(78.1% 0.143 52.1)` | `#ff9b5a` | [P] | dark link / focus / indicator |
 | `hev-text-d-hover` | `oklch(83.2% 0.109 55.7)` | `#ffb581` | [P] | dark link hover |
-| `hev-text-l` | `oklch(42.1% 0.118 46.1)` | `#7f3300` | [P] | light link / focus / indicator |
-| `hev-text-l-hover` | `oklch(36.1% 0.1 46.2)` | `#662801` | [P] | light link hover |
+| `hev-text-l` | `oklch(42.1% 0.118 46.1)` | `#7f3300` | [P] | light link / focus / indicator / CTA fill |
+| `hev-text-l-hover` | `oklch(36.1% 0.1 46.2)` | `#662801` | [P] | light link hover / CTA hover fill |
 | `hev-900` | `oklch(36.6% 0.069 55.7)` | `#5a3417` | [P] | dark accent border |
 | `hev-950` | `oklch(23.6% 0.035 57.4)` | `#2b1a0d` | [P] | dark accent tint |
 
@@ -342,8 +342,8 @@ Named by property, as in the repo: `--background-color-*`, `--text-color-*`, `--
 | `--background-color-primary` | `--bone-100` (`#ede6d8`) | `--charcoal-950` (`#141414`) | `bg` | page canvas (≥640px; under 640 the page uses `secondary`) |
 | `--background-color-secondary` | `--bone-50` (`#f5f0e6`) | `--charcoal-900` (`#1c1c1c`) | `surface` | shell / primary surface |
 | `--background-color-tertiary` | `--white` (`#ffffff`) | `--charcoal-800` (`#242424`) | `surface-2` | cards, inset blocks, hover fills |
-| `--background-color-accent` | `--hev-400` (`#ff862c`) | same | `accent` | primary CTA fill |
-| `--background-color-hover-accent` | `--hev-300` (`#ffaa6b`) | same | `accent-hover` | CTA hover fill, wipe |
+| `--background-color-accent` | `--hev-text-l` (`#7f3300`) | `--hev-400` (`#ff862c`) | `accent` | primary CTA fill |
+| `--background-color-hover-accent` | `--hev-text-l-hover` (`#662801`) | `--hev-300` (`#ffaa6b`) | `accent-hover` | CTA hover fill, wipe |
 | `--background-color-accent-subtle` | `--hev-50` (`#fff1e5`) | `--hev-950` (`#2b1a0d`) | `accent-subtle` | pressed card. Not `::selection`: 1.02–1.12:1 from every surface, so a selection was invisible |
 | `--background-color-indicator` | `--hev-text-l` (`#7f3300`) | `--hev-text-d` (`#ff9b5a`) | `indicator` | active nav underline, card accent bar (state, so ≥ 3:1), `::selection` fill |
 | `--background-color-inverse` | `--charcoal-900` (`#1c1c1c`) | `--bone-100` (`#ede6d8`) | `inverse` | secondary button hover (inversion) |
@@ -352,7 +352,7 @@ Named by property, as in the repo: `--background-color-*`, `--text-color-*`, `--
 | `--text-color-tertiary` | `--bone-700` (`#514941`) | `--bone-400` (`#b8afa3`) | `text-muted` | metadata, captions, footer |
 | `--text-color-accent` | `--hev-text-l` (`#7f3300`) | `--hev-text-d` (`#ff9b5a`) | `accent-text` | links, index numerals |
 | `--text-color-hover-accent` | `--hev-text-l-hover` (`#662801`) | `--hev-text-d-hover` (`#ffb581`) | `accent-text-hover` | link hover |
-| `--text-color-on-accent` | `--charcoal-900` (`#1c1c1c`) | `--charcoal-950` (`#141414`) | `accent-ink` | text/icons **on** accent fills |
+| `--text-color-on-accent` | `--bone-50` (`#f5f0e6`) | `--charcoal-950` (`#141414`) | `accent-ink` | text/icons **on** accent fills |
 | `--text-color-inverse` | `--bone-50` (`#f5f0e6`) | `--charcoal-900` (`#1c1c1c`) | `inverse-text` | text on `background-color-inverse`, and selected text (on `indicator`) |
 | `--text-color-success` | `--green-700` (`#175525`) | `--green-300` (`#6fc27d`) | `success` | status text/dot |
 | `--text-color-warning` | `--amber-700` (`#644400`) | `--amber-300` (`#e3b12c`) | `warning` | status text/dot |
@@ -387,8 +387,8 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 
 | Pair | Ratio | Requirement |
 | --- | --- | --- |
-| `accent-ink` on `accent` | **7.06** | AAA text ✓ |
-| `accent-ink` on `accent-hover` | **9.10** | AAA text ✓ |
+| `accent-ink` on `accent` | **7.78** | AAA text ✓ |
+| `accent-ink` on `accent-hover` | **9.89** | AAA text ✓ |
 | `border-strong` on bg / surface / surface-2 | **3.81 / 4.16 / 4.73** | UI ≥ 3 ✓ |
 | `focus` on bg / surface / surface-2 | **7.12 / 7.78 / 8.84** | UI ≥ 3 ✓ |
 | `inverse-text` on `inverse` | **15.00** | AAA text ✓ |
@@ -1254,8 +1254,8 @@ safelist: {
   --background-color-primary: light-dark(var(--bone-100), var(--charcoal-950));
   --background-color-secondary: light-dark(var(--bone-50), var(--charcoal-900));
   --background-color-tertiary: light-dark(var(--white), var(--charcoal-800));
-  --background-color-accent: var(--hev-400);
-  --background-color-hover-accent: var(--hev-300);
+  --background-color-accent: light-dark(var(--hev-text-l), var(--hev-400));
+  --background-color-hover-accent: light-dark(var(--hev-text-l-hover), var(--hev-300));
   --background-color-accent-subtle: light-dark(var(--hev-50), var(--hev-950));
   --background-color-indicator: light-dark(var(--hev-text-l), var(--hev-text-d));
   --background-color-inverse: light-dark(var(--charcoal-900), var(--bone-100));
@@ -1266,7 +1266,7 @@ safelist: {
   --text-color-tertiary: light-dark(var(--bone-700), var(--bone-400));
   --text-color-accent: light-dark(var(--hev-text-l), var(--hev-text-d));
   --text-color-hover-accent: light-dark(var(--hev-text-l-hover), var(--hev-text-d-hover));
-  --text-color-on-accent: light-dark(var(--charcoal-900), var(--charcoal-950));
+  --text-color-on-accent: light-dark(var(--bone-50), var(--charcoal-950));
   --text-color-inverse: light-dark(var(--bone-50), var(--charcoal-900));
   --text-color-success: light-dark(var(--green-700), var(--green-300));
   --text-color-warning: light-dark(var(--amber-700), var(--amber-300));
@@ -2282,7 +2282,7 @@ export type ColorVar = `--${ColorToken}`
 
 /** Same value in both themes, so written without light-dark(). */
 export const SHARED_COLOR_TOKENS = [
-  'background-color-accent', 'background-color-hover-accent', 'border-color-accent',
+  'border-color-accent',
 ] as const satisfies readonly ColorToken[]
 
 export type SpacingToken = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 11 | 12 | 14 | 16
@@ -2467,7 +2467,7 @@ Every CSS variable referenced by the atoms, CSS Modules, `elements/`, `utilities
 | --- | --- | --- |
 | Primitives: `--white`, `--bone-*`, `--charcoal-*`, `--hev-*`, `--green-*`, `--amber-*`, `--red-*`, `--blue-*` | `settings/colors.css` `:root` | they don't: each primitive is one fixed color |
 | `--background-color-*` (8), `--text-color-*` (11), `--border-color-*` (4), `--outline-color-focus` | `settings/colors.css` `:root`, once each | `light-dark()` over two primitives |
-| `--background-color-accent`, `--background-color-hover-accent`, `--border-color-accent` | `settings/colors.css` `:root` | none: the same primitive in both themes |
+| `--border-color-accent` | `settings/colors.css` `:root` | none: the same primitive in both themes |
 | `--box-shadow-shell-light`, `--box-shadow-shell-dark` | `settings/shadows.css` `:root` | the Layout module's `box-shadow` rules on `[data-theme="dark"]` + no-JS `@media` |
 | Theme-independent: `--rem-scale`, `--f-*`, `--fw-*`, `--lh-*`, `--ls-*`, `--font-*`, `--spacing-*`, `--max-w-*`, `--height-nav`, `--border-025/05`, `--border-radius-*`, `--duration-*`, `--ease-*`, `--z-index-*` | `settings/*.css` `:root` | n/a (inherited by both themes) |
 

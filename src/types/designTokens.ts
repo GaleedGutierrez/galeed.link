@@ -31,8 +31,6 @@ export type ColorToken = (typeof COLOR_TOKENS)[number];
 
 /** Same value in both themes, so written without light-dark(). */
 export const SHARED_COLOR_TOKENS = [
-	'background-color-accent',
-	'background-color-hover-accent',
 	'border-color-accent',
 ] as const satisfies readonly ColorToken[];
 
