@@ -28,7 +28,8 @@ import { personalSchema } from './personalSchema';
 export const PROFILE = {
 	name: personalSchema.name,
 	role: personalSchema.jobTitle,
-	location: 'Jujuy, AR',
+	// The system bar shows the country code, expanded in an <abbr> (SC 3.1.4).
+	location: { region: 'Jujuy', country: 'Argentina', countryCode: 'AR' },
 	isAvailable: true as boolean, // toggles the system bar and llms.txt
 	email: 'galeedeveloper@gmail.com',
 	portfolioUrl: personalSchema.socialLinks.personalWebsite,
@@ -211,7 +212,15 @@ export const getRepoTiles = async (): Promise<RepoItem[]> => {
 					),
 					chips: [
 						language,
-						...(contribution ? [`PR #${contribution.number}`] : []),
+						...(contribution
+							? [
+									{
+										abbr: 'PR',
+										title: 'Pull request',
+										text: ` #${contribution.number}`,
+									},
+								]
+							: []),
 					],
 					status: contribution
 						? PR_STATUS[contribution.status]

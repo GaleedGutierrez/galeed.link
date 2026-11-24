@@ -737,6 +737,7 @@ Conventions (§9):
 
 - Container: `<div class:list={['flex items-center justify-between min-h-12 px-4', styles.bar]}>`. The module adds `padding-block: var(--spacing-2)` (8px; owner's choice, 2026-11-24, so the 36px toggle doesn't sit 6px from the edges: the bar is 52px tall), `background-color: var(--background-color-secondary)` and `border-block-end: var(--border-05) solid var(--border-color-accent)`.
 - Left: `@mixin micro`, `color: var(--text-color-tertiary)`.
+  - The location is `Jujuy, <abbr title="Argentina">AR</abbr>` (`PROFILE.location`): the country code stays short and the `<abbr>` gives its expansion (SC 3.1.4). The hero says "Jujuy, Argentina" in full.
   - The optional availability dot is `--text-color-success` plus text, never the dot alone.
   - Long strings truncate with `min-inline-size: 0; text-overflow: ellipsis`, and the full text is also in the hero. Keep it short.
 - **Theme toggle (one button, two states):** the decision was two states. A toggle that sits permanently in the site chrome is a quick comfort adjustment ("too bright right now"), not a long-term setting. Two states cover that without giving up the return to System. The behavior is in §2.1 rules 4–5 and §2.3.
@@ -867,7 +868,7 @@ chose it over a thumbnail inside the link card, which shrank the screenshot.
 - Missing image: a `--background-color-tertiary` block with the project initial in `@mixin heading-xl` and `--text-color-tertiary`. Never collapse the tile height.
 - Chips (optional): a `flex flex-wrap gap-2` row of §7.7 chips under the
   description, status first (freelance: status + "Privado"; open source:
-  status, language, `PR #n`).
+  status, language, `PR #n`). A chip label can open with an abbreviation (`ChipLabel`): `Chip` renders it as `<abbr title="Pull request">PR</abbr>` (SC 3.1.4).
 - Private work (no `href`): the root is an `<article>` instead of an `<a>`, with
   no new-tab text. The image zoom is scoped to `.tile-card:any-link`, so the
   static tile never reacts to hover.
