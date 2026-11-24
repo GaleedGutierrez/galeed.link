@@ -16,7 +16,10 @@ const VISUAL_UTILITIES = [
 ];
 
 export default defineConfig({
-	presets: [presetWind3()],
+	// The preflight declares every --un-* variable (transforms, rings,
+	// shadows, filters) on every element; 'on-demand' keeps only the ones a
+	// used utility needs.
+	presets: [presetWind3({ preflight: 'on-demand' })],
 	transformers: [transformerVariantGroup()],
 	blocklist: VISUAL_UTILITIES,
 	theme: {

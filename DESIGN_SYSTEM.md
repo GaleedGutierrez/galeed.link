@@ -1113,12 +1113,15 @@ safelist: {
 - **`postcss-custom-properties({ preserve: false })`:** replaces every `var(--background-color-primary)` of a variable defined in `:root` with its value, here `light-dark(var(--bone-100), var(--charcoal-950))` with the primitives resolved too. That is harmless, because `light-dark()` resolves against the element's `color-scheme` at runtime wherever it ends up.
   - It only reads `:root`/`html` (README, v15.0.5). So a token **redefined under another selector would be inlined to its `:root` value**. Themed values are never overridden per selector: they live in `light-dark()`, or the final property is set directly (shadows, §9.6).
   - In CSS Modules the `var()` isn't inlined, because the variable is defined in another file. It resolves at runtime from `:root`, so it still works.
-- **lightningcss with `browserslist(['>= 0.25%', 'not dead', 'supports css-nesting'])`:** emits its `--lightningcss-light/dark` polyfill, because that query includes Safari/iOS 16.5–17.4, which lack `light-dark()`. Verified with `lightningcss-cli` 1.33.0 and `lightningcss` + `browserslist` on the real query:
-  - Every `color-scheme` declaration gets its own switches, including `:root[data-theme="light"|"dark"]`. A pinned theme (0,2,0) beats the polyfill's `@media (prefers-color-scheme: dark) :root` (0,1,0), so OS dark + pinned light works.
-  - `light-dark()` inside a custom property (`--background-color-primary: light-dark(var(--bone-100), …)`) is rewritten as `var(--lightningcss-light, …) var(--lightningcss-dark, …)` and resolves on `:root`, where the switches live. So CSS Modules that read the token at runtime flip correctly.
-  - `color-mix()` with `light-dark()` arguments is precomputed into one value per theme.
-  - At `safari 17.5`, `light-dark()` passes through untouched.
-  - Inline `style.colorScheme` does **not** flip the polyfill switches, which is why the `:root[data-theme]` rules must stay in CSS (§9.2).
+- **lightningcss targets: the `browserslist` field of `package.json`,
+  `baseline widely available with downstream`** (owner's choice, 2026-11-24).
+  In November 2026 that is Chrome/Edge 125+, Firefox 126+, Safari/iOS 17.5+,
+  Samsung Internet 27+ and Opera 111+. Every one supports `light-dark()`,
+  `oklch()` and nesting, so lightningcss passes them through: no
+  `--lightningcss-light/dark` polyfill, no hex fallbacks, nesting kept (about
+  6 KB less CSS before compression). cssnano's autoprefixer reads the same
+  field.
+  - The polyfill only returns if the targets include a browser without `light-dark()` (Safari/iOS 16.5–17.4 was the reason under the old `>= 0.25%, not dead, supports css-nesting` query). It then keys its switches off the `color-scheme` declarations in the style sheet, not inline `style.colorScheme`, which is one reason the `:root[data-theme]` rules stay in CSS (§9.2).
 - **Why lightningcss must run last:** `purgeCss.ts` re-runs every PostCSS plugin
   on `dist/`. When that happens *after* lightningcss,
   `postcss-custom-properties` sees `--lightningcss-light: initial` and
@@ -1138,7 +1141,7 @@ safelist: {
     `@media (…) { .unused {…} }` and `[data-x="1"]` were both removed.
   - **Fix:** the two safelist entries above. As belt and braces, `theme.ts` and the head script write `setAttribute('data-theme', …)` (§2.2, §9.8), which puts the literal token into the built HTML/JS. Both fixes verified.
   - `variables: true` drops unused custom properties. That's safe: tokens are either used, inlined, or read at runtime by CSS Modules, which PurgeCSS sees as `var()` uses.
-- **Browser support (project policy):** `light-dark()` is used **without a hand-written fallback**. The guide rates it Baseline *Newly available* (since 2024-05-13: Chrome/Edge 123, Firefox 120, Safari 17.5). Older targets are covered by the lightningcss polyfill above. `oklch()` is Baseline since 2023.
+- **Browser support (project policy):** `light-dark()` is used **without a hand-written fallback**. The guide rates it Baseline *Newly available* (since 2024-05-13: Chrome/Edge 123, Firefox 120, Safari 17.5). The browserslist targets (Baseline Widely available, above) all support it, so it ships native. `oklch()` is Baseline since 2023.
 
 **Issues found in the current `src/styles` [V], fixed by this system:**
 - `a-button.css` / `a-input.css` use variables that don't exist (`--space-3`, `--space-6`, `--text-color-quaternary`, `--text-color-senary`, `--background-tertiary` …), and `--lh-*` / `--ws-*` are never defined. An undefined `var()` makes the declaration fall back to the inherited/initial value, so those buttons have no fill. §9.5 replaces both atoms.
@@ -2037,7 +2040,9 @@ const VISUAL_UTILITIES = [
 ]
 
 export default defineConfig({
-  presets: [presetWind3()],
+  // 'on-demand': the preflight declares only the --un-* variables a used
+  // utility needs, not every transform/ring/shadow/filter one.
+  presets: [presetWind3({ preflight: 'on-demand' })],
   transformers: [transformerVariantGroup()],
   blocklist: VISUAL_UTILITIES,
   // Keep the repo's own preflight (--un-unit) and logical-property rules
@@ -2362,9 +2367,9 @@ for (const v of ['--box-shadow-shell-light', '--box-shadow-shell-dark'])
       `:root[data-theme="dark"]`, the Layout module's dark shell rule
       (`:root[data-theme="dark"] ._shell_…`), `[data-theme-switching]`, and the
       nav module's `[aria-current="true"]` rule are still present (PurgeCSS,
-      §9.1). Then: use sites contain `light-dark(` or lightningcss's
-      `--lightningcss-light/dark` polyfill. `:root[data-theme="dark"]` sets
-      `color-scheme: dark` (plus the polyfill switches). The toggle and the
+      §9.1). Then: use sites contain `light-dark(` (native for the Baseline
+      targets; lightningcss's `--lightningcss-light/dark` polyfill only for
+      older ones). `:root[data-theme="dark"]` sets `color-scheme: dark`. The toggle and the
       no-JS OS path both turn **everything** dark, including `color-mix()` tints
       (lightningcss precomputes them per theme) and the shell shadow.
 - [ ] Borders, dividers, and the shell edge are visible in **both** themes (the regression from §1.4 issue 4).

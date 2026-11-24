@@ -94,8 +94,8 @@ docs are English.
   `src/scripts/theme.ts`: theme logic. `tests/`: Vitest (token invariants from
   §9.9).
 - `scripts/`: pre-build `gitHistory.ts`; post-build `purgeCss.ts`,
-  `lightningcss.ts`, `subsetFonts.ts`, `inlineCss.ts` and `cspHeaders.ts`
-  (policy and hash helpers in `csp.ts`).
+  `lightningcss.ts`, `pruneCssVars.ts`, `subsetFonts.ts`, `inlineCss.ts` and
+  `cspHeaders.ts` (policy and hash helpers in `csp.ts`).
 - Path aliases in use: `@/*`, `@components/*`, `@layouts/*`, `@styles/*`,
   `@images/*`.
 
@@ -177,16 +177,19 @@ docs are English.
 ## Build pipeline gotchas
 
 - Build order is `git-history`, `astro build`, `purge-css`, `lightningcss`,
-  `subset-fonts`, `inline-css`, `csp-headers`. `git-history` fetches the full
-  history when the clone is shallow (Cloudflare Pages clones one commit), so
-  `getLastModified()` sees the real last content commit instead of the latest
-  one. lightningcss must come after purge-css: `purgeCss.ts` re-runs
-  `postcss-custom-properties`, which would inline the `light-dark()` polyfill
-  switches and pin every color to light. `subset-fonts` must come after both: it
-  renames fonts and style sheets by content hash, so any later step that
-  rewrites the CSS would leave a stale hash. `inline-css` then replaces each
-  `/_astro/*.css` link with a `<style>` and deletes the file: the whole CSS is
-  ~13 KB compressed, so a separate request only blocked the first paint.
+  `prune-css-vars`, `subset-fonts`, `inline-css`, `csp-headers`. `git-history`
+  fetches the full history when the clone is shallow (Cloudflare Pages clones
+  one commit), so `getLastModified()` sees the real last content commit instead
+  of the latest one. lightningcss must come after purge-css: `purgeCss.ts`
+  re-runs `postcss-custom-properties`, which would inline the `light-dark()`
+  polyfill switches and pin every color to light. `prune-css-vars` removes the
+  custom properties nothing reads (after `postcss-custom-properties` inlined
+  them), reading every style sheet, page and script together: tokens are
+  declared in one sheet and used in another. `subset-fonts` must come after
+  them: it renames fonts and style sheets by content hash, so any later step
+  that rewrites the CSS would leave a stale hash. `inline-css` then replaces
+  each `/_astro/*.css` link with a `<style>` and deletes the file: the whole CSS
+  is ~10 KB compressed, so a separate request only blocked the first paint.
   `csp-headers` stays last: it hashes the final HTML, those `<style>` elements
   included.
 - The Content-Security-Policy is generated, not written in `public/_headers`.
@@ -220,6 +223,13 @@ docs are English.
   - `PINNED_AXES` pins JetBrains Mono to weight 500, the only one the site uses
     (half the bytes). Using the mono at another weight needs that weight there,
     or it renders at 500.
+- Browser targets: the `browserslist` field of `package.json`
+  (`baseline widely available with downstream`), read by lightningcss and
+  cssnano's autoprefixer. All of them support `light-dark()`, `oklch()` and
+  nesting, so lightningcss ships them native (no `--lightningcss-light/dark`
+  polyfill).
+- UnoCSS's preflight is `'on-demand'`: it only declares the `--un-*` variables a
+  used utility needs.
 - `postcss-custom-properties({ preserve: false })` inlines `:root` variables.
   Per-selector token overrides silently disappear.
 - PurgeCSS only sees static HTML/JS. Attributes set at runtime need a safelist
