@@ -23,6 +23,9 @@ updates:
       prefix: "chore: :arrow_up:"
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
+    # Replaces the default pair (dependencies, javascript).
+    labels:
+      - dependencies
     directory: "/"
     schedule:
       interval: "weekly"

@@ -296,5 +296,10 @@ docs are English.
 - `check-for-dupes` ignores `.agents/` and `.claude/`: the installed skill is
   symlinked into both, which doubled every file.
 - Work on a branch, never directly on `main`.
+- Labels are code: `.github/labels.yml` (synced by `label-sync.yml`). A PR gets
+  one `type:` label from its Conventional Commit title (or branch prefix) and
+  `area:` labels from its files (`.github/labeler.yml`). Issues get theirs from
+  the issue forms (`.github/issue-label.yml`). A new area needs an entry in
+  each.
 - CI runs lint, stylelint, lint-md, prettier and check-for-dupes. A PR must pass
   all of them.

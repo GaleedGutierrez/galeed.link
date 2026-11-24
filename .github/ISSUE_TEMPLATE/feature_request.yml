@@ -1,0 +1,45 @@
+---
+name: 💡 Feature request
+description: Suggest an idea for galeed.link.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does it solve?
+      placeholder: When I share the link, I can't…
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would you like to happen?
+    validations:
+      required: true
+  # issue-label.yml maps each option to an area or concern label: keep the
+  # option names and those patterns in step.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Pick every part it touches, or "Not sure".
+      multiple: true
+      options:
+        - Content
+        - Components
+        - Styles and theme
+        - SEO and link previews
+        - Accessibility
+        - Performance
+        - Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+  - type: textarea
+    id: context
+    attributes:
+      label: Anything else?
+      description: Links, screenshots or sites that do it well.
