@@ -919,10 +919,11 @@ export default defineConfig(
 	},
 	// ...fixupConfigRules(compat.extends('plugin:jest-dom/recommended')),
 	{
-		...playwright.configs['flat/jest-playwright'],
+		...playwright.configs['flat/recommended'],
 		files: ['tests/e2e/**'],
 		plugins: { playwright },
 		rules: {
+			...playwright.configs['flat/recommended'].rules,
 			'@typescript-eslint/explicit-function-return-type': 'off',
 			'playwright/prefer-equality-matcher': 'error',
 			'playwright/prefer-comparison-matcher': 'error',

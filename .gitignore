@@ -25,6 +25,10 @@ pnpm-debug.log*
 lighthouse-report/
 .lighthouseci/
 
+# Playwright test output
+test-results/
+playwright-report/
+
 # Playwright MCP output (screenshots, page snapshots, console logs)
 .playwright-mcp/
 
