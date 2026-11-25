@@ -1,11 +1,11 @@
 ---
-import { Icon } from "astro-icon/components";
+import { Icon } from 'astro-icon/components';
 
-import styles from "./styles.module.css";
+import styles from './styles.module.css';
 ---
 
 <button
-	class:list={["grid size-9 place-items-center", styles["theme-toggle"]]}
+	class:list={['grid size-9 place-items-center', styles['theme-toggle']]}
 	data-theme-toggle
 	hidden
 	type="button"
@@ -28,7 +28,7 @@ import styles from "./styles.module.css";
 	</span>
 </button>
 <script>
-	import { initTheme } from "@/scripts/theme";
+	import { initTheme } from '@/scripts/theme';
 
 	initTheme();
 </script>

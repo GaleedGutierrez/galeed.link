@@ -1,5 +1,5 @@
 ---
-import styles from "./styles.module.css";
+import styles from './styles.module.css';
 
 export interface NavSection {
 	id: string;
@@ -15,12 +15,12 @@ const { sections } = Astro.props;
 
 <nav
 	aria-label="Secciones"
-	class:list={["sticky top-0 mt-6", styles["navbar"]]}
+	class:list={['sticky top-0 mt-6', styles['navbar']]}
 >
 	<ul
 		class:list={[
-			"flex gap-x-1 overflow-x-auto py-1",
-			styles["navbar__list"],
+			'flex gap-x-1 overflow-x-auto py-1',
+			styles['navbar__list'],
 		]}
 		data-nav-list
 		role="list"
@@ -29,8 +29,8 @@ const { sections } = Astro.props;
 			<li>
 				<a
 					class:list={[
-						"relative inline-flex min-h-11 shrink-0 items-center whitespace-nowrap px-3",
-						styles["navbar__link"],
+						'relative inline-flex min-h-11 shrink-0 items-center whitespace-nowrap px-3',
+						styles['navbar__link'],
 					]}
 					data-nav-link
 					href={`#${section.id}`}
@@ -44,12 +44,12 @@ const { sections } = Astro.props;
 <script>
 	// Mark the section in view as current (§7.5) and keep its link visible in
 	// the horizontally scrolling list.
-	const list = document.querySelector<HTMLElement>("[data-nav-list]");
+	const list = document.querySelector<HTMLElement>('[data-nav-list]');
 	const links = [
-		...document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]"),
+		...document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]'),
 	];
 	const prefersReducedMotion = globalThis.matchMedia(
-		"(prefers-reduced-motion: reduce)",
+		'(prefers-reduced-motion: reduce)',
 	);
 
 	// Scrolls the list only, never the page. A link under an edge fade (the
@@ -78,7 +78,7 @@ const { sections } = Astro.props;
 
 		list.scrollTo({
 			left: start - (list.clientWidth - link.offsetWidth) / 2,
-			behavior: prefersReducedMotion.matches ? "auto" : "smooth",
+			behavior: prefersReducedMotion.matches ? 'auto' : 'smooth',
 		});
 	};
 
@@ -112,8 +112,8 @@ const { sections } = Astro.props;
 			return;
 		}
 
-		currentLink?.removeAttribute("aria-current");
-		next?.setAttribute("aria-current", "true");
+		currentLink?.removeAttribute('aria-current');
+		next?.setAttribute('aria-current', 'true');
 		currentLink = next;
 
 		// A focused link keeps its place: scrolling to the current one would
@@ -147,7 +147,7 @@ const { sections } = Astro.props;
 	let isUpdateQueued = false;
 
 	globalThis.addEventListener(
-		"scroll",
+		'scroll',
 		() => {
 			if (isUpdateQueued) {
 				return;
@@ -161,13 +161,13 @@ const { sections } = Astro.props;
 		},
 		{ passive: true },
 	);
-	globalThis.addEventListener("resize", update, { passive: true });
+	globalThis.addEventListener('resize', update, { passive: true });
 
 	for (const link of links) {
-		link.addEventListener("focus", () => {
+		link.addEventListener('focus', () => {
 			revealInList(link);
 		});
-		link.addEventListener("click", () => {
+		link.addEventListener('click', () => {
 			pinnedLink = link;
 			setCurrent(link);
 		});
@@ -175,7 +175,7 @@ const { sections } = Astro.props;
 
 	// User-driven scrolling releases the pin. pointerdown fires before a
 	// nav link's click, which then pins that link again.
-	for (const type of ["wheel", "touchmove", "keydown", "pointerdown"]) {
+	for (const type of ['wheel', 'touchmove', 'keydown', 'pointerdown']) {
 		globalThis.addEventListener(
 			type,
 			() => {

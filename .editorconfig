@@ -1,32 +1,23 @@
-# top-most EditorConfig file
+# Top-most EditorConfig file. Prettier and shfmt read it too: indent_style,
+# indent_size, max_line_length and quote_type become their options.
 root = true
 
-# Unix-style newlines at the bottom of every file
 [*]
 charset = utf-8
 end_of_line = lf
-max_line_length = 80
-
-# Tab indentation
+insert_final_newline = true
+trim_trailing_whitespace = true
 indent_style = tab
 indent_size = 4
+max_line_length = 80
 
-# Make sure every file has a blank line at the end
-insert_final_newline = true
-
-# Remove any whitespace characters preceding newline characters
-trim_trailing_whitespace = true
-
-# Give operators breathing room, but not brackets
-spaces_around_operators = true
-spaces_around_brackets = false
-indent_brace_style = K&R
-curly_bracket_next_line = false
-
-[*.{ts,tsx,mts,cts,js,jsx,cjs,mjs}]
+# Prettier's singleQuote. .astro covers the frontmatter; HTML attributes
+# keep double quotes (jsxSingleQuote).
+[*.{ts,tsx,mts,cts,js,jsx,cjs,mjs,astro}]
 quote_type = single
 
-[*.{yml, yaml}]
+# YAML can't indent with tabs.
+[*.{yml,yaml}]
 indent_style = space
 indent_size = 2
 
@@ -34,5 +25,6 @@ indent_size = 2
 indent_style = space
 indent_size = 2
 
-[*.py]
-indent_brace_style = Python
+# Prettier skips it; markdownlint caps its lines at 400 instead.
+[DESIGN_SYSTEM.md]
+max_line_length = off

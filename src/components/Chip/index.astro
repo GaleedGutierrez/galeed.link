@@ -1,7 +1,7 @@
 ---
-import { Icon } from "astro-icon/components";
+import { Icon } from 'astro-icon/components';
 
-import type { ChipLabel, StatusTone } from "@/types/designTokens";
+import type { ChipLabel, StatusTone } from '@/types/designTokens';
 
 interface Props {
 	label: ChipLabel;
@@ -13,7 +13,7 @@ interface Props {
 const { label, tone, icon } = Astro.props;
 ---
 
-<span class:list={["a-chip", tone && `a-chip--${tone}`]}>
+<span class:list={['a-chip', tone && `a-chip--${tone}`]}>
 	{tone && (
 		<span
 			aria-hidden="true"
@@ -28,7 +28,7 @@ const { label, tone, icon } = Astro.props;
 		/>
 	)}
 	<span class="a-chip__label">
-		{typeof label === "string" ? (
+		{typeof label === 'string' ? (
 			label
 		) : (
 			<>

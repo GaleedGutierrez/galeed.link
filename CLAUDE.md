@@ -69,6 +69,9 @@ docs are English.
   `markdownlint-configure-file` comment at its top caps them at 400 characters.
   Super Linter's markdownlint is off: it reads its bundled template, not this
   config.
+- Prettier takes its indentation, print width and quotes from `.editorconfig`
+  (`indent_style`, `indent_size`, `max_line_length`, `quote_type`), not from
+  `.prettierrc.json`: change them there. shfmt reads it too.
 - One test file: `npx vitest run tests/tokens.test.ts`.
 - `npm run test:e2e` runs Playwright (`tests/e2e/`) against `npm run preview`,
   so build first. `a11y.spec.ts` runs axe (`@axe-core/playwright`) with the WCAG

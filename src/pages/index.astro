@@ -1,16 +1,16 @@
 ---
-import Bio from "@components/Bio/index.astro";
-import Contact from "@components/Contact/index.astro";
-import Education from "@components/Education/index.astro";
-import Footer from "@components/Footer/index.astro";
-import Hero from "@components/Hero/index.astro";
-import Navbar from "@components/Navbar/index.astro";
-import SectionHeader from "@components/SectionHeader/index.astro";
-import SystemBar from "@components/SystemBar/index.astro";
-import TileList from "@components/TileList/index.astro";
-import Layout from "@layouts/Layout/index.astro";
+import Bio from '@components/Bio/index.astro';
+import Contact from '@components/Contact/index.astro';
+import Education from '@components/Education/index.astro';
+import Footer from '@components/Footer/index.astro';
+import Hero from '@components/Hero/index.astro';
+import Navbar from '@components/Navbar/index.astro';
+import SectionHeader from '@components/SectionHeader/index.astro';
+import SystemBar from '@components/SystemBar/index.astro';
+import TileList from '@components/TileList/index.astro';
+import Layout from '@layouts/Layout/index.astro';
 
-import { buildEducationSchema } from "@/data/educationSchema";
+import { buildEducationSchema } from '@/data/educationSchema';
 import {
 	getCourses,
 	getFreelanceTiles,
@@ -18,9 +18,9 @@ import {
 	getRepoTiles,
 	getStudies,
 	PROFILE,
-} from "@/data/hub";
-import { PERSON_ID, SITE_URL } from "@/data/personalSchema";
-import { buildWorksSchema } from "@/data/worksSchema";
+} from '@/data/hub';
+import { PERSON_ID, SITE_URL } from '@/data/personalSchema';
+import { buildWorksSchema } from '@/data/worksSchema';
 
 const [freelanceTiles, projectTiles, repoTiles] = await Promise.all([
 	getFreelanceTiles(),
@@ -40,37 +40,37 @@ const works = buildWorksSchema({
 
 // A section without content is left out of the page and the nav.
 const sections = [
-	{ id: "bio", label: "Bio", title: "Bio", isVisible: true },
+	{ id: 'bio', label: 'Bio', title: 'Bio', isVisible: true },
 	{
-		id: "freelance",
-		label: "Freelance",
-		title: "Trabajo freelance",
+		id: 'freelance',
+		label: 'Freelance',
+		title: 'Trabajo freelance',
 		isVisible: freelanceTiles.length > 0,
 	},
 	{
-		id: "proyectos",
-		label: "Proyectos",
-		title: "Side projects",
+		id: 'proyectos',
+		label: 'Proyectos',
+		title: 'Side projects',
 		isVisible: projectTiles.length > 0,
 	},
 	{
-		id: "open-source",
-		label: "Open source",
-		title: "Open source",
+		id: 'open-source',
+		label: 'Open source',
+		title: 'Open source',
 		isVisible: repoTiles.length > 0,
 	},
 	{
-		id: "formacion",
-		label: "Formación",
-		title: "Formación",
+		id: 'formacion',
+		label: 'Formación',
+		title: 'Formación',
 		isVisible: studies.length > 0 || courses.recent.length > 0,
 	},
-	{ id: "contacto", label: "Contacto", title: "Contacto", isVisible: true },
+	{ id: 'contacto', label: 'Contacto', title: 'Contacto', isVisible: true },
 ]
 	.filter((section) => section.isVisible)
 	.map((section, position) => ({
 		...section,
-		index: String(position + 1).padStart(2, "0"),
+		index: String(position + 1).padStart(2, '0'),
 		isFirst: position === 0,
 	}));
 
@@ -118,19 +118,19 @@ const section = Object.fromEntries(sections.map((item) => [item.id, item]));
 					{...section.proyectos}
 					action={{
 						href: PROFILE.portfolioUrl,
-						label: "Ver todos",
-						srContext: "Proyectos: ",
+						label: 'Ver todos',
+						srContext: 'Proyectos: ',
 					}}
 				/>
 				<TileList items={projectTiles} />
 			</section>
 		)}
-		{section["open-source"] && (
+		{section['open-source'] && (
 			<section
 				aria-labelledby="open-source"
 				class="flex flex-col gap-4 px-4"
 			>
-				<SectionHeader {...section["open-source"]} />
+				<SectionHeader {...section['open-source']} />
 				<TileList items={repoTiles} />
 			</section>
 		)}

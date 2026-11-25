@@ -1,7 +1,7 @@
 ---
-import { Icon } from "astro-icon/components";
+import { Icon } from 'astro-icon/components';
 
-import styles from "./styles.module.css";
+import styles from './styles.module.css';
 
 interface Props {
 	id: string;
@@ -24,8 +24,8 @@ const { id, index, title, isFirst = false, action } = Astro.props;
 
 <header
 	class:list={[
-		"flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1",
-		!isFirst && ["pt-6", styles["section-header"]],
+		'flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1',
+		!isFirst && ['pt-6', styles['section-header']],
 	]}
 >
 	<h2
@@ -34,7 +34,7 @@ const { id, index, title, isFirst = false, action } = Astro.props;
 	>
 		<span
 			aria-hidden="true"
-			class:list={["self-center", styles["section-header__index"]]}
+			class:list={['self-center', styles['section-header__index']]}
 		>
 			{index}
 		</span>
