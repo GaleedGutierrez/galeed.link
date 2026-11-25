@@ -1,4 +1,4 @@
-/* eslint-disable new-cap */
+/* eslint-disable new-cap -- Sonda and UnoCSS name their integration factories in PascalCase */
 import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
 // import playformCompress from '@playform/compress';

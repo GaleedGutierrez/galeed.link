@@ -1,5 +1,5 @@
-/* eslint-disable security/detect-object-injection */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable security/detect-object-injection -- the keys come from UnoCSS rule matches, checked against fixed maps */
+/* eslint-disable @typescript-eslint/explicit-function-return-type -- UnoCSS types each rule and preflight callback */
 import { defineConfig, presetWind3, transformerVariantGroup } from 'unocss';
 
 /**

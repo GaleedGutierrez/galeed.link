@@ -1,4 +1,4 @@
-/* eslint-disable security/detect-non-literal-fs-filename */
+/* eslint-disable security/detect-non-literal-fs-filename -- build step: every path comes from dist/ or the repo, never from user input */
 /**
  * Post-build: subset every web font to the characters the built pages use.
  *
@@ -106,6 +106,7 @@ const collectCharacters = (htmlFiles: string[], cssFiles: string[]): string => {
 
 	// text-transform can render either case of any letter.
 	const characters = new Set(
+		// eslint-disable-next-line @typescript-eslint/no-misused-spread -- fonts are subset by code point, which is what the spread yields
 		[...text, ...text.toUpperCase(), ...text.toLowerCase()].filter(
 			(character) => character !== '\n' && character !== '\t',
 		),
@@ -190,6 +191,7 @@ const run = async (): Promise<void> => {
 		);
 	const characters = collectCharacters(htmlFiles, cssFiles());
 
+	// eslint-disable-next-line @typescript-eslint/no-misused-spread -- counts code points, like the subset
 	console.info(`   ${[...characters].length} distinct characters kept`);
 
 	const removedFonts = removeUnusedFontFaces(

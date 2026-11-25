@@ -50,6 +50,14 @@ export default defineConfig(
 			'skills-lock.json',
 		],
 	},
+	{
+		// A disable comment or inline config that no longer does anything
+		// fails the lint instead of piling up.
+		linterOptions: {
+			reportUnusedDisableDirectives: 'error',
+			reportUnusedInlineConfigs: 'error',
+		},
+	},
 
 	// Unicorn 80 declares the languages its rules support, and ESLint 10
 	// rejects them on JSON (jsonc) files, so scope it to code.
@@ -154,7 +162,7 @@ export default defineConfig(
 				},
 			],
 			'no-extend-native': 'error',
-			'no-lonely-if': 'error',
+			// no-lonely-if: unicorn/no-lonely-if covers it.
 			'no-param-reassign': 'error',
 			'no-return-assign': 'error',
 			'no-throw-literal': 'error',
@@ -365,6 +373,9 @@ export default defineConfig(
 			'simple-import-sort/exports': 'error',
 			'simple-import-sort/imports': 'error',
 			'unused-imports/no-unused-imports': 'error',
+			// The core rule reports the same variables again: unused-imports
+			// replaces it (its docs turn it off).
+			'no-unused-vars': 'off',
 			'unused-imports/no-unused-vars': [
 				'warn',
 				{
@@ -424,9 +435,9 @@ export default defineConfig(
 		files: ['**/*.ts', '**/*.mts', '**/*.cts', '**/*.tsx'],
 		extends: [
 			// eslint-disable-next-line import-x/no-named-as-default-member
-			...tseslint.configs.recommendedTypeChecked,
+			...tseslint.configs.strictTypeChecked,
 			// eslint-disable-next-line import-x/no-named-as-default-member
-			...tseslint.configs.stylistic,
+			...tseslint.configs.stylisticTypeChecked,
 		],
 		plugins: {
 			tsdoc,
@@ -434,19 +445,49 @@ export default defineConfig(
 
 		languageOptions: {
 			parserOptions: {
+				// `projectService: true` is typescript-eslint's default advice, but
+				// it measured slower here (17 s against 13 s for the whole lint).
 				project: true,
 				tsconfigRootDir: import.meta.dirname,
 			},
 		},
 
 		settings: {
-			'import/resolver': {
+			// import-x only reads `import-x/*` settings: the old `import/resolver`
+			// key was ignored.
+			'import-x/resolver': {
 				typescript: true,
 				node: true,
 			},
 		},
 
 		rules: {
+			// The compiler already checks what these import-x rules do, and they
+			// are the slowest ones on TS (typescript-eslint's performance guide).
+			'import-x/default': 'off',
+			'import-x/named': 'off',
+			'import-x/namespace': 'off',
+			'import-x/no-named-as-default-member': 'off',
+			'import-x/no-unresolved': 'off',
+
+			// The core rule doesn't understand types (it flags type-only uses).
+			'no-use-before-define': 'off',
+			'@typescript-eslint/no-use-before-define': [
+				'error',
+				{
+					functions: false,
+					classes: true,
+					variables: true,
+					allowNamedExports: false,
+				},
+			],
+
+			// Numbers read fine in a template; strictTypeChecked rejects them.
+			'@typescript-eslint/restrict-template-expressions': [
+				'error',
+				{ allowNumber: true },
+			],
+
 			'unused-imports/no-unused-vars': 'off',
 			'tsdoc/syntax': 'warn',
 			'@typescript-eslint/no-misused-promises': [
@@ -459,19 +500,10 @@ export default defineConfig(
 			],
 			'@typescript-eslint/consistent-type-exports': 'error',
 			'@typescript-eslint/consistent-type-imports': 'error',
-			'@typescript-eslint/no-confusing-non-null-assertion': 'error',
-			'@typescript-eslint/explicit-module-boundary-types': 'error',
+			// explicit-module-boundary-types adds nothing on top of it.
 			'@typescript-eslint/explicit-function-return-type': 'error',
-			'@typescript-eslint/no-non-null-assertion': 'error',
-			'@typescript-eslint/consistent-type-definitions': 'error',
-			'@typescript-eslint/no-unnecessary-condition': 'error',
-			'@typescript-eslint/no-useless-constructor': 'error',
 			'@typescript-eslint/prefer-readonly': 'error',
 			'@typescript-eslint/switch-exhaustiveness-check': 'error',
-			'@typescript-eslint/prefer-for-of': 'error',
-			'@typescript-eslint/prefer-nullish-coalescing': 'error',
-			'@typescript-eslint/no-unnecessary-boolean-literal-compare':
-				'error',
 			'@typescript-eslint/promise-function-async': [
 				'error',
 				{
@@ -878,8 +910,13 @@ export default defineConfig(
 	// 		],
 	// 	},
 	// },
+	// Two objects: spreading both into one let sort-class-members' `plugins`
+	// and `rules` replace jsdoc's, so no jsdoc rule ran.
 	{
 		...jsdocConfigs['flat/recommended'],
+		files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
+	},
+	{
 		...sortClassMembers.configs['flat/recommended'],
 		files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
 		rules: {

@@ -1,4 +1,4 @@
-/* eslint-disable security/detect-non-literal-fs-filename */
+/* eslint-disable security/detect-non-literal-fs-filename -- build step: every path comes from dist/ or the repo, never from user input */
 /**
  * Post-build: replaces each page's `/_astro/*.css` links with `<style>`
  * elements.
