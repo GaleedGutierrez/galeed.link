@@ -15,7 +15,7 @@ export const personalSchema = {
 	alternateName: ['Galeed', 'Galeed Gutiérrez'],
 	jobTitle: 'Frontend developer',
 	description:
-		'Desarrollador frontend en Jujuy, Argentina. Construye interfaces accesibles y rápidas con React, Astro y TypeScript, y las prueba con Vitest y Playwright.',
+		'Desarrollador frontend en Jujuy, Argentina. React, Astro y TypeScript.',
 	address: {
 		'@type': 'PostalAddress' as const,
 		addressRegion: 'Jujuy',
