@@ -33,12 +33,23 @@ export const GET: APIRoute = async () => {
 				: `${program} en la ${institution.name}`,
 		);
 
+	// The quote already says the role and the place: the paragraph adds
+	// only what it leaves out.
+	const studying =
+		current.length > 0
+			? `${personalSchema.name} estudia ${toMarkdownText(new Intl.ListFormat('es').format(current))}.`
+			: '';
+	const available = PROFILE.isAvailable
+		? `${studying ? 'Está' : `${personalSchema.name} está`} disponible para proyectos freelance.`
+		: '';
+	const intro = [studying, available].filter(Boolean).join(' ');
+
 	const lines = [
 		`# ${personalSchema.name}`,
 		'',
 		`> ${personalSchema.description}`,
 		'',
-		`${personalSchema.name} es desarrollador frontend en ${PROFILE.location.region}, ${PROFILE.location.country}.${PROFILE.isAvailable ? ' Está disponible para proyectos freelance.' : ''} Estudia ${toMarkdownText(new Intl.ListFormat('es').format(current))}.`,
+		intro,
 		'',
 		`Tecnologías: ${personalSchema.skills.join(', ')}.`,
 		'',

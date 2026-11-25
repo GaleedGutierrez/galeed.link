@@ -29,6 +29,6 @@ jobs:
       - uses: crazy-max/ghaction-github-labeler@548a7c3603594ec17c819e1239f281a3b801ab4d # v6.0.0
         with:
           yaml-file: .github/labels.yml
-          # Labels missing from labels.yml (release, javascript…) stay.
+          # Labels missing from labels.yml stay: delete them by hand.
           skip-delete: true
           dry-run: ${{ github.event_name == 'pull_request' }}
