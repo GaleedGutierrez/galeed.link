@@ -1,16 +1,10 @@
-.stylelintrc.json
-/dist/*
-/build/*
-/node_modules/*
-/**/*.bundle.js
-/**/index.bundle.*.js
-/test-results/*
-/playwright-report/*
-/lighthouse-report/*
-/.lighthouseci/*
-**/fonts/*
-**/font/*
+# Prettier also skips what .gitignore lists (dist/, test output, Lighthouse
+# reports...) and node_modules/.
+
+# Kept unwrapped: a comment at its top caps its lines at 400 characters.
 DESIGN_SYSTEM.md
+
+# Installed agent skills: third-party files, installed as-is.
 /.agents/*
 /.claude/*
 
