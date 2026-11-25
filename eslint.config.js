@@ -3,6 +3,7 @@ import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import vitest from '@vitest/eslint-plugin';
 import { defineConfig } from 'eslint/config';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
 // const compat = new FlatCompat();
 import eslintPluginAstro from 'eslint-plugin-astro';
 import checkFile from 'eslint-plugin-check-file';
@@ -11,7 +12,6 @@ import { configs as jsdocConfigs } from 'eslint-plugin-jsdoc';
 import { configs as jsoncConfigs } from 'eslint-plugin-jsonc';
 import jsxA11y from 'eslint-plugin-jsx-a11y-x';
 import playwright from 'eslint-plugin-playwright';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 // import reactPlugin from 'eslint-plugin-react';
 // import reactHooks from 'eslint-plugin-react-hooks';
 // import reactRefresh from 'eslint-plugin-react-refresh';
@@ -59,7 +59,9 @@ export default defineConfig(
 	eslint.configs.recommended,
 	pluginSecurity.configs.recommended,
 	jsxA11y.configs.recommended,
-	eslintPluginPrettierRecommended,
+	// Turns off the rules Prettier's formatting would fight. Prettier itself
+	// runs on its own (npm run prettier), not inside ESLint.
+	eslintConfigPrettier,
 	...jsoncConfigs['flat/recommended-with-jsonc'],
 	...jsoncConfigs['flat/prettier'],
 	...ymlConfigs['flat/recommended'],
@@ -105,8 +107,6 @@ export default defineConfig(
 		},
 
 		rules: {
-			'prettier/prettier': 'error',
-
 			'array-callback-return': [
 				'error',
 				{

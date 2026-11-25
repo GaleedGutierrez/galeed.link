@@ -72,6 +72,10 @@ docs are English.
 - Prettier takes its indentation, print width and quotes from `.editorconfig`
   (`indent_style`, `indent_size`, `max_line_length`, `quote_type`), not from
   `.prettierrc.json`: change them there. shfmt reads it too.
+- Prettier runs on its own (`npm run prettier`, and after ESLint and stylelint
+  in lint-staged), not inside them: ESLint only loads `eslint-config-prettier`
+  to turn off the rules that fight it, and stylelint 18 has no stylistic rules.
+  `npm run lint` passing says nothing about formatting.
 - One test file: `npx vitest run tests/tokens.test.ts`.
 - `npm run test:e2e` runs Playwright (`tests/e2e/`) against `npm run preview`,
   so build first. `a11y.spec.ts` runs axe (`@axe-core/playwright`) with the WCAG
