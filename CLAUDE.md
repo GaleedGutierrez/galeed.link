@@ -62,6 +62,12 @@ docs are English.
   ("repo", "README", "Internet", "anti-pattern"); `terms` adds the project's
   tool names. Wrap a term that must stay as written (UI text in caps) in
   backticks. Super Linter's textlint is off: it ignores this config.
+- markdownlint-cli2 takes its globs from `.markdownlint-cli2.jsonc` (and skips
+  what `.gitignore` lists): run it with no file arguments. Globs in npm scripts
+  stay quoted: CI runs them with `sh`, which reads an unquoted `**` as `*`.
+  Prettier skips `DESIGN_SYSTEM.md`, so its lines aren't wrapped: a
+  `markdownlint-configure-file` comment at its top caps them at 400 characters,
+  the limit Super Linter's own Markdown config applies.
 - One test file: `npx vitest run tests/tokens.test.ts`.
 - `npm run test:e2e` runs Playwright (`tests/e2e/`) against `npm run preview`,
   so build first. `a11y.spec.ts` runs axe (`@axe-core/playwright`) with the WCAG
