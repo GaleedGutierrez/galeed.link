@@ -134,7 +134,8 @@
 		"typescript": "^6.0.3",
 		"typescript-eslint": "^8.38.0",
 		"unocss": "^66.3.3",
-		"vitest": "^5.1.1"
+		"vitest": "^5.1.1",
+		"yaml": "^2.9.1"
 	},
 	"lint-staged": {
 		"*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json,yml,yaml,astro}": "eslint --fix",
