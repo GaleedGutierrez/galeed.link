@@ -79,6 +79,7 @@
           - "**/*.test.ts"
           - "vitest.config.ts"
           - "playwright.config.ts"
+          - "lighthouserc.json"
 
 "area: tooling":
   - changed-files:
@@ -97,13 +98,18 @@
           - ".gitattributes"
 
 "area: docs":
-  - changed-files:
+  - any:
       # Root-level Markdown only: the skills under .agents/ and .claude/ are
-      # Markdown too, and belong to area: agents.
-      - any-glob-to-any-file:
-          - "*.md"
-          - ".github/**/*.md"
-          - "LICENSE"
+      # Markdown too, and belong to area: agents. So does CLAUDE.md: nearly
+      # every pull request updates it, which put area: docs on all of them.
+      - changed-files:
+          - all-globs-to-any-file:
+              - "*.md"
+              - "!CLAUDE.md"
+      - changed-files:
+          - any-glob-to-any-file:
+              - ".github/**/*.md"
+              - "LICENSE"
 
 "area: agents":
   - changed-files:
