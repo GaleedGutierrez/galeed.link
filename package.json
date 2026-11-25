@@ -38,7 +38,7 @@
 		"csp-headers": "node ./scripts/cspHeaders.ts",
 		"git-history": "node ./scripts/gitHistory.ts",
 		"lint": "eslint ./ --max-warnings 0",
-		"lint:fix": "eslint --fix ./**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json,astro}",
+		"lint:fix": "eslint --fix ./**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json,yml,yaml,astro}",
 		"prettier": "prettier ./ --check",
 		"prettier:fix": "prettier ./ --write",
 		"stylelint": "stylelint ./**/*.{css,scss} --allow-empty-input",
@@ -107,6 +107,7 @@
 		"eslint-plugin-tsdoc": "^0.5.4",
 		"eslint-plugin-unicorn": "^80.0.0",
 		"eslint-plugin-unused-imports": "^4.1.4",
+		"eslint-plugin-yml": "^3.10.0",
 		"husky": "^9.1.7",
 		"jscpd": "^5.4.3",
 		"lighthouse": "^13.6.0",
@@ -136,7 +137,7 @@
 		"vitest": "^5.1.1"
 	},
 	"lint-staged": {
-		"*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json,astro}": "eslint --fix",
+		"*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json,yml,yaml,astro}": "eslint --fix",
 		"*{css,s(a|c)ss}": "stylelint --fix",
 		"*.{md,mdx}": [
 			"markdownlint-cli2 --config \".markdownlint-cli2.jsonc\" --fix",
