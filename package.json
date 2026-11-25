@@ -163,7 +163,6 @@
 			"**/dist/**",
 			"**/dist-dev/**",
 			"**/build/**",
-			"**/fonts/**",
 			"**/coverage/**",
 			"**/playwright-report/**",
 			"**/test-results/**",

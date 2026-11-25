@@ -19,7 +19,6 @@
           - "src/scripts/theme.ts"
           - "uno.config.ts"
           - "postcss.config.js"
-          - "public/fonts/**"
 
 "area: content":
   - changed-files:

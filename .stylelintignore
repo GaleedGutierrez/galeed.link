@@ -1,7 +1,5 @@
 **/*_normalize.css
 **/*_normalize.scss
-**/font/*
-**/fonts/**
 **/__snapshots__/**
 **/node_modules/**
 **/dist/**
