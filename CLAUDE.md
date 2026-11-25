@@ -55,7 +55,10 @@ docs are English.
 | Lighthouse CI           | `npx lhci autorun` (after `npm run build`)    |
 
 - After editing CSS, run `npm run stylelint:fix`. It reorders properties
-  (`order/properties-order`) and normalizes notation. That is expected.
+  (`order/properties-order`) and normalizes notation. That is expected. A
+  property missing from the order list goes to the bottom, alphabetically: add
+  it to its group in `.stylelintrc.json` instead. A disable comment needs a
+  `-- reason` and must still be needed, or the lint fails.
 - `npm run lint-md` also runs textlint (`terminology`, `.textlintrc.json`):
   "style sheet", "hardcode", "lazy loaded", "LinkedIn". The pre-commit hook
   fixes them silently. `exclude` drops the default terms the docs don't follow
@@ -164,9 +167,11 @@ docs are English.
 - **Units:** write px values as `calc(<px> * var(--rem-scale))`. Fluid sizes use
   `utopia.clamp(min, max)`. Breakpoints are literal `em` in range syntax:
   `@media (width >= 40em)` / `48em` / `64em` / `90em`. `var()` doesn't work in
-  `@media`.
-- **Color syntax:** `oklch()` only. stylelint forbids hex and `rgb/hsl/lab/hwb`.
-  For tints use `color-mix(in oklab, …)`, never `in oklch` with neutrals.
+  `@media`. stylelint rejects any other `width` value; a new breakpoint needs an
+  entry in `media-feature-name-value-allowed-list` (and DESIGN_SYSTEM.md §5.4).
+- **Color syntax:** `oklch()` only. stylelint forbids hex, named colors
+  (`transparent` and `currentcolor` are fine) and `rgb/hsl/lab/hwb`. For tints
+  use `color-mix(in oklab, …)`, never `in oklch` with neutrals.
 - **Type:** use the mixins `heading-xl`, `heading-lg`, `heading-md`, `body-lg`,
   `body-md`, `body-sm`, `label`, `micro`.
   - stylelint's `order/order` puts at-rules (`@mixin`, `@media`) after
@@ -176,11 +181,16 @@ docs are English.
   - Only Barlow 400/500/700/800 ship.
 - **Naming:** global atoms are BEM with an `a-` prefix (`.a-button--primary`).
   CSS Module classes are BEM with the component as the block
-  (`styles["navbar__link"]`).
+  (`styles["navbar__link"]`). stylelint requires lowercase BEM class names and
+  kebab-case keyframes.
 - **UnoCSS is layout only:** display, flex/grid, gap, spacing, sizing, position,
   overflow, aspect-ratio. Never color, type, border, radius, shadow or
   transition utilities: `uno.config.ts` blocklists them, so they generate
-  nothing. Prefer logical properties (`inline-size`, `margin-block-start`).
+  nothing.
+- **Logical properties only** (`inline-size`, `margin-block-start`,
+  `inset-inline-start`): stylelint's `property-disallowed-list` rejects
+  `width`/`height`, `top`/`left`… and the per-side `margin`, `padding`, `border`
+  and corner `border-*-radius` properties.
 - **No `!important`** (stylelint). The single exception is
   `[data-theme-switching]`, which has a scoped disable comment.
 - **Motion:** animate only `transform`/`translate`/`scale`, `opacity` and
@@ -221,7 +231,8 @@ docs are English.
 
 - Text ≥ 7:1, UI boundaries and focus ≥ 3:1, in both themes. Never fade text
   with `opacity`/alpha.
-- Never `outline: none`. The single focus ring is in `elements/global.css`.
+- Never `outline: none` (stylelint rejects it). The single focus ring is in
+  `elements/global.css`.
 - Touch targets ≥ 44px. Icon-only controls get an `sr-only` name. Icons come
   from `astro-icon` (Lucide for UI, Simple Icons for brands). No emoji as icons.
 - Lists styled with `list-style: none` that matter (nav, social, chips) carry

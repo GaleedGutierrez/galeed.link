@@ -1,8 +1,8 @@
 a {
 	color: inherit;
 	text-decoration: none;
-	-webkit-tap-highlight-color: transparent;
 	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
 }
 
 /* A bare link in prose (no class) is an inline link. Components always set a

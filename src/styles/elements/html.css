@@ -1,7 +1,7 @@
 html {
 	block-size: 100%;
-	text-size-adjust: 100%;
 	accent-color: var(--text-color-accent);
+	text-size-adjust: 100%;
 
 	/* thumb vs track: 3.81 light / 3.78 dark (≥ 3:1) */
 	scrollbar-color: var(--border-color-strong) var(--background-color-primary);
