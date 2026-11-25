@@ -8,8 +8,8 @@ code in this repository.
 Personal link hub, linktree-style: compressed information only. The detail about
 Galeed and the projects lives on galeedgutierrez.com (the portfolio), so longer
 copy belongs there, not here. Astro 7 + TypeScript (strict) + global ITCSS
-styles + CSS Modules + UnoCSS (layout only). Node 22.23.5 (`.nvmrc`; Astro 7
-needs ≥ 22.23.4), npm, ESM.
+styles + CSS Modules + UnoCSS (layout only). Node 26.13.1 (`.nvmrc`) with its
+bundled npm 12.2.3, ESM.
 
 UI copy is Spanish (`<html lang="es">`). Code, comments, commit messages and
 docs are English.
