@@ -202,6 +202,13 @@ docs are English.
 
 ## Astro and ESLint gotchas
 
+- `eslint.config.js` is a shared template, reused in frontend, backend and CLI
+  projects. The React block, the class-ordering rules and the extra globals and
+  folders are deliberate even where this repo doesn't use them: fix bugs, don't
+  prune them.
+- TS files get `strictTypeChecked` + `stylisticTypeChecked`. A disable comment
+  that no longer suppresses anything fails the lint, and each one carries a
+  `-- reason`.
 - Don't use Astro's shorthand attributes (`<h2 {id}>`, `<Card {item} />`). They
   crash the `jsx-a11y-x` ESLint rules. Write `id={id}`.
 - ESLint 10 uses `eslint-plugin-jsx-a11y-x`, a fork with the same rules under

@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 // The `npm run preview` port (package.json), which serves the built dist/.
 const PORT = 4173;
-const isCI = Boolean(process.env['CI']);
+const isCI = Boolean(process.env.CI);
 
 export default defineConfig({
 	testDir: './tests/e2e',

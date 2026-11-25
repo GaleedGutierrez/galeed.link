@@ -47,7 +47,7 @@ const {
 const canonical = new URL(Astro.url.pathname, SITE_URL).href;
 // astro-seo leaves out the canonical tag only for null: undefined falls back
 // to the page's own URL.
-// eslint-disable-next-line unicorn/no-null
+// eslint-disable-next-line unicorn/no-null -- see above
 const canonicalTag = noindex ? null : canonical;
 const personId = PERSON_ID;
 // public/og.jpg: 1200×630 link-preview card, rendered from the site's own

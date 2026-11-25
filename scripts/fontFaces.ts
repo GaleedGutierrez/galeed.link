@@ -58,6 +58,7 @@ export const hasCharacterInRange = (
 ): boolean => {
 	const ranges = parseUnicodeRange(value);
 
+	// eslint-disable-next-line @typescript-eslint/no-misused-spread -- unicode-range matches code points, which is what the spread yields
 	return [...characters].some((character) => {
 		const codePoint = character.codePointAt(0) ?? -1;
 
