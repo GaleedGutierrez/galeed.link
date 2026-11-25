@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 # Fix and check the staged files, then run every linter on the whole tree, as
 # CI does. The full run reads the working tree, unstaged and untracked files
 # included.

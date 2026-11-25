@@ -332,6 +332,9 @@ docs are English.
     file that fails a linter blocks the commit.
   - pre-push: commitlint over every commit the push sends (what is not on
     `origin/main` yet, for a new branch), then `npm run verify`.
+  - The hooks are POSIX `sh` with a shebang and the executable bit: Super Linter
+    finds them by the shebang and runs ShellCheck and shfmt (CI only). A new
+    hook needs both (`git update-index --chmod=+x`).
 - `check-for-dupes` ignores `.agents/` and `.claude/`: the installed skill is
   symlinked into both, which doubled every file.
 - Work on a branch, never directly on `main`.

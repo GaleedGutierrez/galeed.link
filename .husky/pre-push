@@ -1,9 +1,10 @@
+#!/usr/bin/env sh
 # 1. Every commit this push sends must be a Conventional Commit: commit-msg
 #    misses the ones a rebase or an amend rewrote.
 # 2. Every linter, the type check and the Vitest suite (npm run verify).
 zero=0000000000000000000000000000000000000000
 
-while read -r local_ref local_sha remote_ref remote_sha; do
+while read -r local_ref local_sha _ remote_sha; do
 	# Deleting a remote branch sends no commits.
 	[ "$local_sha" = "$zero" ] && continue
 
