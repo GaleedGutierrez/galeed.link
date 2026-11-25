@@ -1,14 +1,19 @@
+<!-- Prettier skips this file (.prettierignore), so prose is not wrapped at 80
+columns: cap lines at 400 instead, as Super Linter does. -->
+<!-- markdownlint-configure-file { "MD013": { "line_length": 400, "tables": false } } -->
+
 # galeed.link — Design System
 
-**Codename:** *Facility* · Half-Life–inspired, subtle modern editorial
+**Codename:** _Facility_ · Half-Life–inspired, subtle modern editorial
 **Target stack:** Astro + UnoCSS (`presetWind3`) + TypeScript
 **Scope:** single-page personal developer link hub (`galeed.link`) — profile, bio, freelance work, side projects, open source, contact
 **Document date:** 2026-11-22 · Live inspection via Playwright MCP (Chromium, desktop 1440×900, mobile 390×844)
 
 > **How to read this document**
-> - **[V]**: *Verified*. Read from the live page with `getComputedStyle`, `document.fonts`, or CSSOM rules. Each one cites its source:
+>
+> - **[V]**: _Verified_. Read from the live page with `getComputedStyle`, `document.fonts`, or CSSOM rules. Each one cites its source:
 >   **[HL2]** `half-life.com/en/halflife2` · **[BM]** `blackmesagame.com` · **[GL]** `galeed.link` · **[LK]** `linkd-layouts.framer.website/designer`
-> - **[P]**: *Proposed*. An adaptation designed for this system. Every proposed contrast ratio below was computed with the WCAG 2.x relative-luminance formula.
+> - **[P]**: _Proposed_. An adaptation designed for this system. Every proposed contrast ratio below was computed with the WCAG 2.x relative-luminance formula.
 > - All four URLs loaded and were inspected. Nothing was blocked. Where a value could not be observed, the document says so.
 
 ---
@@ -105,7 +110,7 @@ Observed facts:
 - **Hero:** square grayscale portrait (448×448 desktop, 375×375 mobile) with a bottom gradient fade into the background. h1 name 40px/700/−0.144px (fluid ≈37.4px on mobile). Role `"Frontend developer"` at 27px/500 in secondary color, **marked up as an `<h2>`**.
 - **Social row:** 4 links (LinkedIn, Twitter, GitHub, Web), each a 24px icon stacked above a text label.
 - **Section nav:** `Bio · Trabajo freelance · Side projects · Open source · Contacto`, 18px regular, 16px gap, horizontally scrollable.
-- **Bio (`#bio`):** h2 "Bio" (27px/600). Two columns, *Sobre mí* and *Stack tech* (h3 20px/600), each a list of six items with **emoji as icons**, separated by a 1px vertical rule (`w-px bg-slate-950 dark:bg-slate-50`).
+- **Bio (`#bio`):** h2 "Bio" (27px/600). Two columns, _Sobre mí_ and _Stack tech_ (h3 20px/600), each a list of six items with **emoji as icons**, separated by a 1px vertical rule (`w-px bg-slate-950 dark:bg-slate-50`).
 - **Focus:** `a:focus-visible { outline: 2px solid <text color>; outline-offset: 1px }`.
 
 Issues verified during inspection:
@@ -177,12 +182,12 @@ Issues verified during inspection:
 
 Rules:
 
-1. **`data-theme` always holds the *resolved* theme** (`light | dark`), never `system`. CSS only has to handle two states, and UnoCSS `dark:` (if you ever use it) can key on one attribute selector. This fixes issue 4 from §1.4.
+1. **`data-theme` always holds the _resolved_ theme** (`light | dark`), never `system`. CSS only has to handle two states, and UnoCSS `dark:` (if you ever use it) can key on one attribute selector. This fixes issue 4 from §1.4.
 2. **`data-theme-pref`** records whether an override is stored (`system` = nothing stored, or the literal `light | dark`). The data model stays tri-state. Only the UI has two states (§7.2).
 3. When the preference is `system`, a `matchMedia` listener re-resolves live if the OS theme changes.
-4. **Two-state toggle** (modern-web-guidance `dark-mode-toggle`). One button flips to the *opposite of the rendered theme*:
+4. **Two-state toggle** (modern-web-guidance `dark-mode-toggle`). One button flips to the _opposite of the rendered theme_:
    - If the target **differs** from the OS preference, it is stored literally (`light` / `dark`).
-   - If the target **matches** the OS preference, the user is undoing their adjustment. The storage key is *removed*, so the site follows the OS again. The matching value is never stored, because that would silently pin the theme against future OS changes.
+   - If the target **matches** the OS preference, the user is undoing their adjustment. The storage key is _removed_, so the site follows the OS again. The matching value is never stored, because that would silently pin the theme against future OS changes.
 5. **Divergence is only checked when the user toggles, never retroactively.** If the OS later switches to match a stored override (for example, a time-of-day auto switch), the stored value is **kept**. Otherwise a theme could never be pinned.
 6. Without JavaScript, the `@media` fallback still gives a correct system theme. The toggle stays hidden because it cannot work.
 7. Components never use `dark:` variants for color. **They only consume semantic tokens**, which swap automatically.
@@ -241,7 +246,7 @@ The full module is in §9.8. Its behavior contract:
 | OS theme changes while pref = system | re-resolve live, nothing persisted |
 | OS theme changes while an override is stored | nothing happens. The override is kept, even if it now matches the OS |
 | Another tab changes the theme (or clears storage) | `storage` event re-reads and repaints this tab. The icon and label follow through CSS |
-| Rapid repeated clicks | each click reads the *rendered* `data-theme` (set synchronously by the previous click) and sets the **final state explicitly**, with no reliance on `transitionend` (cancellable state transitions) |
+| Rapid repeated clicks | each click reads the _rendered_ `data-theme` (set synchronously by the previous click) and sets the **final state explicitly**, with no reliance on `transitionend` (cancellable state transitions) |
 
 Example, with the OS starting in light: click → `dark` is stored and the site turns dark → OS switches to dark: the site stays dark and the value is kept → OS switches back to light: the site stays dark → click → the target (light) matches the OS, so the key is removed and the site follows the OS again.
 | Theme swap | transitions are suppressed for two frames (`[data-theme-switching]`), so 200ms color transitions don't smear across the whole page |
@@ -272,7 +277,7 @@ and every ratio in §3.4 was computed from those rendered values.
 
 ### 3.1 Derivation
 
-- **Light ("bone paper"):** **bone `#ede6d8`** page and **charcoal `#1c1c1c`** text, the pair chosen for this site. HL2's grey `#e9e8e9` **[V]** is replaced by bone, which keeps the editorial "paper" feel but is warmer. Surfaces step *up* in lightness: bone → light bone `#f5f0e6` → white.
+- **Light ("bone paper"):** **bone `#ede6d8`** page and **charcoal `#1c1c1c`** text, the pair chosen for this site. HL2's grey `#e9e8e9` **[V]** is replaced by bone, which keeps the editorial "paper" feel but is warmer. Surfaces step _up_ in lightness: bone → light bone `#f5f0e6` → white.
 - **Dark ("Black Mesa"):** the same pair, inverted. **Charcoal `#1c1c1c`** is the main surface, **bone `#ede6d8`** the main text. The page canvas is `#141414`, Black Mesa's real `ink-deep` **[V]**.
 - **Accent:** HL2's **`#ff862c`** **[V]** is the dark theme's CTA fill, and HL2's **`#ffaa6b`** **[V]** its hover. Both carry **charcoal ink, never white** (white on `#ff862c` is only 2.41:1). In light mode the fill is the burnt HEV **`#7f3300`** (hover `#662801`) with bone ink, so the CTA changes with the theme like every other surface.
 - **Orange as text** must be much darker in light mode (`#7f3300`, a burnt HEV tone) and a little lighter in dark mode (`#ff9b5a`) to reach 7:1.
@@ -289,7 +294,7 @@ and every ratio in §3.4 was computed from those rendered values.
 
 Primitives are **private**: only the applications in §3.3 reference them, never a component (the repo's own `--slate-50` → `--text-color-primary` pattern). All values are inside the sRGB gamut (no P3-only colors), so `oklch()` and hex render the same.
 
-**HEV accent**
+#### HEV accent
 
 | Primitive (`--…`) | `oklch()` | ≈ Hex | Source | Used for |
 | --- | --- | --- | --- | --- |
@@ -306,7 +311,7 @@ Primitives are **private**: only the applications in §3.3 reference them, never
 
 Black Mesa's `#e37226` **[V]** is no longer used: charcoal on it is only 5.44:1.
 
-**Neutrals and status**
+#### Neutrals and status
 
 | Primitive | `oklch()` | ≈ Hex | Source | Used for |
 | --- | --- | --- | --- | --- |
@@ -371,7 +376,7 @@ Named by property, as in the repo: `--background-color-*`, `--text-color-*`, `--
 
 Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB value of each `oklch()` literal. `—` means that combination isn't used. Labels are the short names from §3.3. Status colors and link hover never sit on `accent-subtle`.
 
-**Light theme**
+#### Light theme
 
 | Foreground | bg | surface | surface-2 | accent-subtle | Min | Level |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -395,7 +400,7 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 | `inverse-text` on `indicator` (`::selection`) | **7.78** | AAA text ✓ |
 | `indicator` (`::selection`) on bg / surface / surface-2 | **7.12 / 7.78 / 8.84** | UI ≥ 3 ✓ |
 
-**Dark theme**
+#### Dark theme
 
 | Foreground | bg | surface | surface-2 | accent-subtle | Min | Level |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -419,7 +424,7 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 | `inverse-text` on `indicator` (`::selection`) | **8.19** | AAA text ✓ |
 | `indicator` (`::selection`) on bg / surface / surface-2 | **8.85 / 8.19 / 7.46** | UI ≥ 3 ✓ |
 
-**Rejected pairs (why the accent rules exist)**
+#### Rejected pairs (why the accent rules exist)
 
 | Pair | Ratio | Seen at |
 | --- | --- | --- |
@@ -458,12 +463,12 @@ Computed with the WCAG 2.x relative-luminance formula from the rendered sRGB val
 | Manrope **[GL, LK]** | loaded | — retired | — | geometric/friendly, which conflicts with the industrial voice |
 
 **About the `ui-ux-pro-max` recommendation.** The `--design-system` run returned
-*Minimalism & Swiss Style* with **Archivo + Space Grotesk** and a monochrome +
+_Minimalism & Swiss Style_ with **Archivo + Space Grotesk** and a monochrome +
 blue (`#2563EB`) palette. The Swiss/minimal structure is kept (grid discipline,
 high contrast, clear hierarchy, subtle 200–250ms hovers). The fonts and the blue
 are **overridden**: Space Grotesk's quirky terminals and the blue accent are
 exactly the "generic AI tech portfolio" look this brief asks to avoid, and
-Barlow matches the observed DIN voice. *Optional:* **Barlow Semi Condensed 800**
+Barlow matches the observed DIN voice. _Optional:_ **Barlow Semi Condensed 800**
 for the h1 only, if you want more HL2 poster energy. It is the same family, so
 there is no pairing risk.
 
@@ -495,6 +500,7 @@ Rules:
 ### 4.3 Font loading in Astro (FOUT mitigation)
 
 1. **Self-host via Fontsource** (no third-party request, no layout-blocking CSS):
+
    ```ts
    // src/layouts/Layout/index.astro frontmatter
    import '@fontsource/barlow/400.css';
@@ -503,8 +509,10 @@ Rules:
    import '@fontsource/barlow/800.css';
    import '@fontsource-variable/jetbrains-mono';
    ```
+
    Fontsource CSS ships `font-display: swap`.
 2. **Preload only the three critical faces** (latin 400, 700 and 800, used above the fold; 700 added 2026-11-23 because the social labels, nav and column headings use it). 500 (one role line) and mono (system bar) are not preloaded: each preload competes with the LCP portrait, and the metric-matched fallback keeps their swap stable:
+
    ```astro
    ---
    import barlow400 from '@fontsource/barlow/files/barlow-latin-400-normal.woff2?url';
@@ -515,10 +523,12 @@ Rules:
    <link rel="preload" href={barlow700} as="font" type="font/woff2" crossorigin />
    <link rel="preload" href={barlow800} as="font" type="font/woff2" crossorigin />
    ```
+
    Don't preload mono. It only appears in small metadata, and a swap there is harmless.
 3. **Metric-matched fallback.** BM ships a generated `Barlow Fallback` face **[V]**. Do the same:
    - Generate overrides with **fontaine** (Vite plugin) or **Capsize**, or use Astro's built-in Fonts API if your Astro version provides it (it generates fallbacks automatically; check the current Astro docs).
    - Manual shape (fill the values from the tool output; don't guess them):
+
      ```css
      @font-face {
        font-family: "Barlow Fallback";
@@ -529,6 +539,7 @@ Rules:
        line-gap-override: /* generated */;
      }
      ```
+
    - The `--font-primary` stack (§9.2) already lists `"Barlow Fallback"` second.
 4. **Normalize the fallback's x-height** with `font-size-adjust: from-font` on
    `body` (already in `elements/body.css`, §9.4), per the
@@ -605,7 +616,7 @@ Applications: `--spacing-gutter: var(--spacing-4)`, `--spacing-stack: var(--spac
  └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Section IDs (fixes issue 1): `#bio`, `#freelance`, `#proyectos`, `#open-source`, `#formacion`, `#contacto`. Nav labels match the section h2 text. Suggested short nav labels: *Bio · Freelance · Proyectos · Open source · Formación · Contacto*.
+Section IDs (fixes issue 1): `#bio`, `#freelance`, `#proyectos`, `#open-source`, `#formacion`, `#contacto`. Nav labels match the section h2 text. Suggested short nav labels: _Bio · Freelance · Proyectos · Open source · Formación · Contacto_.
 
 > Freelance, Side projects, Open source, and Contacto had **no content on the live site** at inspection time. This document specifies their containers and components. The actual entries are content work.
 
@@ -630,7 +641,7 @@ Section IDs (fixes issue 1): `#bio`, `#freelance`, `#proyectos`, `#open-source`,
 | `lg` | `64em` (1024px) | no layout change, on purpose. (The section nav used to turn sticky here; since 2026-11-23 it is sticky at every width, §7.5.) |
 | `xl` | `90em` (1440px) | no layout change. Verify that only the canvas grows. (BM caps its frame at 1440 **[V]**. The shell never approaches that.) |
 
-Breakpoints are written in **`em`**, not `px` (`respect-os-text-scale`: *"Responsive breakpoints MUST NOT assume that text will remain at its default size"*). The pixel values in parentheses are at the default 16px text size. When someone enlarges their text, the layout switches as if the screen were narrower, so the larger text still fits.
+Breakpoints are written in **`em`**, not `px` (`respect-os-text-scale`: _"Responsive breakpoints MUST NOT assume that text will remain at its default size"_). The pixel values in parentheses are at the default 16px text size. When someone enlarges their text, the layout switches as if the screen were narrower, so the larger text still fits.
 
 > The large breakpoints change little on purpose. A link hub should not turn into a dashboard at 1440px. Design effort goes into the 375–640 range, where most traffic lands.
 
@@ -697,7 +708,7 @@ No glows or colored shadows. Linkd's inset "pillow" card shading **[V]** is skeu
 
 ### 6.6 Forced Colors Mode (Windows high contrast)
 
-In forced colors the browser replaces author colors with the user's system palette and removes `box-shadow` and gradient backgrounds. The `color` guide's rule: *"Don't rely on `background-image`, `box-shadow`, or `border-image` to convey borders, separators, or state"*. What changes (each atom's or module's `@media (forced-colors: active)` block, §9.5–§9.6):
+In forced colors the browser replaces author colors with the user's system palette and removes `box-shadow` and gradient backgrounds. The `color` guide's rule: _"Don't rely on `background-image`, `box-shadow`, or `border-image` to convey borders, separators, or state"_. What changes (each atom's or module's `@media (forced-colors: active)` block, §9.5–§9.6):
 
 | Element | Normal | Forced colors |
 | --- | --- | --- |
@@ -715,6 +726,7 @@ In forced colors the browser replaces author colors with the user's system palet
 ## 7. Component specifications
 
 Conventions (§9):
+
 - **Layout** (display, flex/grid, gap, padding/margin, sizing, position, aspect ratio) is written with **UnoCSS utilities**, shown in `class="…"`.
 - **Everything visual** comes from tokens (§9.2), type mixins (`@mixin heading-xl`, §9.3), global atoms (`a-*`, BEM, §9.5) or the component's **CSS Module** (shown as `styles.name`, §9.6).
 - **Hit area** means the minimum interactive box. The page targets ≥44×44px on touch, and never goes below WCAG 2.2's 24×24.
@@ -726,7 +738,7 @@ Conventions (§9):
 
 ### 7.2 System bar + theme toggle
 
-**Anatomy**
+#### Anatomy
 
 ```text
 ┌───────────────────────────────────────────────────────────────┐
@@ -740,6 +752,7 @@ Conventions (§9):
   - The optional availability dot is `--text-color-success` plus text, never the dot alone.
   - Long strings truncate with `min-inline-size: 0; text-overflow: ellipsis`, and the full text is also in the hero. Keep it short.
 - **Theme toggle (one button, two states):** the decision was two states. A toggle that sits permanently in the site chrome is a quick comfort adjustment ("too bright right now"), not a long-term setting. Two states cover that without giving up the return to System. The behavior is in §2.1 rules 4–5 and §2.3.
+
   ```astro
   <button type="button" class:list={['grid place-items-center size-9', styles.toggle]} data-theme-toggle hidden>
     <span data-when="light">
@@ -750,6 +763,7 @@ Conventions (§9):
     </span>
   </button>
   ```
+
   - **Icon = the theme rendered now** (sun in light, moon in dark), and that includes System: it shows the theme the OS resolves to. **The accessible name = the action** ("Cambiar a tema oscuro").
   - Both states are in the markup. The module hides the inactive one with `display: none`, keyed on `:root[data-theme]` (§9.6). This also drops the stale label from the accessibility tree, so no JS is needed to keep the name current when the OS theme changes.
   - **No `aria-pressed`.** The name is already an action, and "pressed" plus "Cambiar a tema oscuro" would contradict itself.
@@ -763,7 +777,7 @@ Conventions (§9):
     - Active: `translate: 0 1px`.
     - The current theme is not a "selected" state. The whole page is the feedback.
   - Tooltip-free. The `sr-only` names carry the meaning. Don't add a static `title`: it would have to change with the state, which needs JS.
-  - Returning to System doesn't need its own option. When the user flips back to the OS theme, the override is cleared (§2.1 rule 4). If the site ever gets a settings panel, *that* is the place for an explicit three-option control (Sistema / Claro / Oscuro), with "Sistema (ahora: claro)".
+  - Returning to System doesn't need its own option. When the user flips back to the OS theme, the override is cleared (§2.1 rule 4). If the site ever gets a settings panel, _that_ is the place for an explicit three-option control (Sistema / Claro / Oscuro), with "Sistema (ahora: claro)".
 
 ### 7.3 Profile / hero header
 
@@ -919,7 +933,7 @@ All buttons: labels never wrap mid-word. Allow two-line labels only on mobile vi
 - No lead paragraph (owner's choice, 2026-11-24). galeed.link is a compressed, linktree-style hub: the two columns are the whole bio. Who Galeed is, the studies and the project detail live on galeedgutierrez.com, the Web link in the social row.
 - Spec sheet: `<div class="grid grid-cols-[1fr_1px_1fr] gap-4">` (§5.3) with two `<section>` columns. Each column has an `<h3>` "SOBRE MÍ" / "STACK TECH". The `h3` element default is `@mixin label`, and the module sets `--text-color-tertiary`.
   - The columns are separated by `<div class={styles.rule} aria-hidden="true">`, a 1px track in `--border-color-primary`.
-- *Sobre mí:* `<ul class="flex flex-col gap-2" role="list">`, items `class="inline-flex gap-2 items-start"` in `@mixin body-md`, each with an 18px Lucide icon in `--text-color-tertiary`, `aria-hidden`. Suggested mapping:
+- _Sobre mí:_ `<ul class="flex flex-col gap-2" role="list">`, items `class="inline-flex gap-2 items-start"` in `@mixin body-md`, each with an 18px Lucide icon in `--text-color-tertiary`, `aria-hidden`. Suggested mapping:
   - Argentina → `lucide:map-pin`
   - Tecnología → `lucide:cpu`
   - Gym → `lucide:dumbbell`
@@ -927,7 +941,7 @@ All buttons: labels never wrap mid-word. Allow two-line labels only on mobile vi
   - Juegos de mesa → `lucide:dices`
   - Mate → `lucide:leaf`
   - Café → `lucide:coffee`
-- *Stack tech:* a chip collection (§7.7). "Frontend Developer" moves out of the list (it is already the role line). This also removes the awkward mobile wrap (issue 7).
+- _Stack tech:_ a chip collection (§7.7). "Frontend Developer" moves out of the list (it is already the role line). This also removes the awkward mobile wrap (issue 7).
 
 ### 7.15 404 page
 
@@ -1018,7 +1032,7 @@ Rules:
 
 ### 8.3 Reduced motion
 
-There is **no global kill switch** (no `transition-duration: 0.01ms` on `*`). The `motion` guide is explicit: *"DO NOT globally apply `animation-duration: 0.01ms;`"*. A global override can make some animations more jarring, and it also removes harmless color feedback. Instead, each moving effect opts in to motion next to its own rule (§9.5–§9.6):
+There is **no global kill switch** (no `transition-duration: 0.01ms` on `*`). The `motion` guide is explicit: _"DO NOT globally apply `animation-duration: 0.01ms;`"_. A global override can make some animations more jarring, and it also removes harmless color feedback. Instead, each moving effect opts in to motion next to its own rule (§9.5–§9.6):
 
 | Effect | `no-preference` | `reduce` |
 | --- | --- | --- |
@@ -1094,7 +1108,7 @@ postcss.config.js · scripts/purgeCss.ts · scripts/lightningcss.ts   ← §9.1
 @import "./utilities/index.css";
 ```
 
-> **[P] Order change:** the repo imports utilities *before* atoms. ITCSS puts utilities last, so a helper like `.sr-only` or `.skip-link` beats any atom it is combined with (`.skip-link.a-button`, §7.1).
+> **[P] Order change:** the repo imports utilities _before_ atoms. ITCSS puts utilities last, so a helper like `.sr-only` or `.skip-link` beats any atom it is combined with (`.skip-link.a-button`, §7.1).
 
 `postcss.config.js` (one change: `mixinsFiles`):
 
@@ -1162,7 +1176,7 @@ safelist: {
   field.
   - The polyfill only returns if the targets include a browser without `light-dark()` (Safari/iOS 16.5–17.4 was the reason under the old `>= 0.25%, not dead, supports css-nesting` query). It then keys its switches off the `color-scheme` declarations in the style sheet, not inline `style.colorScheme`, which is one reason the `:root[data-theme]` rules stay in CSS (§9.2).
 - **Why lightningcss must run last:** `purgeCss.ts` re-runs every PostCSS plugin
-  on `dist/`. When that happens *after* lightningcss,
+  on `dist/`. When that happens _after_ lightningcss,
   `postcss-custom-properties` sees `--lightningcss-light: initial` and
   `--lightningcss-dark:` (empty) in `:root` and inlines them. Every color
   becomes `oklch(<light>) ;`, so the site is **always light** in every browser.
@@ -1173,16 +1187,17 @@ safelist: {
 - **PurgeCSS 7.0.2, run with the project's own options:**
   - **It removes the runtime-only theme selectors** (`:root[data-theme="light"]`, `:root[data-theme="dark"]`, the dark shell shadow, the toggle's `[data-when="light"]` rule), because the static HTML never contains `data-theme`.
   - **The existing safelist patterns protect nothing here.** PurgeCSS compares
-    an attribute selector's *name* (`data-theme`, without brackets), so
+    an attribute selector's _name_ (`data-theme`, without brackets), so
     `/^\[data-.*\]$/` and `/^\[aria-.*\]$/` never match. `/^@media/`,
     `/^@container/` and `/^@supports/` don't match either, because at-rules
     aren't selectors. Rules inside `@media` are purged normally. Tested:
     `@media (…) { .unused {…} }` and `[data-x="1"]` were both removed.
   - **Fix:** the two safelist entries above. As belt and braces, `theme.ts` and the head script write `setAttribute('data-theme', …)` (§2.2, §9.8), which puts the literal token into the built HTML/JS. Both fixes verified.
   - `variables: true` drops unused custom properties. That's safe: tokens are either used, inlined, or read at runtime by CSS Modules, which PurgeCSS sees as `var()` uses.
-- **Browser support (project policy):** `light-dark()` is used **without a hand-written fallback**. The guide rates it Baseline *Newly available* (since 2024-05-13: Chrome/Edge 123, Firefox 120, Safari 17.5). The browserslist targets (Baseline Widely available, above) all support it, so it ships native. `oklch()` is Baseline since 2023.
+- **Browser support (project policy):** `light-dark()` is used **without a hand-written fallback**. The guide rates it Baseline _Newly available_ (since 2024-05-13: Chrome/Edge 123, Firefox 120, Safari 17.5). The browserslist targets (Baseline Widely available, above) all support it, so it ships native. `oklch()` is Baseline since 2023.
 
 **Issues found in the current `src/styles` [V], fixed by this system:**
+
 - `a-button.css` / `a-input.css` use variables that don't exist (`--space-3`, `--space-6`, `--text-color-quaternary`, `--text-color-senary`, `--background-tertiary` …), and `--lh-*` / `--ws-*` are never defined. An undefined `var()` makes the declaration fall back to the inherited/initial value, so those buttons have no fill. §9.5 replaces both atoms.
 - The reset sets `outline: none` on `input`/`button`/`select`/`textarea`, and only `a` and `.a-input` define a `:focus-visible` style, so **buttons have no visible focus**. §9.4 removes `outline: none` and adds one global `:focus-visible` ring.
 - The reset's `prefers-reduced-motion` block applies `0.01ms !important` to everything, which §8.3 replaces with per-effect motion.
@@ -2380,7 +2395,8 @@ for (const v of ['--box-shadow-shell-light', '--box-shadow-shell-dark'])
 
 ### 10.2 Pre-delivery checklist
 
-**Accessibility (critical)**
+#### Accessibility (critical)
+
 - [ ] **AAA contrast:** every text pair in §3.4 holds in both themes. All text (normal and large) ≥ 7:1, UI boundaries and focus ring ≥ 3:1. Re-check any new pair, and never lower text contrast with `opacity` or alpha.
 - [ ] Spot-check the rendered page with a contrast tool (e.g. browser DevTools' contrast picker) in both themes, since `oklch()` values are converted to sRGB by the browser.
 - [ ] Visible `:focus-visible` ring on every interactive element in both themes, never obscured by the sticky nav (`scroll-margin-top` set).
@@ -2395,14 +2411,16 @@ for (const v of ['--box-shadow-shell-light', '--box-shadow-shell-dark'])
 - [ ] **Forced colors:** emulate `forced-colors: active` (DevTools → Rendering). The current nav section, card hover bar, theme toggle (border + icon), status dots and focus ring are all still visible.
 - [ ] **OS text size:** with Android/ChromeOS text size raised (the `text-scale` meta), and with browser text size at 200%, nothing clips and breakpoints switch earlier instead of overflowing.
 
-**Interaction**
+#### Interaction
+
 - [ ] Touch targets ≥ 44×44px (the theme toggle via `::after` extension), ≥ 8px between targets.
 - [ ] `cursor: pointer` on all clickable elements. `touch-action: manipulation`.
 - [ ] Hover transforms are wrapped in `@media (hover: hover)`.
 - [ ] Theme toggle, two states (run the §2.3 scenario with DevTools' `prefers-color-scheme` emulation): with the OS light, a click stores `dark`. Switching the OS to dark and then back to light leaves the site dark and the key **kept**. A second click (target = OS) **removes** the key, and the site follows the OS again. With nothing stored, an OS change repaints live.
 - [ ] Rapid clicking ends on the expected theme (an even number of clicks returns to the start). The button's accessible name always describes the next action, including right after an OS theme change.
 
-**Theming**
+#### Theming
+
 - [ ] No FOUC: hard-reload in dark OS with an empty cache and throttled network. First paint is dark.
 - [ ] Every semantic color (`--background-color-*`, `--text-color-*`, `--border-color-*`, `--outline-color-*`) is **one** declaration in `settings/colors.css` `:root`, using `light-dark()` over two primitives (or one shared primitive), and no `[data-theme]` rule redefines a token. Components never reference a primitive directly. Run the test in §9.9.
 - [ ] **Build order is `astro build && purge-css && lightningcss`** (lightningcss last, §9.1). In `dist/`, `--lightningcss-light` must never appear inlined as a bare value.
@@ -2420,19 +2438,22 @@ for (const v of ['--box-shadow-shell-light', '--box-shadow-shell-dark'])
 - [ ] Borders, dividers, and the shell edge are visible in **both** themes (the regression from §1.4 issue 4).
 - [ ] With JS disabled, the system theme still applies and the toggle stays hidden.
 
-**Layout & text resilience**
+#### Layout & text resilience
+
 - [ ] Test at 320, 375, 390, 640, 768, 1024, 1440. No horizontal page scroll anywhere (`documentElement.scrollWidth === innerWidth`).
 - [ ] Nav is one scrolling line: edges fade, the last link is reachable by touch, mouse and keyboard, and the current link scrolls into view. All 5 anchors resolve to existing IDs.
 - [ ] Long name, long role, long repo name (`owner/a-really-long-repository-name`), and long Spanish titles all wrap without overflow. Chips stay single-line and the collection wraps.
 - [ ] Browser zoom 200% and text-only zoom: no clipped or overlapping text.
 - [ ] Landscape on phones: the hero doesn't consume the whole viewport (5:4 ratio under 640px).
 
-**Motion**
+#### Motion
+
 - [ ] With `prefers-reduced-motion: reduce`: no wipe, no zoom, no arrow nudge, no smooth scroll. The nav underline and card bar still appear (instantly), and color hover feedback still works.
 - [ ] No global `transition-duration` / `animation-duration` override anywhere in the CSS (§8.3).
 - [ ] All content is visible at first paint with no entrance animations.
 
-**Performance**
+#### Performance
+
 - [ ] Portrait via `<Picture>` (AVIF/WebP), `fetchpriority="high"`, explicit dimensions. Tiles are lazy loaded with dimensions. CLS < 0.1.
 - [ ] Only Barlow 400 + 700 + 800 latin preloaded, each pointing at the same hashed file the `@font-face` uses (no double download). Fallback face metric-matched, plus `font-size-adjust: from-font` verified by blocking the font files. No Google Fonts CSS request.
 - [ ] No GSAP or animation libraries. JS limited to `theme.ts` and the nav scrollspy.
