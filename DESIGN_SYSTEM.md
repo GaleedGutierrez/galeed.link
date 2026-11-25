@@ -1,5 +1,5 @@
 <!-- Prettier skips this file (.prettierignore), so prose is not wrapped at 80
-columns: cap lines at 400 instead, as Super Linter does. -->
+columns: cap lines at 400 instead. -->
 <!-- markdownlint-configure-file { "MD013": { "line_length": 400, "tables": false } } -->
 
 # galeed.link — Design System

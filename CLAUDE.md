@@ -66,8 +66,9 @@ docs are English.
   what `.gitignore` lists): run it with no file arguments. Globs in npm scripts
   stay quoted: CI runs them with `sh`, which reads an unquoted `**` as `*`.
   Prettier skips `DESIGN_SYSTEM.md`, so its lines aren't wrapped: a
-  `markdownlint-configure-file` comment at its top caps them at 400 characters,
-  the limit Super Linter's own Markdown config applies.
+  `markdownlint-configure-file` comment at its top caps them at 400 characters.
+  Super Linter's markdownlint is off: it reads its bundled template, not this
+  config.
 - One test file: `npx vitest run tests/tokens.test.ts`.
 - `npm run test:e2e` runs Playwright (`tests/e2e/`) against `npm run preview`,
   so build first. `a11y.spec.ts` runs axe (`@axe-core/playwright`) with the WCAG
