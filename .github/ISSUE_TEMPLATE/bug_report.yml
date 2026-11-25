@@ -39,6 +39,17 @@ body:
     validations:
       required: true
   - type: dropdown
+    id: page
+    attributes:
+      label: Page
+      multiple: true
+      options:
+        - Home (/)
+        - 404 page
+        - /llms.txt
+        - Link preview when shared
+        - Not sure
+  - type: dropdown
     id: theme
     attributes:
       label: Theme
@@ -52,6 +63,12 @@ body:
     attributes:
       label: Browser and device
       placeholder: Firefox 145 on Windows 11, Safari on iPhone 16…
+  - type: input
+    id: accessibility-settings
+    attributes:
+      label: Accessibility settings
+      description: Any system setting that changes how the site looks or reads.
+      placeholder: Reduced motion, Windows contrast theme, 200% zoom, NVDA…
   - type: textarea
     id: screenshots
     attributes:

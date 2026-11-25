@@ -3,6 +3,12 @@ name: 💡 Feature request
 description: Suggest an idea for galeed.link.
 labels: ["enhancement"]
 body:
+  - type: markdown
+    attributes:
+      value: >-
+        galeed.link is a link hub: short entries and links only. Longer copy
+        about Galeed or the projects belongs on
+        [galeedgutierrez.com](https://galeedgutierrez.com).
   - type: textarea
     id: problem
     attributes:
