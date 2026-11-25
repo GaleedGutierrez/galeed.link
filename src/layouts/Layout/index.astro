@@ -1,29 +1,29 @@
 ---
-import "@fontsource/barlow/400.css";
-import "@fontsource/barlow/500.css";
-import "@fontsource/barlow/700.css";
-import "@fontsource/barlow/800.css";
-import "@fontsource-variable/jetbrains-mono";
-import "@styles/index.css";
+import '@fontsource/barlow/400.css';
+import '@fontsource/barlow/500.css';
+import '@fontsource/barlow/700.css';
+import '@fontsource/barlow/800.css';
+import '@fontsource-variable/jetbrains-mono';
+import '@styles/index.css';
 
-import barlow400 from "@fontsource/barlow/files/barlow-latin-400-normal.woff2?url";
-import barlow700 from "@fontsource/barlow/files/barlow-latin-700-normal.woff2?url";
-import barlow800 from "@fontsource/barlow/files/barlow-latin-800-normal.woff2?url";
-import { SEO } from "astro-seo";
-import { Schema } from "astro-seo-schema";
+import barlow400 from '@fontsource/barlow/files/barlow-latin-400-normal.woff2?url';
+import barlow700 from '@fontsource/barlow/files/barlow-latin-700-normal.woff2?url';
+import barlow800 from '@fontsource/barlow/files/barlow-latin-800-normal.woff2?url';
+import { SEO } from 'astro-seo';
+import { Schema } from 'astro-seo-schema';
 
-import type { EducationSchema } from "@/data/educationSchema";
+import type { EducationSchema } from '@/data/educationSchema';
 import {
 	PERSON_ID,
 	personalSchema,
 	SITE_CREATED,
 	SITE_URL,
 	WEBSITE_ID,
-} from "@/data/personalSchema";
-import type { Work } from "@/data/worksSchema";
-import { getLastModified } from "@/utils/lastModified";
+} from '@/data/personalSchema';
+import type { Work } from '@/data/worksSchema';
+import { getLastModified } from '@/utils/lastModified';
 
-import styles from "./styles.module.css";
+import styles from './styles.module.css';
 
 interface Props {
 	title?: string;
@@ -38,7 +38,7 @@ interface Props {
 
 const {
 	title = `${personalSchema.name} · ${personalSchema.jobProfile.name} en Jujuy, Argentina`,
-	description = "Galeed Gutierrez, desarrollador frontend en Jujuy, Argentina. React, Astro y TypeScript. Trabajo freelance, side projects, open source y contacto.",
+	description = 'Galeed Gutierrez, desarrollador frontend en Jujuy, Argentina. React, Astro y TypeScript. Trabajo freelance, side projects, open source y contacto.',
 	noindex = false,
 	works = [],
 	education,
@@ -59,7 +59,7 @@ const ogImage = {
 	width: 1200,
 	height: 630,
 };
-const [firstName, ...lastNames] = personalSchema.name.split(" ");
+const [firstName, ...lastNames] = personalSchema.name.split(' ');
 // Last content commit, not the build time (src/utils/lastModified.ts).
 const dateModified = getLastModified().toISOString();
 ---
@@ -94,25 +94,25 @@ const dateModified = getLastModified().toISOString();
 		<!-- Resolve the theme before first paint (DESIGN_SYSTEM.md §2.2). -->
 		<script is:inline>
 			(() => {
-				const KEY = "galeed:theme";
+				const KEY = 'galeed:theme';
 				const root = document.documentElement;
-				let pref = "system";
+				let pref = 'system';
 				try {
 					const stored = localStorage.getItem(KEY);
-					if (stored === "light" || stored === "dark") pref = stored;
+					if (stored === 'light' || stored === 'dark') pref = stored;
 				} catch {
 					/* storage blocked: stay on system */
 				}
 				const resolved =
-					pref === "system"
-						? window.matchMedia("(prefers-color-scheme: dark)")
+					pref === 'system'
+						? window.matchMedia('(prefers-color-scheme: dark)')
 								.matches
-							? "dark"
-							: "light"
+							? 'dark'
+							: 'light'
 						: pref;
 				// setAttribute (not dataset): PurgeCSS must see "data-theme".
-				root.setAttribute("data-theme", resolved);
-				root.setAttribute("data-theme-pref", pref);
+				root.setAttribute('data-theme', resolved);
+				root.setAttribute('data-theme-pref', pref);
 				root.style.colorScheme = resolved;
 			})();
 		</script>
@@ -171,44 +171,44 @@ const dateModified = getLastModified().toISOString();
 			extend={{
 				link: [
 					{
-						rel: "alternate",
-						type: "text/plain",
-						href: "/llms.txt",
-						title: "llms.txt",
+						rel: 'alternate',
+						type: 'text/plain',
+						href: '/llms.txt',
+						title: 'llms.txt',
 					},
 				],
 				meta: [
-					{ property: "profile:first_name", content: firstName },
+					{ property: 'profile:first_name', content: firstName },
 					{
-						property: "profile:last_name",
-						content: lastNames.join(" "),
+						property: 'profile:last_name',
+						content: lastNames.join(' '),
 					},
-					{ name: "author", content: personalSchema.name },
+					{ name: 'author', content: personalSchema.name },
 				],
 			}}
 			noindex={noindex}
 			openGraph={{
 				basic: {
 					title,
-					type: "profile",
+					type: 'profile',
 					image: ogImage.url,
 					url: canonical,
 				},
 				optional: {
 					description,
-					locale: "es_AR",
+					locale: 'es_AR',
 					siteName: personalSchema.name,
 				},
 				image: {
 					alt: ogImage.alt,
 					height: ogImage.height,
-					type: "image/jpeg",
+					type: 'image/jpeg',
 					width: ogImage.width,
 				},
 			}}
 			title={title}
 			twitter={{
-				card: "summary_large_image",
+				card: 'summary_large_image',
 				creator: personalSchema.xHandle,
 				title,
 				description,
@@ -222,51 +222,51 @@ const dateModified = getLastModified().toISOString();
 		{!noindex && (
 			<Schema
 				item={{
-					"@context": "https://schema.org",
-					"@graph": [
+					'@context': 'https://schema.org',
+					'@graph': [
 						{
-							"@type": "WebSite",
-							"@id": WEBSITE_ID,
+							'@type': 'WebSite',
+							'@id': WEBSITE_ID,
 							url: `${SITE_URL}/`,
 							name: personalSchema.name,
-							alternateName: "galeed.link",
-							inLanguage: "es-AR",
-							publisher: { "@id": personId },
+							alternateName: 'galeed.link',
+							inLanguage: 'es-AR',
+							publisher: { '@id': personId },
 						},
 						{
-							"@type": "ProfilePage",
-							"@id": `${SITE_URL}/#profile`,
+							'@type': 'ProfilePage',
+							'@id': `${SITE_URL}/#profile`,
 							url: canonical,
 							name: title,
 							description,
-							inLanguage: "es-AR",
-							isPartOf: { "@id": WEBSITE_ID },
+							inLanguage: 'es-AR',
+							isPartOf: { '@id': WEBSITE_ID },
 							dateCreated: SITE_CREATED,
 							dateModified,
 							mentions: works.map((work) => ({
-								"@id": work["@id"],
+								'@id': work['@id'],
 							})),
 							mainEntity: {
-								"@type": "Person",
-								"@id": personId,
+								'@type': 'Person',
+								'@id': personId,
 								name: personalSchema.name,
 								alternateName: personalSchema.alternateName,
 								givenName: firstName,
-								familyName: lastNames.join(" "),
+								familyName: lastNames.join(' '),
 								url: `${SITE_URL}/`,
 								image: `${SITE_URL}/profile.webp`,
 								jobTitle: personalSchema.jobTitle,
 								description: personalSchema.description,
 								address: personalSchema.address,
 								nationality: {
-									"@type": "Country",
-									name: "Argentina",
+									'@type': 'Country',
+									name: 'Argentina',
 								},
 								sameAs: Object.values(
 									personalSchema.socialLinks,
 								),
 								knowsAbout: personalSchema.skills,
-								knowsLanguage: "es",
+								knowsLanguage: 'es',
 								...education,
 								hasOccupation: personalSchema.jobProfile,
 							},
@@ -293,7 +293,7 @@ const dateModified = getLastModified().toISOString();
 		<script
 			defer
 			is:inline
-			src={"https://www.googletagmanager.com/gtag/js?id=G-XEPRCKCX47"}
+			src={'https://www.googletagmanager.com/gtag/js?id=G-XEPRCKCX47'}
 			type="text/partytown"
 		></script>
 		<script
@@ -305,8 +305,8 @@ const dateModified = getLastModified().toISOString();
 			// preview deploys and CI set Google's opt-out flag instead:
 			// Lighthouse can't block this worker's requests, so its runs
 			// counted as visits.
-			if (location.hostname !== "galeed.link") {
-				window["ga-disable-G-XEPRCKCX47"] = true;
+			if (location.hostname !== 'galeed.link') {
+				window['ga-disable-G-XEPRCKCX47'] = true;
 			}
 			window.dataLayer = window.dataLayer || [];
 			// On window, not a function declaration: Partytown wraps each
@@ -315,9 +315,9 @@ const dateModified = getLastModified().toISOString();
 			window.gtag = function gtag() {
 				dataLayer.push(arguments);
 			};
-			gtag("js", new Date());
+			gtag('js', new Date());
 
-			gtag("config", "G-XEPRCKCX47");
+			gtag('config', 'G-XEPRCKCX47');
 		</script>
 		<!-- Web Vitals run on the main thread, bundled from npm. Inside
 			 Partytown they ran in a Web Worker, where PerformanceObserver has no
@@ -325,7 +325,7 @@ const dateModified = getLastModified().toISOString();
 			 and loading them from unpkg failed under tracker blockers. Only
 			 gtag stays in Partytown: the call below is forwarded to it. -->
 		<script>
-			import { type Metric, onCLS, onINP, onLCP } from "web-vitals";
+			import { type Metric, onCLS, onINP, onLCP } from 'web-vitals';
 
 			const sendToGoogleAnalytics = ({
 				name,
@@ -333,10 +333,10 @@ const dateModified = getLastModified().toISOString();
 				id,
 			}: Metric): void => {
 				// Partytown's forward stub; missing when analytics is blocked.
-				globalThis.gtag?.("event", name, {
-					event_category: "Web Vitals",
+				globalThis.gtag?.('event', name, {
+					event_category: 'Web Vitals',
 					event_label: id,
-					value: Math.round(name === "CLS" ? delta * 1000 : delta),
+					value: Math.round(name === 'CLS' ? delta * 1000 : delta),
 					non_interaction: true,
 				});
 			};

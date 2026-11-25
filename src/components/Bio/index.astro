@@ -1,31 +1,31 @@
 ---
-import Chip from "@components/Chip/index.astro";
-import { Icon } from "astro-icon/components";
+import Chip from '@components/Chip/index.astro';
+import { Icon } from 'astro-icon/components';
 
-import styles from "./styles.module.css";
+import styles from './styles.module.css';
 
 const ABOUT = [
-	{ icon: "lucide:map-pin", label: "Argentino" },
-	{ icon: "lucide:cpu", label: "Tecnología" },
-	{ icon: "lucide:dumbbell", label: "Gym" },
-	{ icon: "lucide:mountain", label: "Hiking" },
-	{ icon: "lucide:dices", label: "Juegos de mesa" },
-	{ icon: "lucide:leaf", label: "Mate" },
-	{ icon: "lucide:coffee", label: "Café" },
+	{ icon: 'lucide:map-pin', label: 'Argentino' },
+	{ icon: 'lucide:cpu', label: 'Tecnología' },
+	{ icon: 'lucide:dumbbell', label: 'Gym' },
+	{ icon: 'lucide:mountain', label: 'Hiking' },
+	{ icon: 'lucide:dices', label: 'Juegos de mesa' },
+	{ icon: 'lucide:leaf', label: 'Mate' },
+	{ icon: 'lucide:coffee', label: 'Café' },
 ];
 
 const STACK = [
-	{ icon: "simple-icons:react", label: "React" },
-	{ icon: "simple-icons:astro", label: "Astro" },
-	{ icon: "simple-icons:typescript", label: "TypeScript" },
-	{ icon: "simple-icons:tailwindcss", label: "Tailwind CSS" },
-	{ icon: "simple-icons:nodedotjs", label: "Node.js" },
+	{ icon: 'simple-icons:react', label: 'React' },
+	{ icon: 'simple-icons:astro', label: 'Astro' },
+	{ icon: 'simple-icons:typescript', label: 'TypeScript' },
+	{ icon: 'simple-icons:tailwindcss', label: 'Tailwind CSS' },
+	{ icon: 'simple-icons:nodedotjs', label: 'Node.js' },
 ];
 ---
 
 <div class="grid grid-cols-[1fr_1px_1fr] gap-4">
 	<section class="flex flex-col gap-3">
-		<h3 class={styles["bio__heading"]}>Sobre mí</h3>
+		<h3 class={styles['bio__heading']}>Sobre mí</h3>
 		<ul
 			class="flex flex-col gap-2"
 			role="list"
@@ -33,13 +33,13 @@ const STACK = [
 			{ABOUT.map((item) => (
 				<li
 					class:list={[
-						"inline-flex items-start gap-2",
-						styles["bio__item"],
+						'inline-flex items-start gap-2',
+						styles['bio__item'],
 					]}
 				>
 					<Icon
 						aria-hidden="true"
-						class={styles["bio__icon"]}
+						class={styles['bio__icon']}
 						name={item.icon}
 						size={18}
 					/>
@@ -50,10 +50,10 @@ const STACK = [
 	</section>
 	<div
 		aria-hidden="true"
-		class={styles["bio__rule"]}
+		class={styles['bio__rule']}
 	></div>
 	<section class="flex flex-col gap-3">
-		<h3 class={styles["bio__heading"]}>Stack tech</h3>
+		<h3 class={styles['bio__heading']}>Stack tech</h3>
 		<ul
 			class="flex flex-wrap gap-2"
 			role="list"

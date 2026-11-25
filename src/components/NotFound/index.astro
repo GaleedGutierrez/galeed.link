@@ -1,18 +1,18 @@
 ---
-import { Icon } from "astro-icon/components";
+import { Icon } from 'astro-icon/components';
 
-import Illustration from "./Illustration.astro";
-import styles from "./styles.module.css";
+import Illustration from './Illustration.astro';
+import styles from './styles.module.css';
 ---
 
 <div class="flex flex-col items-start gap-4 px-4 py-12">
 	<Illustration />
-	<p class={styles["not-found__code"]}>
+	<p class={styles['not-found__code']}>
 		<span aria-hidden="true">ERR_404 // RUTA_NO_RESUELTA</span>
 		<span class="sr-only">Error 404: ruta no resuelta</span>
 	</p>
 	<h1>Enlace perdido en tránsito</h1>
-	<p class={styles["not-found__text"]}>
+	<p class={styles['not-found__text']}>
 		Esta ruta no figura en el directorio o se perdió durante una cascada de
 		resonancias. Revisá la dirección o volvé al inicio.
 	</p>

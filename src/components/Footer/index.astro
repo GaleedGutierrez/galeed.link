@@ -1,25 +1,25 @@
 ---
-import { Icon } from "astro-icon/components";
+import { Icon } from 'astro-icon/components';
 
-import { PROFILE } from "@/data/hub";
+import { PROFILE } from '@/data/hub';
 
-import styles from "./styles.module.css";
+import styles from './styles.module.css';
 
 const year = new Date().getFullYear();
 ---
 
 <footer
 	class:list={[
-		"mt-8 flex flex-col items-center gap-1 px-4 pb-4 pt-8",
-		styles["footer"],
+		'mt-8 flex flex-col items-center gap-1 px-4 pb-4 pt-8',
+		styles['footer'],
 	]}
 >
-	<p class={styles["footer__line"]}>
+	<p class={styles['footer__line']}>
 		© {year}
 		{PROFILE.name}
 		<span
 			aria-hidden="true"
-			class={styles["footer__lambda"]}
+			class={styles['footer__lambda']}
 		>
 			λ
 		</span>

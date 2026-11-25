@@ -13,7 +13,7 @@ max_line_length = 80
 
 # Prettier's singleQuote. .astro covers the frontmatter; HTML attributes
 # keep double quotes (jsxSingleQuote).
-[*.{ts,tsx,mts,cts,js,jsx,cjs,mjs}]
+[*.{ts,tsx,mts,cts,js,jsx,cjs,mjs,astro}]
 quote_type = single
 
 # YAML can't indent with tabs.

@@ -1,25 +1,25 @@
 ---
-import ThemeToggle from "@components/ThemeToggle/index.astro";
+import ThemeToggle from '@components/ThemeToggle/index.astro';
 
-import { PROFILE } from "@/data/hub";
+import { PROFILE } from '@/data/hub';
 
-import styles from "./styles.module.css";
+import styles from './styles.module.css';
 
 const { region, country, countryCode } = PROFILE.location;
 ---
 
 <div
 	class:list={[
-		"flex min-h-12 items-center justify-between gap-4 px-4",
-		styles["system-bar"],
+		'flex min-h-12 items-center justify-between gap-4 px-4',
+		styles['system-bar'],
 	]}
 >
-	<p class={styles["system-bar__meta"]}>
+	<p class={styles['system-bar__meta']}>
 		{region}, <abbr title={country}>{countryCode}</abbr>
 		{PROFILE.isAvailable && (
 			<>
 				<span aria-hidden="true"> · </span>
-				<span class={styles["system-bar__status"]}>
+				<span class={styles['system-bar__status']}>
 					<span
 						aria-hidden="true"
 						class="a-chip__dot"

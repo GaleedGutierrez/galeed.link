@@ -1,30 +1,30 @@
 ---
-import SocialLinks from "@components/SocialLinks/index.astro";
-import authorPhoto from "@images/me/jpg/me.jpg";
-import { Picture } from "astro:assets";
+import SocialLinks from '@components/SocialLinks/index.astro';
+import authorPhoto from '@images/me/jpg/me.jpg';
+import { Picture } from 'astro:assets';
 
-import { PROFILE } from "@/data/hub";
+import { PROFILE } from '@/data/hub';
 
-import styles from "./styles.module.css";
+import styles from './styles.module.css';
 ---
 
 <div class="flex flex-col">
-	<div class={styles["hero__portrait"]}>
+	<div class={styles['hero__portrait']}>
 		<Picture
 			alt={`Retrato de ${PROFILE.name}.`}
 			class:list={[
-				"aspect-[5/4] w-full sm:aspect-square",
-				styles["hero__image"],
+				'aspect-[5/4] w-full sm:aspect-square',
+				styles['hero__image'],
 			]}
 			fetchpriority="high"
-			formats={["avif", "webp"]}
+			formats={['avif', 'webp']}
 			loading="eager"
 			sizes="(min-width: 40em) 480px, min(100vw, 480px)"
 			src={authorPhoto}
 			widths={[375, 480, 960, 1200]}
 		/>
 	</div>
-	<h1 class:list={["px-4", styles["hero__name"]]}>{PROFILE.name}</h1>
-	<p class:list={["mt-2 px-4", styles["hero__role"]]}>{PROFILE.role}</p>
+	<h1 class:list={['px-4', styles['hero__name']]}>{PROFILE.name}</h1>
+	<p class:list={['mt-2 px-4', styles['hero__role']]}>{PROFILE.role}</p>
 	<SocialLinks class="mt-6" />
 </div>
