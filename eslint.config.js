@@ -21,6 +21,7 @@ import sortClassMembers from 'eslint-plugin-sort-class-members';
 import tsdoc from 'eslint-plugin-tsdoc';
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import unusedImports from 'eslint-plugin-unused-imports';
+import { configs as ymlConfigs } from 'eslint-plugin-yml';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -41,6 +42,8 @@ export default defineConfig(
 			'**/.lighthouseci/**',
 			'.markdownlint-cli2.jsonc',
 			'**/.astro/**',
+			// Playwright MCP page snapshots (gitignored).
+			'.playwright-mcp/**',
 			// Installed agent skills: third-party files, ignored by every other linter too.
 			'.agents/**',
 			'.claude/**',
@@ -59,6 +62,14 @@ export default defineConfig(
 	eslintPluginPrettierRecommended,
 	...jsoncConfigs['flat/recommended-with-jsonc'],
 	...jsoncConfigs['flat/prettier'],
+	...ymlConfigs['flat/recommended'],
+	...ymlConfigs['flat/prettier'],
+	{
+		// GitHub Actions turns an event on with an empty key
+		// (`workflow_dispatch:`).
+		files: ['.github/workflows/**'],
+		rules: { 'yml/no-empty-mapping-value': 'off' },
+	},
 	// eslint-disable-next-line import-x/no-named-as-default-member
 	...eslintPluginAstro.configs.recommended,
 	// ...fixupConfigRules(compat.extends('plugin:editorconfig/noconflict')),

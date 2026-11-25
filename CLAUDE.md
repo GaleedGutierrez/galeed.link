@@ -34,25 +34,25 @@ docs are English.
 
 ## Commands
 
-| Task                  | Command                                       |
-| --------------------- | --------------------------------------------- |
-| Dev server            | `npm run dev`                                 |
-| Dev server on LAN     | `npm run dev -- --host` (only when needed)    |
-| Build                 | `npm run build`                               |
-| Preview build         | `npm run preview`                             |
-| Lint TS/Astro/JSON    | `npm run lint` · `npm run lint:fix`           |
-| Lint CSS              | `npm run stylelint` · `npm run stylelint:fix` |
-| Format                | `npm run prettier` · `npm run prettier:fix`   |
-| Lint Markdown         | `npm run lint-md` · `npm run lint-md:fix`     |
-| Duplicate code        | `npm run check-for-dupes`                     |
-| Type check            | `npm run typecheck` (`astro check`)           |
-| Unit tests (Vitest)   | `npm run test`                                |
-| Accessibility (axe)   | `npm run test:e2e` (after `npm run build`)    |
-| Every linter          | `npm run lint:all` (what CI runs)             |
-| Linters, types, tests | `npm run verify` (the pre-push hook)          |
-| Guided commit         | `npm run commit` (commitlint prompt)          |
-| Lighthouse (preview)  | `npm run test:performance`                    |
-| Lighthouse CI         | `npx lhci autorun` (after `npm run build`)    |
+| Task                    | Command                                       |
+| ----------------------- | --------------------------------------------- |
+| Dev server              | `npm run dev`                                 |
+| Dev server on LAN       | `npm run dev -- --host` (only when needed)    |
+| Build                   | `npm run build`                               |
+| Preview build           | `npm run preview`                             |
+| Lint TS/Astro/JSON/YAML | `npm run lint` · `npm run lint:fix`           |
+| Lint CSS                | `npm run stylelint` · `npm run stylelint:fix` |
+| Format                  | `npm run prettier` · `npm run prettier:fix`   |
+| Lint Markdown           | `npm run lint-md` · `npm run lint-md:fix`     |
+| Duplicate code          | `npm run check-for-dupes`                     |
+| Type check              | `npm run typecheck` (`astro check`)           |
+| Unit tests (Vitest)     | `npm run test`                                |
+| Accessibility (axe)     | `npm run test:e2e` (after `npm run build`)    |
+| Every linter            | `npm run lint:all` (what CI runs)             |
+| Linters, types, tests   | `npm run verify` (the pre-push hook)          |
+| Guided commit           | `npm run commit` (commitlint prompt)          |
+| Lighthouse (preview)    | `npm run test:performance`                    |
+| Lighthouse CI           | `npx lhci autorun` (after `npm run build`)    |
 
 - After editing CSS, run `npm run stylelint:fix`. It reorders properties
   (`order/properties-order`) and normalizes notation. That is expected.
@@ -181,6 +181,9 @@ docs are English.
   the `jsx-a11y-x/` prefix: `eslint-plugin-jsx-a11y` doesn't support ESLint 10.
 - Unicorn is scoped to code files: ESLint 10 rejects its rules on JSON. Two of
   its style rules are off because they fight the JSDoc/TSDoc comment style.
+- YAML goes through ESLint too (`eslint-plugin-yml`): a parse error or a
+  duplicate key fails the pre-commit hook, before Super Linter's yamllint.
+  Workflows may leave an event key empty (`workflow_dispatch:`).
 - Lists keep `role="list"`; ESLint allows it on `ul` only.
 - `setAttribute('data-theme…')` in `theme.ts` has a scoped
   `unicorn/dom-node-dataset` disable: PurgeCSS needs the literal names.
