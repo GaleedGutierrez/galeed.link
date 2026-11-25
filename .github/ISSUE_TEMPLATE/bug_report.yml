@@ -3,25 +3,35 @@ name: 🐛 Bug report
 description: Something on galeed.link looks or works wrong.
 labels: ["bug"]
 body:
+  - type: markdown
+    attributes:
+      value: >-
+        Found a security flaw? Don't file it here, where anyone can read it:
+        [report it privately](https://github.com/GaleedGutierrez/galeed.link/security/advisories/new).
   - type: textarea
     id: description
     attributes:
       label: What happened?
-      description: What you saw, and what you expected instead.
+      description: What you saw.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
     validations:
       required: true
   - type: textarea
     id: steps
     attributes:
       label: Steps to reproduce
+      description: Skip it for a typo or wrong data.
       placeholder: |
         1. Open https://galeed.link/ on a phone
         2. Switch to the dark theme
         3. Scroll to the footer
-    validations:
-      required: true
   # issue-label.yml maps each option to an area or concern label: keep the
-  # option names and those patterns in step.
+  # option names and those patterns in step (tests/issueForms.test.ts).
   - type: dropdown
     id: area
     attributes:

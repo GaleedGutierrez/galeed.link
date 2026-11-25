@@ -342,8 +342,10 @@ docs are English.
   one `type:` label from its Conventional Commit title (or branch prefix) and
   `area:` labels from its files (`.github/labeler.yml`). Issues get theirs from
   the issue forms (`.github/issue-label.yml`). A new area needs an entry in
-  each. CLAUDE.md counts as `area: agents`, not `area: docs`. Pull requests from
-  forks get no labels: their token is read-only.
+  each. `tests/issueForms.test.ts` checks that both forms share the "Area"
+  options, each maps to one label, and every label is in `labels.yml`. CLAUDE.md
+  counts as `area: agents`, not `area: docs`. Pull requests from forks get no
+  labels: their token is read-only.
 - CI runs on pull requests and on `main` (not on bare branch pushes): every
   linter, `astro check`, Vitest, axe (Playwright), Lighthouse CI and CodeQL
   (JavaScript and the workflows). The `main` ruleset requires the lint, Super

@@ -23,7 +23,7 @@ body:
     validations:
       required: true
   # issue-label.yml maps each option to an area or concern label: keep the
-  # option names and those patterns in step.
+  # option names and those patterns in step (tests/issueForms.test.ts).
   - type: dropdown
     id: area
     attributes:

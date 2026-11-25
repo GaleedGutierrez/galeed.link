@@ -10,7 +10,7 @@
 # Each pattern finds its option on the line after that heading, so prose that
 # mentions "content" elsewhere adds nothing. The type label (bug, enhancement,
 # question) comes from the form itself. Keep the option names in step with
-# ISSUE_TEMPLATE/*.yml.
+# ISSUE_TEMPLATE/*.yml: tests/issueForms.test.ts fails when they drift.
 
 "area: content":
   - '/### Area\s+[^\n]*\bContent\b/'
