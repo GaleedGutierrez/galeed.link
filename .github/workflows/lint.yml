@@ -115,5 +115,9 @@ jobs:
           # project's .textlintrc.json; Super Linter's copy reads only its own
           # bundled config and rules.
           VALIDATE_NATURAL_LANGUAGE: false
+          # markdownlint runs in the job above (npm run lint-md) with
+          # .markdownlint-cli2.jsonc; Super Linter's copy reads its bundled
+          # template, a looser config.
+          VALIDATE_MARKDOWN: false
           # Agent skills are third-party files, installed as-is.
           FILTER_REGEX_EXCLUDE: (^|/)\.(agents|claude)/

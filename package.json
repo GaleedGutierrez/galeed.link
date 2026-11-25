@@ -43,10 +43,10 @@
 		"prettier:fix": "prettier ./ --write",
 		"stylelint": "stylelint ./**/*.{css,scss} --allow-empty-input",
 		"stylelint:fix": "stylelint --fix ./**/*.{css,scss} --allow-empty-input",
-		"lint-text": "textlint ./**/*.md ",
-		"lint-text:fix": "textlint --fix ./**/*.md ",
-		"lint-md": "markdownlint-cli2 --config \".markdownlint-cli2.jsonc\" **/*.md \"#node_modules\" && npm run lint-text",
-		"lint-md:fix": "markdownlint-cli2 --config \".markdownlint-cli2.jsonc\" --fix **/*.md \"#node_modules\" && npm run lint-text:fix",
+		"lint-text": "textlint \"**/*.md\"",
+		"lint-text:fix": "textlint --fix \"**/*.md\"",
+		"lint-md": "markdownlint-cli2 && npm run lint-text",
+		"lint-md:fix": "markdownlint-cli2 --fix && npm run lint-text:fix",
 		"check-for-dupes": "jscpd ./",
 		"lint:all": "npm run lint && npm run stylelint && npm run prettier && npm run lint-md && npm run check-for-dupes",
 		"typecheck": "astro check",
@@ -141,7 +141,7 @@
 		"*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json,yml,yaml,astro}": "eslint --fix",
 		"*{css,s(a|c)ss}": "stylelint --fix",
 		"*.{md,mdx}": [
-			"markdownlint-cli2 --config \".markdownlint-cli2.jsonc\" --fix",
+			"markdownlint-cli2 --no-globs --fix",
 			"textlint --fix",
 			"prettier --write"
 		],
