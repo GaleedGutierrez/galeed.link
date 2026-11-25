@@ -10,11 +10,29 @@ const config = {
 		postcssMixins({ mixinsFiles: './src/styles/tools/*.css' }),
 		postcssCustomProperties({ preserve: false }),
 		postcssUtopia({ minWidth: 360, maxWidth: 448 }),
-		cssnano({
-			// discardUnused runs per file, so it deleted every Fontsource
-			// @font-face (each file declares a face it doesn't use itself).
-			preset: ['advanced', { discardUnused: false }],
-		}),
+		// Builds only: in dev it slowed HMR and minified what DevTools shows.
+		// postcss-load-config skips a `false` plugin.
+		process.env.NODE_ENV === 'production' &&
+			cssnano({
+				// Vite runs PostCSS once per file, and these advanced plugins
+				// assume they see the whole site:
+				// - discardUnused deleted every Fontsource @font-face (each file
+				//   declares a face it doesn't use itself).
+				// - reduceIdents renamed each file's keyframes to a, b, c…, so
+				//   two files bundled into one sheet would collide.
+				// - mergeIdents merges same-body keyframes, with the same risk.
+				// - zindex rebases each file's z-index from 1, which breaks the
+				//   stacking order between files.
+				preset: [
+					'advanced',
+					{
+						discardUnused: false,
+						reduceIdents: false,
+						mergeIdents: false,
+						zindex: false,
+					},
+				],
+			}),
 	],
 };
 

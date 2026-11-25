@@ -191,6 +191,15 @@ docs are English.
   `inset-inline-start`): stylelint's `property-disallowed-list` rejects
   `width`/`height`, `top`/`left`… and the per-side `margin`, `padding`, `border`
   and corner `border-*-radius` properties.
+  - stylelint never sees UnoCSS' output, so `uno.config.ts` rewrites it: its
+    `postprocess` turns `px-4`, `h-full`, `top-0`… into logical properties and
+    `min-width` media queries into range syntax.
+  - `tests/unocss.test.ts` generates the utilities `src/` uses and lints them
+    with the stylelint rules about what CSS does (properties, colors, units,
+    media, `!important`). A utility that slips through fails `npm run test`.
+- `uno.config.ts`, `scripts/purgeCss.ts` and `scripts/lightningcss.ts` are
+  shared templates, reused in every frontend project: fix bugs, don't prune
+  them.
 - **No `!important`** (stylelint). The single exception is
   `[data-theme-switching]`, which has a scoped disable comment.
 - **Motion:** animate only `transform`/`translate`/`scale`, `opacity` and
@@ -253,18 +262,19 @@ docs are English.
   `prune-css-vars`, `subset-fonts`, `inline-css`, `csp-headers`. `git-history`
   fetches the full history when the clone is shallow (Cloudflare Pages clones
   one commit), so `getLastModified()` sees the real last content commit instead
-  of the latest one. lightningcss must come after purge-css: `purgeCss.ts`
-  re-runs `postcss-custom-properties`, which would inline the `light-dark()`
-  polyfill switches and pin every color to light. `prune-css-vars` removes the
-  custom properties nothing reads (after `postcss-custom-properties` inlined
-  them), reading every style sheet, page and script together: tokens are
-  declared in one sheet and used in another. `subset-fonts` must come after
-  them: it renames fonts and style sheets by content hash, so any later step
-  that rewrites the CSS would leave a stale hash. `inline-css` then replaces
-  each `/_astro/*.css` link with a `<style>` and deletes the file: the whole CSS
-  is ~10 KB compressed, so a separate request only blocked the first paint.
-  `csp-headers` stays last: it hashes the final HTML, those `<style>` elements
-  included.
+  of the latest one. `purgeCss.ts` only purges: Vite already ran PostCSS, and
+  lightningcss minifies right after. Don't add a PostCSS pass after
+  lightningcss: `postcss-custom-properties` would inline the `light-dark()`
+  polyfill switches and pin every color to light. A step that fails exits
+  non-zero, which stops the build. `prune-css-vars` removes the custom
+  properties nothing reads (after `postcss-custom-properties` inlined them),
+  reading every style sheet, page and script together: tokens are declared in
+  one sheet and used in another. `subset-fonts` must come after them: it renames
+  fonts and style sheets by content hash, so any later step that rewrites the
+  CSS would leave a stale hash. `inline-css` then replaces each `/_astro/*.css`
+  link with a `<style>` and deletes the file: the whole CSS is ~10 KB
+  compressed, so a separate request only blocked the first paint. `csp-headers`
+  stays last: it hashes the final HTML, those `<style>` elements included.
 - The Content-Security-Policy is generated, not written in `public/_headers`.
   `cspHeaders.ts` hashes every inline script and `<style>` in `dist/*.html` (the
   site is static, so no nonces) and adds the header to the `/*` rule of
@@ -304,7 +314,13 @@ docs are English.
 - UnoCSS's preflight is `'on-demand'`: it only declares the `--un-*` variables a
   used utility needs.
 - `postcss-custom-properties({ preserve: false })` inlines `:root` variables.
-  Per-selector token overrides silently disappear.
+  Per-selector token overrides silently disappear. Vite runs PostCSS once per
+  file, so it only reaches the global sheets: CSS Modules don't see `:root` and
+  keep their `var()`.
+- cssnano runs in builds only (`NODE_ENV=production`), with the `advanced`
+  plugins that assume they see the whole site turned off: `discardUnused`,
+  `reduceIdents`, `mergeIdents` and `zindex` work per file, so they deleted font
+  faces, would collide keyframe names and would reorder z-index across files.
 - PurgeCSS only sees static HTML/JS. Attributes set at runtime need a safelist
   entry by **attribute name** (`/^data-theme/`, `'aria-current'`). Patterns like
   `/^\[data-.*\]$/` or `/^@media/` match nothing. `fontFace` is off because it

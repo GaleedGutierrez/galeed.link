@@ -70,6 +70,14 @@ const processCSSFile = (cssFile: string): number | undefined => {
 			targets,
 		});
 
+		// Rules it couldn't parse or lower are dropped or kept as written:
+		// show them instead of shipping the surprise.
+		for (const warning of result.warnings) {
+			console.warn(
+				`⚠️ ${cssFile}:${warning.loc.line}:${warning.loc.column} ${warning.message}`,
+			);
+		}
+
 		logMessage(`✅ LightningCSS completed for ${cssFile}`);
 
 		// Write the optimized CSS back to the file
@@ -85,9 +93,13 @@ const processCSSFile = (cssFile: string): number | undefined => {
 
 		return savings;
 	} catch (error) {
-		if (error instanceof Error) {
-			console.error(`❌ Error processing ${cssFile}:`, error.message);
-		}
+		console.error(
+			`❌ Error processing ${cssFile}:`,
+			error instanceof Error ? error.message : error,
+		);
+		// Keep going with the other files, but fail the build: an
+		// untransformed sheet would otherwise ship without a trace.
+		process.exitCode = 1;
 	}
 };
 
@@ -95,6 +107,7 @@ function runLightningCSS(): void {
 	try {
 		if (!fs.existsSync(distributionPath)) {
 			logMessage('❌ Distribution (dist) folder not found', 'error');
+			process.exitCode = 1;
 
 			return;
 		}
