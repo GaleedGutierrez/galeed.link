@@ -111,5 +111,9 @@ jobs:
           # ESLint and Prettier already lint and format the code (job above).
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_BIOME_LINT: false
+          # textlint runs in the job above (npm run lint-md) with the
+          # project's .textlintrc.json; Super Linter's copy reads only its own
+          # bundled config and rules.
+          VALIDATE_NATURAL_LANGUAGE: false
           # Agent skills are third-party files, installed as-is.
           FILTER_REGEX_EXCLUDE: (^|/)\.(agents|claude)/

@@ -3,6 +3,23 @@
 		"comments": true
 	},
 	"rules": {
-		"terminology": true
+		"terminology": {
+			"terms": [
+				"Astro",
+				"UnoCSS",
+				"Partytown",
+				"Cloudflare",
+				"Lighthouse",
+				"PurgeCSS",
+				"Vitest",
+				"Playwright"
+			],
+			"exclude": [
+				"readme(s)?",
+				"repo\\b",
+				"anti[- ]pattern(s)?",
+				"(?<=(?:\\w+[^.?!])? )internet\\b(?! explorer)"
+			]
+		}
 	}
 }

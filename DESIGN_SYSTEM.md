@@ -189,7 +189,7 @@ Rules:
 
 ### 2.2 Inline `<head>` script (prevents FOUC / theme flicker)
 
-Place it in `src/layouts/Layout/index.astro` **before** any stylesheet link, and mark it `is:inline` so Astro doesn't bundle or defer it.
+Place it in `src/layouts/Layout/index.astro` **before** any style sheet link, and mark it `is:inline` so Astro doesn't bundle or defer it.
 
 ```astro
 ---
@@ -544,8 +544,8 @@ Rules:
    in the built HTML (plus CSS `content` strings, both letter cases and a small
    margin of digits, Spanish letters and punctuation) and subsets every
    Fontsource file with `subset-font`. Variable axes are kept. It renames each
-   font and each stylesheet that references one by content hash, so a cached
-   stylesheet never points at a font a later deploy removed. Measured: the fonts
+   font and each style sheet that references one by content hash, so a cached
+   style sheet never points at a font a later deploy removed. Measured: the fonts
    a visit downloads drop from about 136 KB to about 46 KB.
 
 ---
@@ -780,7 +780,7 @@ Conventions (§9):
 ### 7.4 Social link row
 
 - `<ul class="grid grid-cols-4 gap-2 px-4" role="list">`. Each item is `<a class:list={['flex flex-col items-center justify-center gap-1 min-h-14', styles.link]}>`, with an **icon above a visible label** (GL pattern **[V]**, kept over LK's icon-only row).
-- Module `.link`: `@mixin label` (uppercase 14px, so "LINKEDIN" fits ~85px tiles at 375), `color: var(--text-color-secondary)`, `border-radius: var(--border-radius-05)`.
+- Module `.link`: `@mixin label` (uppercase 14px, so `LINKEDIN` fits ~85px tiles at 375), `color: var(--text-color-secondary)`, `border-radius: var(--border-radius-05)`.
 - Icons: 20px. **Brand marks come from Simple Icons** (`simple-icons:linkedin`, `simple-icons:x`, `simple-icons:github`) via `astro-icon`, because Lucide has deprecated its brand icons. Use `lucide:globe` for "Web". Icons get `aria-hidden="true"` because the label names the link.
 - External links: `target="_blank" rel="me noopener"` plus `<span class="sr-only">(se abre en una pestaña nueva)</span>`.
 - States: hover → `--text-color-accent`. Focus-visible → global ring. Active → `translate: 0 1px`.
@@ -882,7 +882,7 @@ chose it over a thumbnail inside the link card, which shrank the screenshot.
   `font-weight: var(--fw-medium)`, `overflow-wrap: anywhere`).
 - Description: the pull request title, or the project description when there
   is no PR. The tile links to the PR, or to the repo.
-- **Stars/forks only if fetched at build time** (e.g. GitHub API during `astro build`, with a graceful fallback that omits them). Never hard-code numbers that go stale.
+- **Stars/forks only if fetched at build time** (e.g. GitHub API during `astro build`, with a graceful fallback that omits them). Never hardcode numbers that go stale.
 
 ### 7.11 Buttons & CTAs
 
@@ -2433,7 +2433,7 @@ for (const v of ['--box-shadow-shell-light', '--box-shadow-shell-dark'])
 - [ ] All content is visible at first paint with no entrance animations.
 
 **Performance**
-- [ ] Portrait via `<Picture>` (AVIF/WebP), `fetchpriority="high"`, explicit dimensions. Tiles are lazy-loaded with dimensions. CLS < 0.1.
+- [ ] Portrait via `<Picture>` (AVIF/WebP), `fetchpriority="high"`, explicit dimensions. Tiles are lazy loaded with dimensions. CLS < 0.1.
 - [ ] Only Barlow 400 + 700 + 800 latin preloaded, each pointing at the same hashed file the `@font-face` uses (no double download). Fallback face metric-matched, plus `font-size-adjust: from-font` verified by blocking the font files. No Google Fonts CSS request.
 - [ ] No GSAP or animation libraries. JS limited to `theme.ts` and the nav scrollspy.
 
