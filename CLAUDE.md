@@ -56,6 +56,12 @@ docs are English.
 
 - After editing CSS, run `npm run stylelint:fix`. It reorders properties
   (`order/properties-order`) and normalizes notation. That is expected.
+- `npm run lint-md` also runs textlint (`terminology`, `.textlintrc.json`):
+  "style sheet", "hardcode", "lazy loaded", "LinkedIn". The pre-commit hook
+  fixes them silently. `exclude` drops the default terms the docs don't follow
+  ("repo", "README", "Internet", "anti-pattern"); `terms` adds the project's
+  tool names. Wrap a term that must stay as written (UI text in caps) in
+  backticks. Super Linter's textlint is off: it ignores this config.
 - One test file: `npx vitest run tests/tokens.test.ts`.
 - `npm run test:e2e` runs Playwright (`tests/e2e/`) against `npm run preview`,
   so build first. `a11y.spec.ts` runs axe (`@axe-core/playwright`) with the WCAG
