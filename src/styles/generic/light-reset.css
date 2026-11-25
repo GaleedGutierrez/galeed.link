@@ -12,7 +12,6 @@
 	}
 
 	body {
-		min-height: 100dvh;
 		min-block-size: 100dvh;
 		line-height: 1.5;
 	}
@@ -38,9 +37,7 @@
 	canvas,
 	picture {
 		display: block;
-		height: auto;
 		block-size: auto;
-		max-width: 100%;
 		max-inline-size: 100%;
 	}
 

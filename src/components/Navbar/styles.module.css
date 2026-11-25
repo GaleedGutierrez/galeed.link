@@ -15,8 +15,8 @@
 
 	/* py-1 (4px) leaves room for the focus ring: overflow clips outlines. */
 	padding-inline: var(--navbar-fade-start) var(--navbar-fade-end);
-	scroll-padding-inline: var(--navbar-fade-start) var(--navbar-fade-end);
 	overscroll-behavior-inline: contain;
+	scroll-padding-inline: var(--navbar-fade-start) var(--navbar-fade-end);
 	mask-image: linear-gradient(
 		to right,
 		transparent,
@@ -30,8 +30,8 @@
 	scrollbar-width: none;
 
 	@media (hover: hover) and (pointer: fine) {
-		scrollbar-width: thin;
 		scrollbar-color: var(--border-color-strong) transparent;
+		scrollbar-width: thin;
 	}
 }
 
@@ -45,9 +45,9 @@
 		inset-block-end: var(--spacing-2);
 		block-size: var(--border-05);
 		background-color: var(--background-color-indicator);
+		scale: 0 1;
 		transform-origin: left;
 		content: "";
-		scale: 0 1;
 
 		@media (prefers-reduced-motion: no-preference) {
 			transition: scale var(--duration-slow) var(--ease-out);

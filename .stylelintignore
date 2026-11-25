@@ -1,10 +1,7 @@
-**/*_normalize.css
-**/*_normalize.scss
-**/__snapshots__/**
-**/node_modules/**
-**/dist/**
-**/build/**
-**/coverage/**
-**/playwright-report/**
-**/test-results/**
-**/lighthouse-report/**
+# Build and test output (stylelint doesn't read .gitignore; it skips
+# node_modules/ on its own).
+dist/
+lighthouse-report/
+.lighthouseci/
+playwright-report/
+test-results/
