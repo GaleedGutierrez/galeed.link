@@ -108,6 +108,9 @@ docs are English.
 - `src/components/<Name>/index.astro` + `styles.module.css`. `TileList` +
   `TileCard` render every project: freelance, side projects and open source.
   `Education` renders the Formación section (studies and recent courses).
+- `src/icons/`: astro-icon's local collection (`.svg` files, used as
+  `name="file-name"`). Keep the folder even while empty (`.gitkeep`): without it
+  the build warns and skips writing `.astro/icon.d.ts`.
 - `src/layouts/Layout/`: `<head>`, the inline theme script, fonts, the shell.
   SEO tags come from `astro-seo` (canonical, Open Graph, X card) and the JSON-LD
   from `astro-seo-schema`: one `@graph` with the `ProfilePage` → `Person` and
