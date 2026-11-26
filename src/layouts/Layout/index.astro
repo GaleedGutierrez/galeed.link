@@ -9,6 +9,7 @@ import '@styles/index.css';
 import barlow400 from '@fontsource/barlow/files/barlow-latin-400-normal.woff2?url';
 import barlow700 from '@fontsource/barlow/files/barlow-latin-700-normal.woff2?url';
 import barlow800 from '@fontsource/barlow/files/barlow-latin-800-normal.woff2?url';
+import { getLastModified } from '@galeedgutierrez/frontend-config/git';
 import { SEO } from 'astro-seo';
 import { Schema } from 'astro-seo-schema';
 
@@ -22,7 +23,6 @@ import {
 } from '@/data/personalSchema';
 import { THEME_COLORS } from '@/data/themeColors';
 import type { Work } from '@/data/worksSchema';
-import { getLastModified } from '@/utils/lastModified';
 
 import styles from './styles.module.css';
 
@@ -61,7 +61,7 @@ const ogImage = {
 	height: 630,
 };
 const [firstName, ...lastNames] = personalSchema.name.split(' ');
-// Last content commit, not the build time (src/utils/lastModified.ts).
+// Last content commit, not the build time.
 const dateModified = getLastModified().toISOString();
 ---
 

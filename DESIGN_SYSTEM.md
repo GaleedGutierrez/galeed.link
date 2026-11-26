@@ -551,7 +551,7 @@ Rules:
 5. Don't put `font-display: optional` on Barlow. The name in the hero should render in the brand face on first visit.
 6. **Mono fallback too** (added 2026-11-23). `JetBrains Mono Fallback` faces (Capsize: JetBrains Mono over Menlo, Consolas and Courier New) sit after JetBrains Mono in `--font-mono`, so metadata, chips and repo names keep their width and line height during the swap.
 7. **Subset to the page's characters** (added 2026-11-23).
-   `scripts/subsetFonts.ts` runs last in the build: it collects the characters
+   The `subsetFonts` step of `optimize()` (`@galeedgutierrez/frontend-config`) runs late in the build: it collects the characters
    in the built HTML (plus CSS `content` strings, both letter cases and a small
    margin of digits, Spanish letters and punctuation) and subsets every
    Fontsource file with `subset-font`. Variable axes are kept. It renames each
@@ -1081,7 +1081,7 @@ src/
   scripts/theme.ts                                    ← §9.8
   types/design-tokens.ts                              ← §9.9
 uno.config.ts                                         ← §9.7
-postcss.config.js · scripts/purgeCss.ts · scripts/lightningcss.ts   ← §9.1
+postcss.config.js · astro.config.mjs (optimize())   ← §9.1
 ```
 
 ### 9.1 Import order & build pipeline
@@ -1110,7 +1110,7 @@ postcss.config.js · scripts/purgeCss.ts · scripts/lightningcss.ts   ← §9.1
 
 > **[P] Order change:** the repo imports utilities _before_ atoms. ITCSS puts utilities last, so a helper like `.sr-only` or `.skip-link` beats any atom it is combined with (`.skip-link.a-button`, §7.1).
 
-`postcss.config.js` (`mixinsFiles`, and cssnano in builds only, without the `advanced` plugins that need the whole site):
+`postcss.config.js` calls the shared `postcssConfig()` (`@galeedgutierrez/frontend-config/postcss`) with the hub's widths, `{ utopia: { minWidth: 360, maxWidth: 448 } }`. This is the chain it builds (`mixinsFiles`, and cssnano in builds only, without the `advanced` plugins that need the whole site):
 
 ```js
 import cssnano from 'cssnano';
@@ -1153,7 +1153,7 @@ export default config;
 > stacking order between files. In dev, cssnano only slowed HMR and minified
 > what DevTools shows.
 
-`.stylelintrc.json` (**[P] change**): let stylelint know the mixin at-rules, instead of a disable comment in every file that calls one:
+The shared stylelint config, which `.stylelintrc.json` extends (**[P] change**): let stylelint know the mixin at-rules, instead of a disable comment in every file that calls one:
 
 ```json
 "at-rule-no-unknown": [true, { "ignoreAtRules": ["define-mixin", "mixin"] }]
@@ -1163,23 +1163,22 @@ export default config;
 >
 > **[P] Why `mixinsFiles`:** without it, postcss-mixins only knows the mixins defined in the file being processed. That works for `index.css`, which `@import`s `tools/`. Each `styles.module.css` is processed on its own, so a `@mixin heading-xl` there would not exist. Check the option name against your installed `postcss-mixins` version.
 
-`package.json` build order (the CSS steps; `CLAUDE.md` explains the rest):
+Build order (`CLAUDE.md` explains each step): `npm run build` is `galeed-git-history && astro build`, and the `optimize()` integration, last in `astro.config.mjs`, runs `purgeCss`, `lightningCss`, `pruneCssVariables`, `subsetFonts`, `inlineCss` and `cspHeaders` after the build.
 
-```json
-"build": "npm run git-history && astro build && npm run purge-css && npm run lightningcss && npm run prune-css-vars && npm run subset-fonts && npm run inline-css && npm run csp-headers"
-```
+PurgeCSS safelist (**[P] change**), in `astro.config.mjs`. These two entries join the shared safelist:
 
-`scripts/purgeCss.ts` safelist (**[P] change**). Keep your list and add these two entries:
-
-```ts
-safelist: {
-  standard: [
-    /^data-theme/,   // data-theme, -pref, -switching, -toggle: set at runtime by theme.ts
-    'aria-current',  // set by the section nav scrollspy (§7.5)
-    // …your existing entries
-  ],
+```js
+optimize({
+  purgeCss: {
+    safelist: {
+      standard: [
+        /^data-theme/,   // data-theme, -pref, -switching, -toggle: set at runtime by theme.ts
+        'aria-current',  // set by the section nav scrollspy (§7.5)
+      ],
+    },
+  },
   // …
-},
+}),
 ```
 
 **Verified behavior of this pipeline:**
@@ -1196,7 +1195,7 @@ safelist: {
   6 KB less CSS before compression). cssnano's autoprefixer reads the same
   field.
   - The polyfill only returns if the targets include a browser without `light-dark()` (Safari/iOS 16.5–17.4 was the reason under the old `>= 0.25%, not dead, supports css-nesting` query). It then keys its switches off the `color-scheme` declarations in the style sheet, not inline `style.colorScheme`, which is one reason the `:root[data-theme]` rules stay in CSS (§9.2).
-- **No PostCSS pass after lightningcss:** `purgeCss.ts` only purges. Vite
+- **No PostCSS pass after lightningcss:** the `purgeCss` step only purges. Vite
   already ran PostCSS, and lightningcss minifies right after. A PostCSS pass
   after lightningcss would let `postcss-custom-properties` see
   `--lightningcss-light: initial` and `--lightningcss-dark:` (empty) in `:root`
@@ -1204,7 +1203,7 @@ safelist: {
   would be **always light** in every browser. Reproduced with
   `postcss-custom-properties` 15, back when `purgeCss.ts` re-ran the PostCSS
   chain and the build ran lightningcss first.
-- **A failed step fails the build:** `purgeCss.ts` and `lightningcss.ts` keep going with the other files but exit non-zero, and lightningcss prints its warnings. Before, a failed file only logged an error and shipped unprocessed.
+- **A failed step fails the build:** `purgeCss` and `lightningCss` keep going with the other files but throw at the end, and lightningcss prints its warnings. Before, a failed file only logged an error and shipped unprocessed.
 - **PurgeCSS 7.0.2, run with the project's own options:**
   - **It removes the runtime-only theme selectors** (`:root[data-theme="light"]`, `:root[data-theme="dark"]`, the dark shell shadow, the toggle's `[data-when="light"]` rule), because the static HTML never contains `data-theme`.
   - **The existing safelist patterns protect nothing here.** PurgeCSS compares
@@ -1214,7 +1213,7 @@ safelist: {
     aren't selectors. Rules inside `@media` are purged normally. Tested:
     `@media (…) { .unused {…} }` and `[data-x="1"]` were both removed.
   - **Fix:** the two safelist entries above. As belt and braces, `theme.ts` and the head script write `setAttribute('data-theme', …)` (§2.2, §9.8), which puts the literal token into the built HTML/JS. Both fixes verified.
-  - `variables` stays `false`: PurgeCSS read each sheet on its own and deleted tokens that CSS Modules still used (the sticky nav's `z-index`, motion tokens, the shell's radius and shadow). `scripts/pruneCssVars.ts` drops the unused custom properties instead, reading every sheet, page and script together.
+  - `variables` stays `false`: PurgeCSS read each sheet on its own and deleted tokens that CSS Modules still used (the sticky nav's `z-index`, motion tokens, the shell's radius and shadow). The `pruneCssVariables` step drops the unused custom properties instead, reading every sheet, page and script together.
 - **Browser support (project policy):** `light-dark()` is used **without a hand-written fallback**. The guide rates it Baseline _Newly available_ (since 2024-05-13: Chrome/Edge 123, Firefox 120, Safari 17.5). The browserslist targets (Baseline Widely available, above) all support it, so it ships native. `oklch()` is Baseline since 2023.
 
 **Issues found in the current `src/styles` [V], fixed by this system:**
