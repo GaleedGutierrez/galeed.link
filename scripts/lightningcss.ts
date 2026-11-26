@@ -100,6 +100,8 @@ const processCSSFile = (cssFile: string): number | undefined => {
 		// Keep going with the other files, but fail the build: an
 		// untransformed sheet would otherwise ship without a trace.
 		process.exitCode = 1;
+
+		return undefined;
 	}
 };
 
@@ -161,7 +163,9 @@ function runLightningCSS(): void {
 }
 
 // Run the LightningCSS function if this module is the entry point
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+const entryPoint = process.argv[1];
+
+if (entryPoint && import.meta.url === pathToFileURL(entryPoint).href) {
 	runLightningCSS();
 }
 

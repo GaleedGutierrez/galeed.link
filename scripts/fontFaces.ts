@@ -29,14 +29,14 @@ export const parseUnicodeRange = (value: string): CodePointRange[] =>
 		const isValid =
 			parts.length === 2
 				? parts.every((part) => /^[\da-f]{1,6}$/i.test(part))
-				: parts.length === 1 && /^[\da-f?]{1,6}$/i.test(parts[0]);
+				: parts.length === 1 && /^[\da-f?]{1,6}$/i.test(parts[0] ?? '');
 
 		if (!isValid) {
 			return [];
 		}
 
 		// A single code point is its own range; ? spans 0 to f.
-		const [start, end = start] = parts;
+		const [start = '', end = start] = parts;
 
 		return [
 			[

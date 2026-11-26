@@ -8,7 +8,7 @@ import { parse } from 'yaml';
 // Nothing else ties the files together: a renamed option would silently stop
 // labeling issues.
 
-const AREA_FORMS = ['bug_report', 'feature_request'];
+const AREA_FORMS = ['bug_report', 'feature_request'] as const;
 const ALL_FORMS = [...AREA_FORMS, 'question'];
 /** The option that maps to no label on purpose. */
 const UNLABELED = 'Not sure';
