@@ -57,15 +57,17 @@ docs are English.
 - After editing CSS, run `npm run stylelint:fix`. It reorders properties
   (`order/properties-order`) and normalizes notation. That is expected. A
   property missing from the order list goes to the bottom, alphabetically: add
-  it to its group in `.stylelintrc.json` instead. A disable comment needs a
-  `-- reason` and must still be needed, or the lint fails.
-- `npm run lint-md` also runs textlint (`terminology`, `.textlintrc.json`):
+  it to its group in the shared config (see [Shared configs](#shared-configs)).
+  A disable comment needs a `-- reason` and must still be needed, or the lint
+  fails.
+- `npm run lint-md` also runs textlint (`terminology`, `.textlintrc.cjs`):
   "style sheet", "hardcode", "lazy loaded", "LinkedIn". The pre-commit hook
-  fixes them silently. `exclude` drops the default terms the docs don't follow
-  ("repo", "README", "Internet", "anti-pattern"); `terms` adds the project's
-  tool names. Wrap a term that must stay as written (UI text in caps) in
-  backticks. Super Linter's textlint is off: it ignores this config.
-- markdownlint-cli2 takes its globs from `.markdownlint-cli2.jsonc` (and skips
+  fixes them silently. The shared config drops the default terms the docs don't
+  follow ("repo", "README", "Internet", "anti-pattern") and adds the tool names;
+  `textlint({ terms })` adds more. Wrap a term that must stay as written (UI
+  text in caps) in backticks. Super Linter's textlint is off: it ignores this
+  config.
+- markdownlint-cli2 takes its globs from `.markdownlint-cli2.mjs` (and skips
   what `.gitignore` lists): run it with no file arguments. Globs in npm scripts
   stay quoted: CI runs them with `sh`, which reads an unquoted `**` as `*`.
   Prettier skips `DESIGN_SYSTEM.md`, so its lines aren't wrapped: a
@@ -73,8 +75,9 @@ docs are English.
   Super Linter's markdownlint is off: it reads its bundled template, not this
   config.
 - Prettier takes its indentation, print width and quotes from `.editorconfig`
-  (`indent_style`, `indent_size`, `max_line_length`, `quote_type`), not from
-  `.prettierrc.json`: change them there. shfmt reads it too.
+  (`indent_style`, `indent_size`, `max_line_length`, `quote_type`), not from its
+  shared config (the `prettier` key of `package.json`): change them there. shfmt
+  reads it too.
 - Prettier runs on its own (`npm run prettier`, and after ESLint and stylelint
   in lint-staged), not inside them: ESLint only loads `eslint-config-prettier`
   to turn off the rules that fight it, and stylelint 18 has no stylistic rules.
@@ -94,15 +97,15 @@ docs are English.
   (`--blocked-url-patterns`), which skews the scores; add a pattern for any
   other antivirus web shield that injects one.
 - `npx lhci autorun` is the CI check: it serves `dist/` and fails below the
-  limits in `lighthouserc.json`: performance 0.9, the other categories 1 (the
-  404 skips SEO, it is `noindex`), LCP 2.5 s, CLS 0.1, TBT 200 ms and 500 KB in
-  all. Each limit takes the median of the 3 runs: the default, the best run,
-  passed a run at 0.79. The `lighthouse:no-pwa` preset also asserts every audit
-  on its own, not only the category scores (only the home asserts
-  `is-crawlable`). It blocks Kaspersky and the analytics, but not Partytown's
-  worker, which still loads `gtag` (the opt-out flag keeps CI out of Google
-  Analytics). Locally, Kaspersky's blocked script still fails `is-on-https`
-  (best practices): only the CI run is conclusive.
+  limits in `lighthouserc.mjs` (the shared `lighthouse()` defaults): performance
+  0.9, the other categories 1 (the 404 skips SEO, it is `noindex`), LCP 2.5 s,
+  CLS 0.1, TBT 200 ms and 500 KB in all. Each limit takes the median of the 3
+  runs: the default, the best run, passed a run at 0.79. The `lighthouse:no-pwa`
+  preset also asserts every audit on its own, not only the category scores (only
+  the home asserts `is-crawlable`). It blocks Kaspersky and the analytics, but
+  not Partytown's worker, which still loads `gtag` (the opt-out flag keeps CI
+  out of Google Analytics). Locally, Kaspersky's blocked script still fails
+  `is-on-https` (best practices): only the CI run is conclusive.
 
 ## Structure
 
@@ -157,11 +160,35 @@ docs are English.
 - `src/types/designTokens.ts`: token lists and card models.
   `src/scripts/theme.ts`: theme logic. `tests/`: Vitest (token invariants from
   §9.9).
-- `scripts/`: pre-build `gitHistory.ts`; post-build `purgeCss.ts`,
-  `lightningcss.ts`, `pruneCssVars.ts`, `subsetFonts.ts`, `inlineCss.ts` and
-  `cspHeaders.ts` (policy and hash helpers in `csp.ts`).
-- Path aliases in use: `@/*`, `@components/*`, `@layouts/*`, `@styles/*`,
-  `@images/*`.
+- No `scripts/`: the pre-build step is the `galeed-git-history` bin and the
+  post-build steps run from `optimize()`, the last integration in
+  `astro.config.mjs`, which holds this site's options (PurgeCSS safelist, pinned
+  font axes, CSP sources). See [Shared configs](#shared-configs).
+- Path aliases in use (from `@galeedgutierrez/tsconfig/astro.json`): `@/*`,
+  `@components/*`, `@layouts/*`, `@styles/*`, `@images/*`.
+
+## Shared configs
+
+The tooling comes from three packages, published from the `frontend-config`
+monorepo (`D:\Yo\proyectos-personales\frontend-config`, GitHub
+`GaleedGutierrez/frontend-config`):
+
+- `@galeedgutierrez/tsconfig`: `tsconfig.json` extends `astro.json`.
+- `@galeedgutierrez/eslint-config`: `eslint.config.js` calls `galeed()`.
+- `@galeedgutierrez/frontend-config`: stylelint (`.stylelintrc.json` extends it
+  and adds the breakpoints), Prettier, commitlint, PostCSS (`postcssConfig` with
+  this site's Utopia widths), UnoCSS (`unoConfig` with the breakpoints),
+  markdownlint, textlint, Lighthouse CI, lint-staged, `getLastModified()` and
+  the `optimize()` integration (the post-build steps).
+
+They are templates reused in every project. A bug or a rule change belongs in
+`frontend-config`, with a changeset, not in a local override here. Only this
+site's values (breakpoints, Utopia widths, safelist, CSP sources, pinned axes)
+live in this repository.
+
+- Folder names are camelCase (`unicorn/filename-case`), checked below `src/` and
+  `tests/`. Pages under `src/pages/` are routes, so their files are kebab-case
+  and their folders unchecked.
 
 ## CSS rules
 
@@ -194,21 +221,18 @@ docs are English.
   kebab-case keyframes.
 - **UnoCSS is layout only:** display, flex/grid, gap, spacing, sizing, position,
   overflow, aspect-ratio. Never color, type, border, radius, shadow or
-  transition utilities: `uno.config.ts` blocklists them, so they generate
-  nothing.
+  transition utilities: the shared `unoConfig()` blocklists them, so they
+  generate nothing.
 - **Logical properties only** (`inline-size`, `margin-block-start`,
   `inset-inline-start`): stylelint's `property-disallowed-list` rejects
   `width`/`height`, `top`/`left`… and the per-side `margin`, `padding`, `border`
   and corner `border-*-radius` properties.
-  - stylelint never sees UnoCSS' output, so `uno.config.ts` rewrites it: its
+  - stylelint never sees UnoCSS' output, so `unoConfig()` rewrites it: its
     `postprocess` turns `px-4`, `h-full`, `top-0`… into logical properties and
     `min-width` media queries into range syntax.
   - `tests/unocss.test.ts` generates the utilities `src/` uses and lints them
     with the stylelint rules about what CSS does (properties, colors, units,
     media, `!important`). A utility that slips through fails `npm run test`.
-- `uno.config.ts`, `scripts/purgeCss.ts` and `scripts/lightningcss.ts` are
-  shared templates, reused in every frontend project: fix bugs, don't prune
-  them.
 - **No `!important`** (stylelint). The single exception is
   `[data-theme-switching]`, which has a scoped disable comment.
 - **Motion:** animate only `transform`/`translate`/`scale`, `opacity` and
@@ -220,10 +244,10 @@ docs are English.
 
 ## Astro and ESLint gotchas
 
-- `eslint.config.js` is a shared template, reused in frontend, backend and CLI
-  projects. The React block, the class-ordering rules and the extra globals and
-  folders are deliberate even where this repo doesn't use them: fix bugs, don't
-  prune them.
+- The ESLint config (`galeed()`) is a shared template, reused in frontend,
+  backend and CLI projects. The React block, the class-ordering rules and the
+  extra globals and folders are deliberate even where this repo doesn't use
+  them: fix bugs in `frontend-config`, don't prune them.
 - TS files get `strictTypeChecked` + `stylisticTypeChecked`. A disable comment
   that no longer suppresses anything fails the lint, and each one carries a
   `-- reason`.
@@ -267,54 +291,61 @@ docs are English.
 
 ## Build pipeline gotchas
 
-- Build order is `git-history`, `astro build`, `purge-css`, `lightningcss`,
-  `prune-css-vars`, `subset-fonts`, `inline-css`, `csp-headers`. `git-history`
+- `npm run build` is `galeed-git-history && astro build`. `galeed-git-history`
   fetches the full history when the clone is shallow (Cloudflare Pages clones
   one commit), so `getLastModified()` sees the real last content commit instead
-  of the latest one. `purgeCss.ts` only purges: Vite already ran PostCSS, and
-  lightningcss minifies right after. Don't add a PostCSS pass after
-  lightningcss: `postcss-custom-properties` would inline the `light-dark()`
-  polyfill switches and pin every color to light. A step that fails exits
-  non-zero, which stops the build. `prune-css-vars` removes the custom
-  properties nothing reads (after `postcss-custom-properties` inlined them),
-  reading every style sheet, page and script together: tokens are declared in
-  one sheet and used in another. `subset-fonts` must come after them: it renames
-  fonts and style sheets by content hash, so any later step that rewrites the
-  CSS would leave a stale hash. `inline-css` then replaces each `/_astro/*.css`
-  link with a `<style>` and deletes the file: the whole CSS is ~10 KB
-  compressed, so a separate request only blocked the first paint. `csp-headers`
-  stays last: it hashes the final HTML, those `<style>` elements included.
+  of the latest one. After the build, `optimize()` runs its steps in this order:
+  `purgeCss`, `lightningCss`, `pruneCssVariables`, `subsetFonts`, `inlineCss`,
+  `cspHeaders`. Keep it the last integration: it needs the others' output.
+  - `purgeCss` only purges: Vite already ran PostCSS, and lightningcss minifies
+    right after. Don't add a PostCSS pass after lightningcss:
+    `postcss-custom-properties` would inline the `light-dark()` polyfill
+    switches and pin every color to light.
+  - A step that fails throws, which stops the build.
+  - `pruneCssVariables` removes the custom properties nothing reads (after
+    `postcss-custom-properties` inlined them), reading every style sheet, page
+    and script together: tokens are declared in one sheet and used in another.
+  - `subsetFonts` must come after them: it renames fonts and style sheets by
+    content hash, so any later step that rewrites the CSS would leave a stale
+    hash.
+  - `inlineCss` then replaces each `/_astro/*.css` link with a `<style>` and
+    deletes the file: the whole CSS is ~10 KB compressed, so a separate request
+    only blocked the first paint.
+  - `cspHeaders` stays last: it hashes the final HTML, those `<style>` elements
+    included.
 - The Content-Security-Policy is generated, not written in `public/_headers`.
-  `cspHeaders.ts` hashes every inline script and `<style>` in `dist/*.html` (the
-  site is static, so no nonces) and adds the header to the `/*` rule of
-  `dist/_headers`. Never add a second `/*` rule: on Cloudflare it replaces the
-  first one, which dropped HSTS and the other headers. Editing an inline script
-  needs no manual hash update. Never add `'unsafe-inline'` or `'unsafe-eval'` to
-  the page policy: `tests/csp.test.ts` checks it.
-  - It ships as `Content-Security-Policy-Report-Only`; enforcing it is the
-    `CSP_HEADER` constant in `csp.ts`.
+  The `cspHeaders` step hashes every inline script and `<style>` in
+  `dist/*.html` (the site is static, so no nonces) and adds the header to the
+  `/*` rule of `dist/_headers`. Never add a second `/*` rule: on Cloudflare it
+  replaces the first one, which dropped HSTS and the other headers. Editing an
+  inline script needs no manual hash update. The page policy rejects
+  `'unsafe-inline'` and `'unsafe-eval'`: the step throws on either.
+  - It ships as `Content-Security-Policy-Report-Only`; enforcing it is
+    `cspHeaders: { reportOnly: false }` in `astro.config.mjs`.
   - Cloudflare joins every matching `_headers` rule, so `/*` headers reach all
     files. A rule that replaces one must detach it first (`! Header`).
   - Check live headers with a cache-busting query (`?v=1`): the edge cache keeps
     serving a file's old headers for hours after a deploy.
-  - `/~partytown/*` gets its own `PARTYTOWN_POLICY` and
+  - `/~partytown/*` gets its own policy (`cspHeaders.partytown`) and
     `X-Frame-Options: SAMEORIGIN`: Partytown's sandbox is framed by the page and
     runs gtag through an inline script, eval and blob workers, so the
     `'unsafe-*'` exceptions live only there.
   - Cloudflare Web Analytics injects its beacon at the edge, so its origins are
-    listed in the page policy by hand.
+    listed in `cspHeaders.sources` by hand.
   - `astro preview` ignores `_headers`. Test the policy in a browser by adding
     the header to the preview's responses (e.g. a Playwright route), or on a
     Cloudflare preview deploy.
-- `subsetFonts.ts` keeps only the characters in the built HTML (plus CSS
-  `content`, both cases and a small margin). Text a client script inserts at
-  runtime isn't in the HTML: add its characters to `SAFETY_CHARACTERS`.
+- `subsetFonts` keeps only the characters in the built HTML (plus CSS `content`,
+  both cases and a small margin). Text a client script inserts at runtime isn't
+  in the HTML: add its characters with `subsetFonts.safetyCharacters`, which
+  replaces the default, so start from `DEFAULT_SAFETY_CHARACTERS`
+  (`@galeedgutierrez/frontend-config/steps`).
   - It also deletes each `@font-face` rule (and its file) whose `unicode-range`
-    covers none of those characters, and the WOFF fallbacks (`fontFaces.ts`). A
-    character from a new script brings its subset back.
-  - `PINNED_AXES` pins JetBrains Mono to weight 500, the only one the site uses
-    (half the bytes). Using the mono at another weight needs that weight there,
-    or it renders at 500.
+    covers none of those characters, and the WOFF fallbacks. A character from a
+    new script brings its subset back.
+  - `subsetFonts.pinnedAxes` pins JetBrains Mono to weight 500, the only one the
+    site uses (half the bytes). Using the mono at another weight needs that
+    weight there, or it renders at 500.
 - Browser targets: the `browserslist` field of `package.json`
   (`baseline widely available with downstream`), read by lightningcss and
   cssnano's autoprefixer. All of them support `light-dark()`, `oklch()` and
@@ -335,12 +366,13 @@ docs are English.
   `/^\[data-.*\]$/` or `/^@media/` match nothing. `fontFace` is off because it
   dropped the `Barlow Fallback` face. `variables` is off because it deleted
   tokens still in use (the sticky nav's `z-index`, motion tokens, the shell's
-  radius and shadow), so `var()` resolved to nothing.
-- `purgeCss.ts` has a custom `defaultExtractor`. The default one split UnoCSS
+  radius and shadow), so `var()` resolved to nothing. Add an entry with
+  `purgeCss.safelist`: it joins the shared one.
+- `purgeCss` has a custom `defaultExtractor`. The default one split UnoCSS
   arbitrary values (`grid-cols-[1fr_1px_1fr]`, `aspect-[5/4]`) at the brackets,
   so they were silently purged. After adding an arbitrary class, check it
   survives in `dist/_astro/*.css`.
-- `purgeCss.ts` passes the CSS to PurgeCSS as `raw` text. PurgeCSS 9 globs `css`
+- `purgeCss` passes the CSS to PurgeCSS as `raw` text. PurgeCSS 9 globs `css`
   paths, and an absolute Windows path (backslashes) matched nothing, so the step
   silently purged nothing.
 - `@galeedgutierrez/shared-assets` is in `vite.resolve.noExternal`: it imports
@@ -391,7 +423,9 @@ docs are English.
     whole tree. The full run reads unstaged and untracked files too, so a stray
     file that fails a linter blocks the commit.
   - pre-push: commitlint over every commit the push sends (what is not on
-    `origin/main` yet, for a new branch), then `npm run verify`.
+    `origin/main` yet, for a new branch), then `npm run verify`. Each check ends
+    with `|| exit 1`: a hook's status is its last command's, so a failed
+    commitlint used to pass whenever verify did.
   - The hooks are POSIX `sh` with a shebang and the executable bit: Super Linter
     finds them by the shebang and runs ShellCheck and shfmt (CI only). A new
     hook needs both (`git update-index --chmod=+x`).

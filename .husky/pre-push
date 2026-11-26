@@ -8,16 +8,32 @@ while read -r local_ref local_sha _ remote_sha; do
 	# Deleting a remote branch sends no commits.
 	[ "$local_sha" = "$zero" ] && continue
 
+	root=$(git rev-list --max-parents=0 "$local_sha" | tail -n 1)
+
 	# A new branch, or a remote tip this clone doesn't have: lint what isn't on
-	# main yet.
-	if [ "$remote_sha" = "$zero" ] || ! git cat-file -e "$remote_sha" 2>/dev/null; then
+	# main yet. The first push of a new repository has no main: every commit.
+	if [ "$remote_sha" != "$zero" ] && git cat-file -e "$remote_sha" 2>/dev/null; then
+		from=$remote_sha
+	elif git rev-parse --verify --quiet origin/main >/dev/null; then
 		from=$(git merge-base origin/main "$local_sha")
 	else
-		from=$remote_sha
+		from=$root
 	fi
 
 	echo "commitlint: $local_ref ($from..$local_sha)"
-	npx --no -- commitlint --from "$from" --to "$local_sha"
+
+	# Each check exits on failure: the hook's status is its last command's,
+	# so a failed commitlint used to pass whenever npm run verify did.
+
+	# --from excludes its own commit, so the root commit is linted on its own.
+	if [ "$from" = "$root" ] && [ "$remote_sha" = "$zero" ]; then
+		git log -1 --format=%B "$root" | npx --no -- commitlint || exit 1
+	fi
+
+	# Nothing new (a branch at main's tip): commitlint rejects from = to.
+	if [ "$from" != "$local_sha" ]; then
+		npx --no -- commitlint --from "$from" --to "$local_sha" || exit 1
+	fi
 done
 
 npm run verify
