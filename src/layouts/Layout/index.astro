@@ -20,6 +20,7 @@ import {
 	SITE_URL,
 	WEBSITE_ID,
 } from '@/data/personalSchema';
+import { THEME_COLORS } from '@/data/themeColors';
 import type { Work } from '@/data/worksSchema';
 import { getLastModified } from '@/utils/lastModified';
 
@@ -82,12 +83,12 @@ const dateModified = getLastModified().toISOString();
 			name="color-scheme"
 		/>
 		<meta
-			content="#ede6d8"
+			content={THEME_COLORS.light}
 			media="(prefers-color-scheme: light)"
 			name="theme-color"
 		/>
 		<meta
-			content="#141414"
+			content={THEME_COLORS.dark}
 			media="(prefers-color-scheme: dark)"
 			name="theme-color"
 		/>

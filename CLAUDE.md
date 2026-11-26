@@ -134,6 +134,15 @@ docs are English.
   `/llms.txt`. Keep the canonical name spelling "Galeed Gutierrez".
 - `src/pages/llms.txt.ts`: `/llms.txt` for AI answer engines (GEO), built from
   the same data as the page.
+- `src/pages/site.webmanifest.ts`: the web manifest, built from `personalSchema`
+  and `THEME_COLORS` (no plugin). Not a PWA: no `display`. `start_url` and `id`
+  pin it to the home.
+  - `src/data/themeColors.ts` holds the two page backgrounds in hex, for the
+    manifest and the `theme-color` metas. `tests/tokens.test.ts` checks them
+    against `--bone-100` and `--charcoal-950`.
+  - `public/icon-maskable-512.png` is the favicon's dark version with the ring
+    inside the central 80% (Android's mask safe zone). Regenerate it with the
+    other icons when the mark changes.
 - `public/og.jpg`: 1200×630 link-preview card, rendered from the site's own
   tokens and fonts. Regenerate it when the name, role or portrait change.
 - `src/pages/index.astro`: builds the section list. A section without data is
