@@ -1,7 +1,9 @@
 import { readFileSync } from 'node:fs';
 
+import { transform } from 'lightningcss';
 import { describe, expect, it } from 'vitest';
 
+import { THEME_COLORS } from '@/data/themeColors';
 import { COLOR_TOKENS, SHARED_COLOR_TOKENS } from '@/types/designTokens';
 
 /**
@@ -44,6 +46,24 @@ describe('color tokens (DESIGN_SYSTEM.md §9.9)', () => {
 		expect(colors).not.toMatch(
 			/\[data-theme[^\]]*\][^{]*\{[^}]*--(background|text|border|outline)-color-/,
 		);
+	});
+
+	// The theme-color metas and the web manifest need hex, so they can't read
+	// the tokens. lightningcss lowers oklch() to its sRGB hex for old targets.
+	it.each([
+		['light', 'bone-100', THEME_COLORS.light],
+		['dark', 'charcoal-950', THEME_COLORS.dark],
+	])('THEME_COLORS.%s is --%s in hex', (_theme, token, hex) => {
+		const oklch = declarationOf(token).exec(colors)?.[1]?.trim() ?? '';
+		const { code } = transform({
+			filename: 'token.css',
+			code: Buffer.from(`a{color:${oklch}}`),
+			minify: true,
+			// Chrome 80 (major << 16) has no oklch(), so the hex comes first.
+			targets: { chrome: 80 << 16 },
+		});
+
+		expect(code.toString()).toContain(`color:${hex};`);
 	});
 
 	it('keeps both shell shadow values', () => {
