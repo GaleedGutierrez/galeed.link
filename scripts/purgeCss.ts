@@ -4,11 +4,7 @@ import fs, { globSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-import postcss from 'postcss';
-import type postcssrc from 'postcss-load-config';
 import { PurgeCSS, type UserDefinedOptions } from 'purgecss';
-
-import postcssConfig from '../postcss.config.js';
 
 const distributionPath = path.join(import.meta.dirname, '..', 'dist');
 const purgeCssConfig: Omit<UserDefinedOptions, 'css'> = {
@@ -230,42 +226,6 @@ function logMessage(message: string, level = 'info'): void {
 	console.info(message);
 }
 
-// Helper function to filter valid PostCSS plugins
-function getValidPostCSSPlugins(
-	plugins: postcssrc.Config['plugins'],
-): postcss.AcceptedPlugin[] {
-	if (!Array.isArray(plugins)) {
-		return [];
-	}
-
-	const validPlugins: postcss.AcceptedPlugin[] = [];
-
-	for (const plugin of plugins) {
-		// Skip disabled plugins
-		if (plugin === false) {
-			continue;
-		}
-
-		// Handle different plugin formats from postcss-load-config
-		if (typeof plugin === 'function') {
-			// Direct plugin function
-			validPlugins.push(plugin);
-		} else if (
-			typeof plugin === 'object' &&
-			// A plugin instance (postcss), a processor (process) or the result
-			// of a plugin creator (pluginName).
-			(('postcss' in plugin && typeof plugin.postcss === 'function') ||
-				('process' in plugin && typeof plugin.process === 'function') ||
-				('pluginName' in plugin &&
-					typeof plugin.pluginName === 'string'))
-		) {
-			validPlugins.push(plugin as postcss.AcceptedPlugin);
-		}
-	}
-
-	return validPlugins;
-}
-
 const processCSSFile = async (cssFile: string): Promise<number | undefined> => {
 	const cssFilePath = path.join(distributionPath, cssFile);
 	const beforeSize = calculateFileSize(cssFilePath);
@@ -288,12 +248,10 @@ const processCSSFile = async (cssFile: string): Promise<number | undefined> => {
 
 		logMessage(`✅ PurgeCSS completed for ${cssFile}`);
 
-		const validPlugins = getValidPostCSSPlugins(postcssConfig.plugins);
-		const result = await postcss(validPlugins).process(purged.css, {
-			from: undefined,
-		});
-
-		fs.writeFileSync(cssFilePath, result.css);
+		// No second PostCSS pass: Vite already ran postcss.config.js, and
+		// lightningcss minifies after this step. Re-running it saved 4 bytes
+		// and re-applied postcss-custom-properties to lightningcss' output.
+		fs.writeFileSync(cssFilePath, purged.css);
 
 		const afterSize = calculateFileSize(cssFilePath);
 		const afterBytes = fs.statSync(cssFilePath).size;
@@ -305,9 +263,13 @@ const processCSSFile = async (cssFile: string): Promise<number | undefined> => {
 
 		return savings;
 	} catch (error) {
-		if (error instanceof Error) {
-			console.error(`❌ Error processing ${cssFile}:`, error.message);
-		}
+		console.error(
+			`❌ Error processing ${cssFile}:`,
+			error instanceof Error ? error.message : error,
+		);
+		// Keep going with the other files, but fail the build: an unpurged
+		// sheet would otherwise ship without a trace.
+		process.exitCode = 1;
 	}
 };
 
@@ -315,6 +277,7 @@ async function runPurgeCSS(): Promise<void> {
 	try {
 		if (!fs.existsSync(distributionPath)) {
 			logMessage('❌ Distribution (dist) folder not found', 'error');
+			process.exitCode = 1;
 
 			return;
 		}

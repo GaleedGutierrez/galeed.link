@@ -1,6 +1,11 @@
 /* eslint-disable security/detect-object-injection -- the keys come from UnoCSS rule matches, checked against fixed maps */
 /* eslint-disable @typescript-eslint/explicit-function-return-type -- UnoCSS types each rule and preflight callback */
-import { defineConfig, presetWind3, transformerVariantGroup } from 'unocss';
+import {
+	defineConfig,
+	type Postprocessor,
+	presetWind3,
+	transformerVariantGroup,
+} from 'unocss';
 
 /**
  * UnoCSS is for LAYOUT ONLY: display, flex/grid, gap, padding/margin, sizing,
@@ -15,13 +20,87 @@ const VISUAL_UTILITIES = [
 	/(^|:)(uppercase|lowercase|capitalize|italic|truncate|antialiased)$/,
 ];
 
+/**
+ * Not utilities: the extractor reads the `<h1>`…`<h6>` tags as Wind's `h1`
+ * shorthand (`h-1`) and generated `.h2 { height: .5rem }`.
+ */
+const HEADING_TAGS = /^h[1-6]$/;
+
+const SIDES = {
+	top: 'block-start',
+	bottom: 'block-end',
+	left: 'inline-start',
+	right: 'inline-end',
+} as const;
+const CORNERS = {
+	'top-left': 'start-start',
+	'top-right': 'start-end',
+	'bottom-left': 'end-start',
+	'bottom-right': 'end-end',
+} as const;
+
+/** Physical property → its logical twin, for horizontal-tb writing modes. */
+const LOGICAL_PROPERTIES: Record<string, string> = Object.fromEntries<string>([
+	['width', 'inline-size'],
+	['height', 'block-size'],
+	['min-width', 'min-inline-size'],
+	['max-width', 'max-inline-size'],
+	['min-height', 'min-block-size'],
+	['max-height', 'max-block-size'],
+	...Object.entries(SIDES).flatMap(([side, logical]): [string, string][] => [
+		[side, `inset-${logical}`],
+		...['margin', 'padding', 'scroll-margin', 'scroll-padding'].map(
+			(property): [string, string] => [
+				`${property}-${side}`,
+				`${property}-${logical}`,
+			],
+		),
+		...['', '-width', '-style', '-color'].map(
+			(suffix): [string, string] => [
+				`border-${side}${suffix}`,
+				`border-${logical}${suffix}`,
+			],
+		),
+	]),
+	...Object.entries(CORNERS).map(([corner, logical]): [string, string] => [
+		`border-${corner}-radius`,
+		`border-${logical}-radius`,
+	]),
+]);
+
+/** `(min-width: 40em)` → `(width >= 40em)`, likewise max- and height. */
+const toRangeSyntax = (query: string) =>
+	query.replaceAll(
+		/\((min|max)-(width|height):\s*([^)]+)\)/g,
+		(_, bound: string, feature: string, value: string) =>
+			`(${feature} ${bound === 'min' ? '>=' : '<='} ${value.trim()})`,
+	);
+
+/**
+ * Rewrites every utility to logical properties and range media queries, the
+ * same rules stylelint enforces on hand-written CSS (it never sees UnoCSS'
+ * output; tests/unocss.test.ts lints it). Drop it from `postprocess` in a
+ * project that wants Wind's physical output.
+ * @param utility - A generated utility, rewritten in place.
+ */
+const toLogical: Postprocessor = (utility) => {
+	utility.entries = utility.entries.map(([property, value]) => [
+		LOGICAL_PROPERTIES[property] ?? property,
+		value,
+	]);
+	utility.parent = utility.parent?.startsWith('@media')
+		? toRangeSyntax(utility.parent)
+		: utility.parent;
+};
+
 export default defineConfig({
 	// The preflight declares every --un-* variable (transforms, rings,
 	// shadows, filters) on every element; 'on-demand' keeps only the ones a
 	// used utility needs.
 	presets: [presetWind3({ preflight: 'on-demand' })],
 	transformers: [transformerVariantGroup()],
-	blocklist: VISUAL_UTILITIES,
+	blocklist: [...VISUAL_UTILITIES, HEADING_TAGS],
+	postprocess: [toLogical],
 	theme: {
 		// em, not px, so layouts follow the user's text size (§5.4).
 		breakpoints: {

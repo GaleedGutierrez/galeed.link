@@ -1110,7 +1110,7 @@ postcss.config.js · scripts/purgeCss.ts · scripts/lightningcss.ts   ← §9.1
 
 > **[P] Order change:** the repo imports utilities _before_ atoms. ITCSS puts utilities last, so a helper like `.sr-only` or `.skip-link` beats any atom it is combined with (`.skip-link.a-button`, §7.1).
 
-`postcss.config.js` (one change: `mixinsFiles`):
+`postcss.config.js` (`mixinsFiles`, and cssnano in builds only, without the `advanced` plugins that need the whole site):
 
 ```js
 import cssnano from 'cssnano';
@@ -1125,12 +1125,33 @@ const config = {
     postcssMixins({ mixinsFiles: './src/styles/tools/*.css' }),
     postcssCustomProperties({ preserve: false }),
     postcssUtopia({ minWidth: 360, maxWidth: 448 }),
-    cssnano({ preset: ['advanced', {}] }),
+    // Builds only. postcss-load-config skips a `false` plugin.
+    process.env.NODE_ENV === 'production' &&
+      cssnano({
+        preset: [
+          'advanced',
+          {
+            discardUnused: false,
+            reduceIdents: false,
+            mergeIdents: false,
+            zindex: false,
+          },
+        ],
+      }),
   ],
 };
 
 export default config;
 ```
+
+> **Why those four are off:** Vite runs PostCSS once per file, and these
+> `advanced` plugins assume they see the whole site. Per file, `discardUnused`
+> deleted every Fontsource `@font-face` (each file declares a face it doesn't
+> use itself), `reduceIdents` renamed each file's keyframes to `a`, `b`, `c`…
+> (two files bundled into one sheet would collide), `mergeIdents` carries the
+> same risk, and `zindex` rebases each file's `z-index` from 1, which breaks the
+> stacking order between files. In dev, cssnano only slowed HMR and minified
+> what DevTools shows.
 
 `.stylelintrc.json` (**[P] change**): let stylelint know the mixin at-rules, instead of a disable comment in every file that calls one:
 
@@ -1142,10 +1163,10 @@ export default config;
 >
 > **[P] Why `mixinsFiles`:** without it, postcss-mixins only knows the mixins defined in the file being processed. That works for `index.css`, which `@import`s `tools/`. Each `styles.module.css` is processed on its own, so a `@mixin heading-xl` there would not exist. Check the option name against your installed `postcss-mixins` version.
 
-`package.json` build order (**[P] change: lightningcss last**):
+`package.json` build order (the CSS steps; `CLAUDE.md` explains the rest):
 
 ```json
-"build": "astro build && npm run purge-css && npm run lightningcss"
+"build": "npm run git-history && astro build && npm run purge-css && npm run lightningcss && npm run prune-css-vars && npm run subset-fonts && npm run inline-css && npm run csp-headers"
 ```
 
 `scripts/purgeCss.ts` safelist (**[P] change**). Keep your list and add these two entries:
@@ -1175,15 +1196,15 @@ safelist: {
   6 KB less CSS before compression). cssnano's autoprefixer reads the same
   field.
   - The polyfill only returns if the targets include a browser without `light-dark()` (Safari/iOS 16.5–17.4 was the reason under the old `>= 0.25%, not dead, supports css-nesting` query). It then keys its switches off the `color-scheme` declarations in the style sheet, not inline `style.colorScheme`, which is one reason the `:root[data-theme]` rules stay in CSS (§9.2).
-- **Why lightningcss must run last:** `purgeCss.ts` re-runs every PostCSS plugin
-  on `dist/`. When that happens _after_ lightningcss,
-  `postcss-custom-properties` sees `--lightningcss-light: initial` and
-  `--lightningcss-dark:` (empty) in `:root` and inlines them. Every color
-  becomes `oklch(<light>) ;`, so the site is **always light** in every browser.
-  Reproduced with `postcss-custom-properties` 15. The repo's current order
-  (`lightningcss → purge-css`) has exactly this shape. Check your real `dist/`
-  too: the live site did switch themes when inspected (§1.4), so its deployed
-  build may differ.
+- **No PostCSS pass after lightningcss:** `purgeCss.ts` only purges. Vite
+  already ran PostCSS, and lightningcss minifies right after. A PostCSS pass
+  after lightningcss would let `postcss-custom-properties` see
+  `--lightningcss-light: initial` and `--lightningcss-dark:` (empty) in `:root`
+  and inline them. Every color would become `oklch(<light>) ;`, so the site
+  would be **always light** in every browser. Reproduced with
+  `postcss-custom-properties` 15, back when `purgeCss.ts` re-ran the PostCSS
+  chain and the build ran lightningcss first.
+- **A failed step fails the build:** `purgeCss.ts` and `lightningcss.ts` keep going with the other files but exit non-zero, and lightningcss prints its warnings. Before, a failed file only logged an error and shipped unprocessed.
 - **PurgeCSS 7.0.2, run with the project's own options:**
   - **It removes the runtime-only theme selectors** (`:root[data-theme="light"]`, `:root[data-theme="dark"]`, the dark shell shadow, the toggle's `[data-when="light"]` rule), because the static HTML never contains `data-theme`.
   - **The existing safelist patterns protect nothing here.** PurgeCSS compares
@@ -1193,7 +1214,7 @@ safelist: {
     aren't selectors. Rules inside `@media` are purged normally. Tested:
     `@media (…) { .unused {…} }` and `[data-x="1"]` were both removed.
   - **Fix:** the two safelist entries above. As belt and braces, `theme.ts` and the head script write `setAttribute('data-theme', …)` (§2.2, §9.8), which puts the literal token into the built HTML/JS. Both fixes verified.
-  - `variables: true` drops unused custom properties. That's safe: tokens are either used, inlined, or read at runtime by CSS Modules, which PurgeCSS sees as `var()` uses.
+  - `variables` stays `false`: PurgeCSS read each sheet on its own and deleted tokens that CSS Modules still used (the sticky nav's `z-index`, motion tokens, the shell's radius and shadow). `scripts/pruneCssVars.ts` drops the unused custom properties instead, reading every sheet, page and script together.
 - **Browser support (project policy):** `light-dark()` is used **without a hand-written fallback**. The guide rates it Baseline _Newly available_ (since 2024-05-13: Chrome/Edge 123, Firefox 120, Safari 17.5). The browserslist targets (Baseline Widely available, above) all support it, so it ships native. `oklch()` is Baseline since 2023.
 
 **Issues found in the current `src/styles` [V], fixed by this system:**
@@ -2102,7 +2123,11 @@ export default defineConfig({
   // utility needs, not every transform/ring/shadow/filter one.
   presets: [presetWind3({ preflight: 'on-demand' })],
   transformers: [transformerVariantGroup()],
-  blocklist: VISUAL_UTILITIES,
+  // h1…h6: the extractor reads the heading tags as Wind's `h2` shorthand.
+  blocklist: [...VISUAL_UTILITIES, /^h[1-6]$/],
+  // Every utility leaves with logical properties and range media queries:
+  // px-4 → padding-inline-*, top-0 → inset-block-start, md: → (width >= 48em).
+  postprocess: [toLogical],
   // Keep the repo's own preflight (--un-unit) and logical-property rules
   // (pt/pb/mt/mb → padding/margin-block-*, w-* → inline-size). User rules are
   // matched before preset rules, so they replace the preset's physical versions.
@@ -2120,7 +2145,18 @@ export default defineConfig({
 })
 ```
 
-> **[P] Today the repo's `uno.config.ts` has no preset**, only its own `pt/pb/mt/mb/w` rules **[V]**, so `flex`, `grid`, `gap-*` or `items-center` from §7 would generate nothing. Adding `presetWind3` (with the blocklist) is what makes the §7 layout utilities exist. Check in the inspector that your logical rules still win over the preset's `mt-*`/`w-*`.
+> **`toLogical`** maps each physical property to its logical twin (`width` →
+> `inline-size`, `padding-left` → `padding-inline-start`,
+> `border-top-left-radius` → `border-start-start-radius`…) and rewrites
+> `(min-width: X)` / `(max-width: X)` to `(width >= X)` / `(width <= X)`.
+> stylelint never reads UnoCSS' output, so this is what holds the preset's
+> utilities to the same rules as the hand-written CSS (logical properties, §5.4
+> breakpoints). `tests/unocss.test.ts` generates the utilities `src/` uses and
+> lints them with the project's stylelint rules about what CSS does (properties,
+> colors, units, media, `!important`): a utility that slips through fails `npm
+> run test`.
+>
+> `presetWind3` (with the blocklist) is what makes the §7 layout utilities (`flex`, `grid`, `gap-*`, `items-center`) exist. The logical `pt/pb/mt/mb/w` rules still win over the preset's versions.
 >
 > **[P] Check the blocklist in the UnoCSS inspector (`/__unocss` in dev).** A blocked utility produces no CSS, so a stray `text-red-500` shows up as "nothing happens" instead of a silent off-token color. Adjust the patterns if your UnoCSS version matches variants differently.
 
@@ -2423,8 +2459,9 @@ for (const v of ['--box-shadow-shell-light', '--box-shadow-shell-dark'])
 
 - [ ] No FOUC: hard-reload in dark OS with an empty cache and throttled network. First paint is dark.
 - [ ] Every semantic color (`--background-color-*`, `--text-color-*`, `--border-color-*`, `--outline-color-*`) is **one** declaration in `settings/colors.css` `:root`, using `light-dark()` over two primitives (or one shared primitive), and no `[data-theme]` rule redefines a token. Components never reference a primitive directly. Run the test in §9.9.
-- [ ] **Build order is `astro build && purge-css && lightningcss`** (lightningcss last, §9.1). In `dist/`, `--lightningcss-light` must never appear inlined as a bare value.
+- [ ] **No PostCSS pass after lightningcss** (§9.1). In `dist/`, `--lightningcss-light` must never appear inlined as a bare value.
 - [ ] **UnoCSS output is layout only:** the inspector (`/__unocss`) shows no color, type, border, radius, shadow or transition utilities (blocklist, §9.7).
+- [ ] **UnoCSS output follows stylelint:** `tests/unocss.test.ts` passes, so no utility ships a physical property, a `min-width` query or `!important` (§9.7).
 - [ ] Every `@mixin` used in a CSS Module resolves (postcss-mixins `mixinsFiles`, §9.1): grep `dist/` for a leftover `@mixin`.
 - [ ] **Build output** (`dist/`): `:root[data-theme="light"]`,
       `:root[data-theme="dark"]`, the Layout module's dark shell rule
