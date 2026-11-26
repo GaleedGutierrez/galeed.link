@@ -164,6 +164,10 @@ export default defineConfig({
 		[
 			/^w-(.+)$/,
 			([, d]) => {
+				if (d === undefined) {
+					return {};
+				}
+
 				// Valores especiales
 				const specialValues: Record<string, string> = {
 					auto: 'auto',

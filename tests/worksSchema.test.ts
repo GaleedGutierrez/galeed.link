@@ -147,7 +147,9 @@ describe('buildWorksSchema', () => {
 			],
 		});
 
-		expect(work['@id']).toBe('https://galeed.link/#proyecto-diseno-codigo');
+		expect(work?.['@id']).toBe(
+			'https://galeed.link/#proyecto-diseno-codigo',
+		);
 	});
 
 	it('follows the page order: freelance, side projects, open source', () => {

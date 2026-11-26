@@ -18,7 +18,7 @@ import {
 const parse = (policy: string): Map<string, string[]> =>
 	new Map(
 		policy.split('; ').map((directive) => {
-			const [name, ...sources] = directive.split(' ');
+			const [name = '', ...sources] = directive.split(' ');
 
 			return [name, sources];
 		}),

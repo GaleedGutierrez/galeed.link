@@ -50,8 +50,8 @@ const TYPE_PATTERN = /(?:^|\s)type\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/i;
 export const inlineScripts = (html: string): string[] =>
 	html
 		.matchAll(SCRIPT_PATTERN)
-		.filter(([, attributes]) => !SRC_PATTERN.test(attributes))
-		.filter(([, attributes]) => {
+		.filter(([, attributes = '']) => !SRC_PATTERN.test(attributes))
+		.filter(([, attributes = '']) => {
 			const match = TYPE_PATTERN.exec(attributes);
 			const type = (match?.[1] ?? match?.[2] ?? match?.[3] ?? '')
 				.trim()
@@ -59,7 +59,7 @@ export const inlineScripts = (html: string): string[] =>
 
 			return EXECUTABLE_TYPES.has(type);
 		})
-		.map((match) => match[2])
+		.map((match) => match[2] ?? '')
 		.toArray();
 
 const STYLE_PATTERN = /<style\b[^>]*>([\s\S]*?)<\/style>/gi;
@@ -73,7 +73,7 @@ const STYLE_PATTERN = /<style\b[^>]*>([\s\S]*?)<\/style>/gi;
 export const inlineStyles = (html: string): string[] =>
 	html
 		.matchAll(STYLE_PATTERN)
-		.map((match) => match[1])
+		.map(([, content = '']) => content)
 		.toArray();
 
 /**

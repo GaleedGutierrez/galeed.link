@@ -8,6 +8,11 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedSideEffectImports": true,
 		"forceConsistentCasingInFileNames": true,
+		"noImplicitReturns": true,
+		"noImplicitOverride": true,
+		"noUncheckedIndexedAccess": true,
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
 
 		/* Paths */
 		"paths": {
@@ -39,7 +44,7 @@
 			"@routes/*": ["./src/routes/*"],
 			"@services/*": ["./src/services/*"],
 			"@state/*": ["./src/state/*"],
-			"@shared": ["./src/utils/*"],
+			"@shared/*": ["./src/utils/*"],
 			"@store/*": ["./src/store/*"],
 			"@styles/*": ["./src/styles/*"],
 			"@sections/*": ["./src/sections/*"],
@@ -50,5 +55,11 @@
 	},
 	"extends": "astro/tsconfigs/strict",
 	"include": [".astro/types.d.ts", "**/*"],
-	"exclude": ["dist"]
+	"exclude": [
+		"dist",
+		"coverage",
+		"playwright-report",
+		"test-results",
+		".lighthouseci"
+	]
 }

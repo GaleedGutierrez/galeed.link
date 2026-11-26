@@ -137,6 +137,8 @@ const run = (): void => {
 	);
 };
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+const entryPoint = process.argv[1];
+
+if (entryPoint && import.meta.url === pathToFileURL(entryPoint).href) {
 	run();
 }

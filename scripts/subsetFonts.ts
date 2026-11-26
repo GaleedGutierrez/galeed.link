@@ -75,7 +75,7 @@ const extractCssContent = (css: string): string =>
 	css
 		.matchAll(/content:\s*(["'])(.*?)\1/g)
 		.map((match) =>
-			match[2].replaceAll(
+			(match[2] ?? '').replaceAll(
 				/\\([\da-f]{1,6})\s?/gi,
 				(_match, hex: string) =>
 					String.fromCodePoint(Number.parseInt(hex, 16)),
