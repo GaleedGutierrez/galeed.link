@@ -32,6 +32,9 @@ playwright-report/
 # Playwright MCP output (screenshots, page snapshots, console logs)
 .playwright-mcp/
 
+# Gentle Shell/Gentle AI generated files
+.atl/
+
 # local Claude Code settings
 .claude/settings.local.json
 
