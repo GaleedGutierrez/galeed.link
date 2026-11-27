@@ -1,7 +1,6 @@
 /* eslint-disable new-cap -- Sonda and UnoCSS name their integration factories in PascalCase */
 import partytown from '@astrojs/partytown';
 import sitemap from '@astrojs/sitemap';
-// import playformCompress from '@playform/compress';
 import { optimize } from '@galeedgutierrez/frontend-config/astro';
 import { getLastModified } from '@galeedgutierrez/frontend-config/git';
 import { defineConfig } from 'astro/config';
@@ -55,16 +54,6 @@ export default defineConfig({
 				forward: ['dataLayer.push', 'gtag'],
 			},
 		}),
-		// playformCompress({
-		// 	CSS: {
-		// 		csso: false,
-		// 	},
-		// 	HTML: {
-		// 		'html-minifier-terser': {
-		// 			removeComments: true,
-		// 		},
-		// 	},
-		// }),
 		// generic/light-reset.css is the only reset.
 		UnoCSS({
 			injectReset: false,

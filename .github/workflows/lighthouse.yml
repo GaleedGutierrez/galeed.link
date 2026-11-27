@@ -38,7 +38,7 @@ jobs:
       - name: 🏗️ Build App
         run: npm run build
 
-      # Serves dist/ and asserts the scores in lighthouserc.json.
+      # Serves dist/ and asserts the scores in lighthouserc.mjs.
       - name: 📊 Run Lighthouse
         run: npx lhci autorun
 
